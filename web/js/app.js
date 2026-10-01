@@ -68,27 +68,45 @@ export function applyGlobalFilters() {
   if (channelElem) state.currentChannel = channelElem.value;
   if (deptElem) state.currentDept = deptElem.value;
 
+  // Dynamically aggregate KPIs from the filtered inventory positions
+  const filtered = getFilteredPositions();
+  let totalRevenue = 0;
+  let totalCost = 0;
+  let totalOnHand = 0;
+  let totalRunRate = 0;
+  let totalInventoryCost = 0;
+  let dayCount = 60; // Evaluation window (days)
+
+  filtered.forEach(pos => {
+    const product = rawProducts.find(p => p.sku === pos.sku);
+    if (!product) return;
+    const unitsSoldEst = pos.runRate * 4; // 4-week trailing units
+    const revenue = unitsSoldEst * product.price;
+    const cost = unitsSoldEst * product.cost;
+    totalRevenue += revenue;
+    totalCost += cost;
+    totalOnHand += pos.onHand;
+    totalRunRate += pos.runRate;
+    totalInventoryCost += pos.onHand * pos.unitCost;
+  });
+
+  const grossMargin = totalRevenue - totalCost;
+  const gmPct = totalRevenue > 0 ? ((grossMargin / totalRevenue) * 100) : 0;
+  const weeklyRate = totalRunRate;
+  const wos = weeklyRate > 0 ? (totalOnHand / weeklyRate) : 0;
+  const annualFactor = 365 / Math.max(1, dayCount);
+  const annualizedMargin = grossMargin * annualFactor;
+  const gmroi = totalInventoryCost > 0 ? (annualizedMargin / totalInventoryCost) : 0;
+
   const revElem = document.getElementById('kpi-net-revenue');
   const gmElem = document.getElementById('kpi-gross-margin');
   const gmroiElem = document.getElementById('kpi-gmroi');
   const wosElem = document.getElementById('kpi-wos');
 
-  if (state.currentDept === 'Apparel') {
-    if (revElem) revElem.innerText = '6,420,100 AED';
-    if (gmElem) gmElem.innerText = '58.2%';
-    if (gmroiElem) gmroiElem.innerText = '3.85x';
-    if (wosElem) wosElem.innerText = '5.1 Wks';
-  } else if (state.currentDept === 'Footwear') {
-    if (revElem) revElem.innerText = '2,890,500 AED';
-    if (gmElem) gmElem.innerText = '62.0%';
-    if (gmroiElem) gmroiElem.innerText = '4.10x';
-    if (wosElem) wosElem.innerText = '2.4 Wks';
-  } else {
-    if (revElem) revElem.innerText = '24,820,400 AED';
-    if (gmElem) gmElem.innerText = '69.7%';
-    if (gmroiElem) gmroiElem.innerText = '3.42x';
-    if (wosElem) wosElem.innerText = '4.8 Wks';
-  }
+  if (revElem) revElem.innerText = `${Math.round(totalRevenue).toLocaleString()} AED`;
+  if (gmElem) gmElem.innerText = `${gmPct.toFixed(1)}%`;
+  if (gmroiElem) gmroiElem.innerText = `${gmroi.toFixed(2)}x`;
+  if (wosElem) wosElem.innerText = `${wos.toFixed(1)} Wks`;
 
   updateAllVisuals();
 }

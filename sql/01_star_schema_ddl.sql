@@ -120,8 +120,8 @@ INSERT INTO Dim_Date (
     FiscalMonthName, RetailWeekNum, DayOfWeekName, DayOfWeekNum,
     IsWeekendGCC, IsRetailPeakSeason
 ) VALUES (
-    -1, '1900-01-01', 1900, 'N/A', 0,
-    'Unknown', 0, 'Unknown', 0,
+    -1, '1900-01-01', 1900, 'Unknown', -1,
+    'Unknown', -1, 'Unknown', -1,
     FALSE, FALSE
 ) ON CONFLICT (DateKey) DO NOTHING;
 
@@ -130,7 +130,7 @@ INSERT INTO Dim_Store (
     StoreKey, StoreCode, StoreName, Channel, Emirate, Country,
     GrossLeasableAreaSqFt, ClusterTier, HubFulfillmentEligible
 ) VALUES (
-    -1, 'UNK', 'Unknown Store', 'Unknown', 'Unknown', 'Unknown',
+    -1, 'UNKNOWN', 'Unknown / Unassigned', 'Unknown', 'Unknown', 'Unknown',
     0, 'Unknown', FALSE
 ) ON CONFLICT (StoreKey) DO NOTHING;
 
@@ -139,7 +139,7 @@ INSERT INTO Dim_Product (
     ProductKey, SKU, ProductName, Department, Category, SubCategory,
     Brand, BrandTier, BaseUnitCostAED, BaseRetailPriceAED, ElasticityCoefficient
 ) VALUES (
-    -1, 'UNKNOWN-SKU', 'Unknown Product', 'Unknown', 'Unknown', 'Unknown',
+    -1, 'UNKNOWN', 'Unknown Product', 'Unknown', 'Unknown', 'Unknown',
     'Unknown', 'Unknown', 0.0000, 0.0000, 0.00
 ) ON CONFLICT (ProductKey) DO NOTHING;
 

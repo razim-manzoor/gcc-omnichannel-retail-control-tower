@@ -65,12 +65,26 @@ def run_audit():
         WHERE p.ProductKey IS NULL
     """).fetchone()[0]
     
+    pos_orphans_date = con.execute("""
+        SELECT COUNT(*) FROM read_csv_auto('data/Fact_POS_Transactions.csv') f
+        LEFT JOIN read_csv_auto('data/Dim_Date.csv') d ON f.DateKey = d.DateKey
+        WHERE d.DateKey IS NULL
+    """).fetchone()[0]
+
+    inv_orphans_date = con.execute("""
+        SELECT COUNT(*) FROM read_csv_auto('data/Fact_Daily_Inventory.csv') f
+        LEFT JOIN read_csv_auto('data/Dim_Date.csv') d ON f.SnapshotDateKey = d.DateKey
+        WHERE d.DateKey IS NULL
+    """).fetchone()[0]
+
     print(f"POS -> Store Orphan FKs:    {pos_orphans_store}")
     print(f"POS -> Product Orphan FKs:  {pos_orphans_prod}")
+    print(f"POS -> Date Orphan FKs:     {pos_orphans_date}")
     print(f"Inv -> Store Orphan FKs:    {inv_orphans_store}")
     print(f"Inv -> Product Orphan FKs:  {inv_orphans_prod}")
+    print(f"Inv -> Date Orphan FKs:     {inv_orphans_date}")
     
-    if any([pos_orphans_store, pos_orphans_prod, inv_orphans_store, inv_orphans_prod]):
+    if any([pos_orphans_store, pos_orphans_prod, pos_orphans_date, inv_orphans_store, inv_orphans_prod, inv_orphans_date]):
         issues.append("Orphan foreign keys found in Fact tables!")
 
     # Check Additive Math: NetSalesAmt = GrossSalesAmt - DiscountAmt
@@ -81,6 +95,16 @@ def run_audit():
     print(f"POS NetSales != Gross - Discount: {math_diff} rows")
     if math_diff > 0:
         issues.append(f"{math_diff} rows have NetSales != Gross - Discount")
+
+    # Check Inventory Invariant: AvailableUnits = OnHand - Reserved and Cost = OnHand * UnitCost
+    inv_math_diff = con.execute("""
+        SELECT COUNT(*) FROM read_csv_auto('data/Fact_Daily_Inventory.csv')
+        WHERE AvailableUnits != (OnHandUnits - ReservedUnits)
+           OR ROUND(InventoryCostValueAmt, 2) != ROUND(OnHandUnits * UnitCostSnapshotAmt, 2)
+    """).fetchone()[0]
+    print(f"Inv Invariant Mismatches:         {inv_math_diff} rows")
+    if inv_math_diff > 0:
+        issues.append(f"{inv_math_diff} rows have invalid inventory math")
 
     # 3. Check Financial Aggregates
     fin = con.execute("""

@@ -15,7 +15,7 @@ if (!Model.Tables.Contains("_Measures"))
 
 var measuresTable = Model.Tables["_Measures"];
 
-// 2. Measure Master Catalog (32 Production DAX Measures across 6 Display Folders)
+// 2. Measure Master Catalog (43 Production DAX Measures across 6 Display Folders)
 var measureCatalog = new []
 {
     // -------------------------------------------------------------------------
@@ -249,7 +249,7 @@ var measureCatalog = new []
         Folder = "06 Markdown Simulation & Sensitivity",
         Format = "0.00",
         Desc = "Weighted average elasticity across selected products or transaction context",
-        Dax = "VAR AggUnits = [Units Sold]\nRETURN\n    IF (\n        AggUnits > 0,\n        DIVIDE (\n            SUMX (\n                Fact_POS_Transactions,\n                Fact_POS_Transactions[UnitsSold] * RELATED ( Dim_Product[ElasticityCoefficient] )\n            ),\n            AggUnits,\n            -1.50\n        ),\n        -1.50\n    )"
+        Dax = "VAR AggUnits = [Units Sold]\nRETURN\n    IF (\n        AggUnits > 0,\n        DIVIDE (\n            SUMX (\n                Dim_Product,\n                [Units Sold] * Dim_Product[ElasticityCoefficient]\n            ),\n            AggUnits,\n            -1.50\n        ),\n        -1.50\n    )"
     },
     new {
         Name = "Simulated Volume Lift %",
@@ -333,7 +333,7 @@ var measureCatalog = new []
         Folder = "06 Markdown Simulation & Sensitivity",
         Format = "",
         Desc = "Executive green/red feasibility verdict classifying commercial profitability vs volume buffer",
-        Dax = "VAR SimUnits = [Simulated Units Sold]\nVAR BEUnits = [Breakeven Unit Volume]\nVAR MarginDelta = [Gross Margin Delta (AED)]\nRETURN\n    SWITCH (\n        TRUE (),\n        [Simulated Discount %] == 0, \"BASELINE (Full Price)\",\n        MarginDelta >= 0, \"✅ ACCRETIVE: Generates +\" & FORMAT ( MarginDelta, \"#,##0 AED\" ) & \" Net Profit\",\n        MarginDelta < 0 && SimUnits >= BEUnits, \"⚖️ VOLUME BUFFERED: Clears stock with neutral margin\",\n        \"❌ DILUTIVE: Destroys \" & FORMAT ( ABS ( MarginDelta ), \"#,##0 AED\" ) & \" Gross Margin\"\n    )"
+        Dax = "VAR MarginDelta = [Gross Margin Delta (AED)]\nVAR CapROI = [Capital vs Margin ROI Ratio]\nRETURN\n    SWITCH (\n        TRUE (),\n        [Simulated Discount %] == 0, \"BASELINE (Full Price)\",\n        MarginDelta >= 0, \"✅ ACCRETIVE: Generates +\" & FORMAT ( MarginDelta, \"#,##0 AED\" ) & \" Net Profit\",\n        MarginDelta < 0 && NOT ISBLANK ( CapROI ) && CapROI >= 1.5, \"⚖️ CAPITAL TRADE-OFF: Working capital ROI \" & FORMAT ( CapROI, \"0.00x\" ) & \" offsets margin cost\",\n        \"❌ DILUTIVE: Destroys \" & FORMAT ( ABS ( MarginDelta ), \"#,##0 AED\" ) & \" Gross Margin\"\n    )"
     },
     new {
         Name = "Capital vs Margin ROI Ratio",

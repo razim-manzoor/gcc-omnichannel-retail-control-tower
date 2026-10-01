@@ -14,24 +14,18 @@ export function animateValue(elemId, start, end, duration, formatPrefix = '', fo
   const obj = document.getElementById(elemId);
   if (!obj) return;
   const range = end - start;
-  const minTimer = 20;
-  let stepTime = Math.abs(Math.floor(duration / 20));
-  stepTime = Math.max(stepTime, minTimer);
-  const startTime = new Date().getTime();
-  const endTime = startTime + duration;
-  let timer;
+  const startTime = performance.now();
 
-  function run() {
-    const now = new Date().getTime();
-    const remaining = Math.max((endTime - now) / duration, 0);
-    const value = Math.round(end - (remaining * range));
+  function step(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const value = Math.round(start + range * progress);
     obj.innerText = `${formatPrefix}${value.toLocaleString()}${formatSuffix}`;
-    if (value === end) {
-      clearInterval(timer);
+    if (progress < 1) {
+      requestAnimationFrame(step);
     }
   }
-  timer = setInterval(run, stepTime);
-  run();
+  requestAnimationFrame(step);
 }
 
 export function recalculateSimulation(discountPct, products, onChartRender) {
@@ -105,7 +99,9 @@ export function recalculateSimulation(discountPct, products, onChartRender) {
     slider.style.background = `linear-gradient(to right, #1E3A8A 0%, #1E3A8A ${pctPos}%, #CBD5E1 ${pctPos}%, #CBD5E1 100%)`;
   }
 
-  // Update Verdict Badge (Aligned strictly with DAX [Breakeven Feasibility Verdict])
+  // Update Verdict Badge (Aligned with DAX [Breakeven Feasibility Verdict])
+  // "VOLUME BUFFERED" fires when margin is sacrificed but Capital ROI >= 1.5x
+  // (i.e. working capital released is at least 1.5x the margin surrendered)
   const badge = document.getElementById('sim-verdict-badge');
   if (badge) {
     if (discountPct === 0) {
@@ -116,7 +112,7 @@ export function recalculateSimulation(discountPct, products, onChartRender) {
       badge.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span> ACCRETIVE PROFIT YIELD`;
     } else if (capROI !== 'N/A' && parseFloat(capROI) >= 1.5) {
       badge.className = "px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-amber-50 text-amber-800 border border-amber-200 flex items-center";
-      badge.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5"></span> VOLUME BUFFERED (${capROI}x ROI)`;
+      badge.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5"></span> CAPITAL TRADE-OFF (${capROI}x ROI)`;
     } else {
       badge.className = "px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-rose-50 text-rose-800 border border-rose-200 flex items-center";
       badge.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5"></span> DILUTIVE MARGIN RISK`;

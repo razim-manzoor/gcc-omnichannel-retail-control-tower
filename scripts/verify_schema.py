@@ -374,7 +374,7 @@ def run_verification(source_mode="csv"):
             CASE 
                 WHEN SimDiscountPct = 0.00 THEN 'BASELINE (Full Price)'
                 WHEN GrossMarginDelta >= 0 THEN '✅ ACCRETIVE: Generates +' || CAST(ROUND(GrossMarginDelta, 0) AS INT) || ' AED'
-                WHEN GrossMarginDelta < 0 AND SimUnitsSold >= BreakevenUnitVolume THEN '⚖️ VOLUME BUFFERED: Neutral margin'
+                WHEN GrossMarginDelta < 0 AND CapitalMarginROIRatio IS NOT NULL AND CapitalMarginROIRatio >= 1.5 THEN '⚖️ CAPITAL TRADE-OFF: ROI ' || CAST(ROUND(CapitalMarginROIRatio, 2) AS VARCHAR) || 'x offsets margin cost'
                 ELSE '❌ DILUTIVE: Destroys ' || CAST(ABS(ROUND(GrossMarginDelta, 0)) AS INT) || ' AED'
             END AS FeasibilityVerdict
         FROM TradeOffCalculations

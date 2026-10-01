@@ -3,6 +3,12 @@
  * High-Density Data Presentation, Monospace Numerals, Dynamic Directives, CSV Export
  */
 
+/** Escapes HTML entities to prevent XSS when injecting data into innerHTML */
+function escapeHtml(str) {
+  if (typeof str !== 'string') return str;
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
 export function renderTable(data, selectedSkuHighlight, sortColumn, sortAsc, onRowClick) {
   const tbody = document.getElementById('table-body');
   if (!tbody) return;
@@ -52,12 +58,12 @@ export function renderTable(data, selectedSkuHighlight, sortColumn, sortAsc, onR
     rows += `
       <tr id="row-${item.sku}" data-sku="${item.sku}" class="${rowBg} transition-all duration-150 border-b border-slate-100 cursor-pointer text-xs">
         <td class="py-2.5 px-3">
-          <div class="font-mono font-bold text-slate-900">${item.sku}</div>
-          <div class="text-[11px] text-slate-500">${item.prodName}</div>
+          <div class="font-mono font-bold text-slate-900">${escapeHtml(item.sku)}</div>
+          <div class="text-[11px] text-slate-500">${escapeHtml(item.prodName)}</div>
         </td>
         <td class="py-2.5 px-3">
-          <div class="font-semibold text-slate-800">${item.storeName}</div>
-          <div class="font-mono text-[10px] text-slate-400">${item.storeCode}</div>
+          <div class="font-semibold text-slate-800">${escapeHtml(item.storeName)}</div>
+          <div class="font-mono text-[10px] text-slate-400">${escapeHtml(item.storeCode)}</div>
         </td>
         <td class="py-2.5 px-3">${strBar}</td>
         <td class="py-2.5 px-3">${wosBadge}</td>

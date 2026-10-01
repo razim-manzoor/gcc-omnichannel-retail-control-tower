@@ -3,6 +3,12 @@
  * Refined 2D Diagnostic Matrix (Zero-Collision Luxury Telemetry) & Sensitivity Chart
  */
 
+/** Escapes HTML entities to prevent XSS */
+function escapeHtml(str) {
+  if (typeof str !== 'string') return str;
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
 export function renderSensitivityChart(data) {
   const svg = document.getElementById('sim-chart-svg');
   if (!svg) return;
@@ -203,29 +209,33 @@ export function renderScatterPlot(filteredPositions, selectedSkuHighlight, onBub
 
   g.innerHTML = pointsHtml;
 
-  // Clean event listeners for hover and click
-  g.querySelectorAll('g[data-sku]').forEach(elem => {
-    elem.addEventListener('mouseenter', (e) => {
-      const store = elem.getAttribute('data-store');
-      const storeCode = elem.getAttribute('data-storecode');
-      const sku = elem.getAttribute('data-sku');
-      const str = parseFloat(elem.getAttribute('data-str'));
-      const wos = parseFloat(elem.getAttribute('data-wos'));
-      const onHand = parseInt(elem.getAttribute('data-onhand'));
-      const directive = elem.getAttribute('data-directive');
-      showScatterTip(e, store, storeCode, sku, str, wos, onHand, directive);
-    });
+  // Event delegation on parent container for hover and click
+  g.onmouseover = null; g.onmouseout = null; g.onclick = null;
+  g.addEventListener('mouseover', (e) => {
+    const elem = e.target.closest('g[data-sku]');
+    if (!elem) return;
+    const store = elem.getAttribute('data-store');
+    const storeCode = elem.getAttribute('data-storecode');
+    const sku = elem.getAttribute('data-sku');
+    const str = parseFloat(elem.getAttribute('data-str'));
+    const wos = parseFloat(elem.getAttribute('data-wos'));
+    const onHand = parseInt(elem.getAttribute('data-onhand'));
+    const directive = elem.getAttribute('data-directive');
+    showScatterTip(e, store, storeCode, sku, str, wos, onHand, directive);
+  });
 
-    elem.addEventListener('mouseleave', () => {
-      hideScatterTip();
-    });
+  g.addEventListener('mouseout', (e) => {
+    const related = e.relatedTarget;
+    if (!related || !g.contains(related)) hideScatterTip();
+  });
 
-    elem.addEventListener('click', () => {
-      const sku = elem.getAttribute('data-sku');
-      if (typeof onBubbleClick === 'function') {
-        onBubbleClick(sku);
-      }
-    });
+  g.addEventListener('click', (e) => {
+    const elem = e.target.closest('g[data-sku]');
+    if (!elem) return;
+    const sku = elem.getAttribute('data-sku');
+    if (typeof onBubbleClick === 'function') {
+      onBubbleClick(sku);
+    }
   });
 }
 
@@ -248,10 +258,10 @@ export function showScatterTip(e, store, storeCode, sku, str, wos, onHand, direc
   tooltip.innerHTML = `
     <div class="flex items-center justify-between pb-1.5 border-b border-slate-100 mb-2">
       <div>
-        <div class="font-bold text-slate-900 text-xs">${store}</div>
-        <div class="font-mono text-[10px] text-slate-400 font-semibold">${storeCode}</div>
+        <div class="font-bold text-slate-900 text-xs">${escapeHtml(store)}</div>
+        <div class="font-mono text-[10px] text-slate-400 font-semibold">${escapeHtml(storeCode)}</div>
       </div>
-      <span class="font-mono text-[10px] bg-slate-100 px-2 py-0.5 rounded-md text-slate-700 font-bold border border-slate-200">${sku}</span>
+      <span class="font-mono text-[10px] bg-slate-100 px-2 py-0.5 rounded-md text-slate-700 font-bold border border-slate-200">${escapeHtml(sku)}</span>
     </div>
     <div class="grid grid-cols-2 gap-2 text-xs mb-2">
       <div class="bg-slate-50 p-1.5 rounded-lg border border-slate-100">

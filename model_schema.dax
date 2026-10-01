@@ -270,8 +270,8 @@ RETURN
         AggUnits > 0,
         DIVIDE (
             SUMX (
-                Fact_POS_Transactions,
-                Fact_POS_Transactions[UnitsSold] * RELATED ( Dim_Product[ElasticityCoefficient] )
+                Dim_Product,
+                [Units Sold] * Dim_Product[ElasticityCoefficient]
             ),
             AggUnits,
             -1.50
@@ -354,15 +354,14 @@ RETURN
 
 /// Executive green/red feasibility verdict classifying commercial profitability vs volume buffer
 [Breakeven Feasibility Verdict] = 
-VAR SimUnits = [Simulated Units Sold]
-VAR BEUnits = [Breakeven Unit Volume]
 VAR MarginDelta = [Gross Margin Delta (AED)]
+VAR CapROI = [Capital vs Margin ROI Ratio]
 RETURN
     SWITCH (
         TRUE (),
         [Simulated Discount %] == 0, "BASELINE (Full Price)",
         MarginDelta >= 0, "✅ ACCRETIVE: Generates +" & FORMAT ( MarginDelta, "#,##0 AED" ) & " Net Profit",
-        MarginDelta < 0 && SimUnits >= BEUnits, "⚖️ VOLUME BUFFERED: Clears stock with neutral margin",
+        MarginDelta < 0 && NOT ISBLANK ( CapROI ) && CapROI >= 1.5, "⚖️ CAPITAL TRADE-OFF: Working capital ROI " & FORMAT ( CapROI, "0.00x" ) & " offsets margin cost",
         "❌ DILUTIVE: Destroys " & FORMAT ( ABS ( MarginDelta ), "#,##0 AED" ) & " Gross Margin"
     )
 

@@ -228,7 +228,9 @@
           </div>
 
           <div class="relative w-full h-[300px] mt-2" id="scatter-container">
-            <svg id="scatter-svg" class="w-full h-full" viewBox="0 0 760 280">
+            <svg id="scatter-svg" class="w-full h-full" viewBox="0 0 760 280" role="img" aria-label="Store Velocity vs Supply Health diagnostic scatter plot">
+              <title>Store Velocity vs. Supply Health Diagnostic Matrix</title>
+              <desc>Scatter plot showing Sell-Through Rate percentage on the Y-axis versus Weeks of Supply cover on the X-axis for each store-SKU combination</desc>
               <!-- Soft Watermark Quadrant Shading -->
               <rect x="45" y="25" width="105" height="110" fill="#FEE2E2" fill-opacity="0.25" rx="6" />
               <rect x="250" y="135" width="480" height="110" fill="#FEF3C7" fill-opacity="0.25" rx="6" />
@@ -313,7 +315,7 @@
               <span class="text-xs font-semibold text-slate-700">Simulated Promotional Markdown:</span>
               <span class="text-xs font-mono font-bold text-slate-900 bg-slate-100 px-2.5 py-0.5 rounded-md border border-slate-200" id="slider-val-label">25% Markdown</span>
             </div>
-            <input type="range" id="discount-slider" min="0" max="30" step="5" value="25" oninput="handleSliderChange(this.value)">
+            <input type="range" id="discount-slider" min="0" max="30" step="5" value="25" oninput="handleSliderChange(this.value)" aria-label="Simulated promotional markdown discount percentage" role="slider" aria-valuemin="0" aria-valuemax="30" aria-valuenow="25">
             <div class="flex justify-between text-[10px] font-mono text-slate-400 font-semibold mt-1 px-1">
               <span>0% (Full Price)</span>
               <span>10%</span>
@@ -358,7 +360,10 @@
           </div>
 
           <div class="relative w-full h-[200px] mt-1" id="sim-chart-container">
-            <svg id="sim-chart-svg" class="w-full h-full" viewBox="0 0 640 180"></svg>
+            <svg id="sim-chart-svg" class="w-full h-full" viewBox="0 0 640 180" role="img" aria-label="Category elasticity and capital yield sensitivity chart">
+              <title>Category Elasticity and Capital Yield</title>
+              <desc>Clustered bar chart comparing baseline vs simulated gross margin by product category with a working capital release line overlay</desc>
+            </svg>
           </div>
         </div>
 
@@ -430,12 +435,12 @@
   <!-- ========================================================================= -->
   <!-- EXECUTIVE BRIEFING MODAL DIALOG                                           -->
   <!-- ========================================================================= -->
-  <div id="briefing-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 hidden">
-    <div class="luxury-card bg-white max-w-2xl w-full p-6 shadow-2xl space-y-4">
+  <div id="briefing-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 hidden" role="dialog" aria-modal="true" aria-labelledby="briefing-title">
+    <div class="luxury-card bg-white max-w-2xl w-full p-6 shadow-2xl space-y-4" role="document">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100">
         <div class="flex items-center space-x-2">
           <div class="w-7 h-7 rounded-md bg-slate-900 text-white flex items-center justify-center font-bold text-xs">LR</div>
-          <h2 class="text-base font-bold text-slate-900 tracking-tight">Executive Architecture & Data Governance</h2>
+          <h2 id="briefing-title" class="text-base font-bold text-slate-900 tracking-tight">Executive Architecture & Data Governance</h2>
         </div>
         <button onclick="toggleModal(false)" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
       </div>

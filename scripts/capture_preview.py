@@ -60,17 +60,12 @@ def main():
         page.goto(url, wait_until="networkidle")
         time.sleep(2)
 
-        # Switch to 100% native mode for screenshot
-        btn_native = page.query_selector("#btn-native")
-        if btn_native:
-            btn_native.click()
-            time.sleep(1)
-
         print("[4/5] Capturing full 1920x1080 executive canvas screenshot...")
-        dashboard_elem = page.query_selector("#dashboard-canvas")
+        # Target the main dashboard container element
+        dashboard_elem = page.query_selector("main")
         if dashboard_elem:
             dashboard_elem.screenshot(path=str(preview_img))
-            print(f"  -> Screenshot saved to: {preview_img}")
+            print(f"  -> Dashboard screenshot saved to: {preview_img}")
         else:
             page.screenshot(path=str(preview_img))
             print(f"  -> Full page screenshot saved to: {preview_img}")

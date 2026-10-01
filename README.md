@@ -75,9 +75,9 @@ An enterprise-grade, end-to-end Decision Support Control Tower built for luxury 
 | **Data Generation** | Python 3.12 (`pandas`, `numpy`, `faker`) | Simulating 115,000+ POS transactions & 53,000+ daily inventory snapshots across GCC malls with authentic footfall and seasonality weighting. |
 | **ETL & Data Prep** | Power Query (M Language) | Fully parameterized M scripts (`power_query/`) handling ingestion, data typing, and retail calendar generation. |
 | **Data Modeling** | Power BI Desktop, Tabular Editor 2/3 | Pure Kimball Star Schema with 1-to-many single-direction filtering and Tabular Object Model (TOM) automation. |
-| **Calculation Engine** | Advanced DAX (VertiPaq) | 30+ production measures in 6 display folders: Financial Core, Semi-Additive Inventory, STR%, WOS, Prescriptive Directives, and What-If Elasticity. |
+| **Calculation Engine** | Advanced DAX (VertiPaq) | 43 production measures in 6 display folders: Financial Core, Semi-Additive Inventory, STR%, WOS, Prescriptive Directives, and What-If Elasticity. |
 | **Analytical Verification** | DuckDB In-Memory | High-speed analytical test harness (`scripts/verify_schema.py`) asserting referential integrity, math invariants, and sub-30ms aggregation. |
-| **Visualization & UX** | HTML5, Tailwind CSS, Power BI | Pixel-perfect 1920x1080 executive canvas honoring the 3-second rule with zero external JS runtime dependencies. |
+| **Visualization & UX** | HTML5, Tailwind CSS (CDN), Power BI | Pixel-perfect 1920x1080 executive canvas honoring the 3-second rule with zero npm build dependencies (Tailwind CSS and Google Fonts loaded via CDN). |
 | **Executive Briefing** | Markdown & HTML Case Study | Branded 1-page executive summary (`docs/CASE_STUDY.html`) formatted for leadership presentations and PDF export. |
 
 ---
@@ -141,10 +141,10 @@ The entire synthetic dataset is audited and verified against formal financial an
 │     StoreCode         │ │     SKU              │ │     DiscountDisplayLabel  │
 │     StoreName         │ │     ProductName      │ │     SimulationSortOrder   │
 │     Channel           │ │     Department       │ └───────────────────────────┘
-│     GrossLeasableArea │ │     BrandTier        │    (DISCONNECTED PARAMETER)
+│     GrossLeasableAreaSqFt │ │     BrandTier        │    (DISCONNECTED PARAMETER)
 │     HubFulfillment    │ │     BaseUnitCostAED  │
 └───────────────────────┘ │     BaseRetailPrice  │
-                          │     ElasticityCoeff  │
+                          │     ElasticityCoefficient │
                           └──────────────────────┘
 ```
 
@@ -168,7 +168,7 @@ Measures are structured into **6 Production Display Folders**:
 
 ### Folder 03 & 04: Velocity, Sell-Through & Supply Cover
 * `[Units Sold Trailing 4W]` — Trailing 28-day demand run rate.
-* `[Sell-Through Rate %]` — `DIVIDE ( [Units Sold T4W], [Units Sold T4W] + [Ending On Hand Units], 0 )`
+* `[Sell-Through Rate %]` — `DIVIDE ( [Units Sold], [Units Sold] + [Ending On Hand Units], 0 )`
 * `[Weeks of Supply (WOS)]` — `DIVIDE ( [Ending On Hand Units], [Weekly Run Rate T4W], 0 )`
 
 ### Folder 05: Action Triggers & Prescriptive Balancing
@@ -179,7 +179,7 @@ Measures are structured into **6 Production Display Folders**:
 
 ### Folder 06: Forward-Looking What-If Elasticity Simulator
 * Leverages the disconnected parameter `Markdown_Scenario[ScenarioDiscountPct]`:
-  * `[Simulated Volume Lift %] = -1 * ( [Portfolio Elasticity] * [Selected Discount %] )`
+  * `[Simulated Volume Lift %] = -1 * ( [Effective Elasticity Coeff] * [Simulated Discount %] )`
   * `[Simulated Units Sold] = [Units Sold] * ( 1 + [Simulated Volume Lift %] )`
   * `[Working Capital Released (AED)] = [Incremental Units] * [Average Unit Cost]`
   * `[Breakeven Unit Gap] = [Simulated Units Sold] - ( [Baseline GM] / ( [Sim AUR] - [AUC] ) )`
