@@ -44,7 +44,6 @@ def main():
     time.sleep(1)
 
     preview_img = DOCS_ASSETS / "control_tower_preview.png"
-    web_preview_img = BASE_DIR / "web" / "preview.png"
     demo_gif = DOCS_ASSETS / "control_tower_demo.gif"
 
     print("[2/5] Launching headless browser with Playwright...")
@@ -71,12 +70,9 @@ def main():
         dashboard_elem = page.query_selector("#dashboard-canvas")
         if dashboard_elem:
             dashboard_elem.screenshot(path=str(preview_img))
-            dashboard_elem.screenshot(path=str(web_preview_img))
             print(f"  -> Screenshot saved to: {preview_img}")
-            print(f"  -> Web asset saved to:  {web_preview_img}")
         else:
             page.screenshot(path=str(preview_img))
-            page.screenshot(path=str(web_preview_img))
             print(f"  -> Full page screenshot saved to: {preview_img}")
 
         print("[5/5] Generating What-If slider animated interaction GIF...")

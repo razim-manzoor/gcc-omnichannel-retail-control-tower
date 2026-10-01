@@ -42,33 +42,35 @@
     
     .pos-grid { position: absolute !important; left: 16px; top: 686px; width: 1888px; height: 374px; }
 
-    /* Tactile Slider with Dynamic Gradient Track */
+    /* Institutional Executive Slider */
     input[type=range] {
       -webkit-appearance: none;
       width: 100%;
-      background: linear-gradient(to right, #6366F1 0%, #6366F1 83.3%, #E2E8F0 83.3%, #E2E8F0 100%);
-      height: 6px;
-      border-radius: 9999px;
+      background: linear-gradient(to right, #1E3A8A 0%, #1E3A8A 83.3%, #CBD5E1 83.3%, #CBD5E1 100%);
+      height: 5px;
+      border-radius: 4px;
       outline: none;
-      transition: background 0.15s ease;
+      transition: background 0.1s ease;
+      cursor: pointer;
     }
     input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      height: 20px;
-      width: 20px;
+      height: 18px;
+      width: 18px;
       border-radius: 50%;
-      background: #6366F1;
+      background: #1E3A8A;
       cursor: pointer;
-      border: 3px solid #FFFFFF;
-      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.45);
-      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s ease;
+      border: 2.5px solid #FFFFFF;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.35);
+      transition: transform 0.1s ease, background-color 0.15s ease;
     }
     input[type=range]::-webkit-slider-thumb:hover {
-      transform: scale(1.25);
-      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.6);
+      transform: scale(1.15);
+      background: #1E40AF;
     }
     input[type=range]::-webkit-slider-thumb:active {
-      transform: scale(1.1);
+      transform: scale(1.05);
+      background: #0F172A;
     }
 
     /* Custom High-Density Scrollbars */
@@ -87,25 +89,20 @@
       background: #94A3B8;
     }
 
-    /* Executive Shimmer CTA Effect */
-    .shimmer-btn {
-      position: relative;
-      overflow: hidden;
+    /* Executive High-Trust Action Button */
+    .btn-executive-action {
+      background-color: #059669;
+      color: #FFFFFF;
+      font-weight: 600;
+      border: 1px solid #047857;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      transition: background-color 0.15s ease, transform 0.1s ease;
     }
-    .shimmer-btn::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(60deg, transparent 30%, rgba(255, 255, 255, 0.25) 50%, transparent 70%);
-      transform: rotate(25deg);
-      animation: shimmer-sweep 4s infinite linear;
+    .btn-executive-action:hover {
+      background-color: #047857;
     }
-    @keyframes shimmer-sweep {
-      0% { transform: translate(-100%, -100%) rotate(25deg); }
-      20%, 100% { transform: translate(100%, 100%) rotate(25deg); }
+    .btn-executive-action:active {
+      transform: scale(0.98);
     }
 
     /* Row Highlight Animation on Cross-Filter */
@@ -147,20 +144,19 @@
   <header class="w-full bg-[#0F172A] text-white px-6 py-2.5 flex items-center justify-between text-xs border-b border-slate-800 z-50 select-none">
     <div class="flex items-center space-x-3">
       <div class="flex items-center space-x-2">
-        <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 -ml-3.5"></span>
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
         <span class="font-bold tracking-wider text-slate-100 uppercase text-[11px]">VertiPaq Live Tabular Session</span>
       </div>
       <span class="text-slate-500">|</span>
       <span class="text-slate-300">Format: <strong class="text-white">16:9 Landscape</strong> (1920 × 1080 px)</span>
       <span class="text-slate-500">|</span>
-      <span class="text-slate-400">Governance: <strong class="text-indigo-300">3-Second C-Suite Diagnostic Rule</strong></span>
+      <span class="text-slate-400">Governance: <strong class="text-slate-200">3-Second C-Suite Diagnostic Rule</strong></span>
     </div>
 
     <div class="flex items-center space-x-3">
       <!-- Scale Toggle -->
       <div class="bg-slate-800 rounded p-0.5 flex border border-slate-700">
-        <button id="btn-fit" class="px-3 py-1 rounded text-white bg-indigo-600 font-semibold transition" onclick="setViewMode('fit')">Fit Canvas to Screen</button>
+        <button id="btn-fit" class="px-3 py-1 rounded text-white bg-slate-900 font-semibold transition" onclick="setViewMode('fit')">Fit Canvas to Screen</button>
         <button id="btn-native" class="px-3 py-1 rounded text-slate-300 hover:text-white transition" onclick="setViewMode('native')">100% Native 1080p</button>
       </div>
 
@@ -191,12 +187,12 @@
         <!-- Brand & Title -->
         <div class="flex items-center space-x-4">
           <div class="w-10 h-10 rounded-lg bg-[#0F172A] flex items-center justify-center text-white shadow-inner font-bold text-lg tracking-tighter">
-            <span class="text-indigo-400">L</span>R
+            <span class="text-amber-400 font-black">L</span>R
           </div>
           <div>
             <div class="flex items-center space-x-2">
               <h1 class="text-lg font-bold text-[#0F172A] tracking-tight">GCC Omnichannel Retail & Markdown Elasticity Control Tower</h1>
-              <span class="px-2 py-0.5 text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">FY2026 Active</span>
+              <span class="px-2 py-0.5 text-[11px] font-semibold bg-slate-100 text-slate-800 border border-slate-200 rounded-full">FY2026 Active</span>
             </div>
             <p class="text-xs text-[#64748B]">Executive Performance Dashboard • The Dubai Mall | Mall of the Emirates | Yas Mall | E-Commerce DC</p>
           </div>
@@ -224,7 +220,7 @@
           <!-- Channel Slicer Dropdown -->
           <div class="flex flex-col">
             <span class="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold mb-1">Store Channel</span>
-            <select id="channel-filter" onchange="applyGlobalFilters()" class="text-xs font-medium bg-white border border-[#CBD5E1] rounded-md px-3 py-1 text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-indigo-500">
+            <select id="channel-filter" onchange="applyGlobalFilters()" class="text-xs font-medium bg-white border border-[#CBD5E1] rounded-md px-3 py-1 text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-slate-400">
               <option value="All">All Channels (8 GCC Locations)</option>
               <option value="Physical Flagship">Physical Flagships (Dubai Mall, Riyadh, Jeddah, Galleria)</option>
               <option value="Physical Boutique">Physical Boutiques (MOE & Yas Mall)</option>
@@ -236,7 +232,7 @@
           <!-- Department Slicer Dropdown -->
           <div class="flex flex-col">
             <span class="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold mb-1">Merchandise Dept</span>
-            <select id="dept-filter" onchange="applyGlobalFilters()" class="text-xs font-medium bg-white border border-[#CBD5E1] rounded-md px-3 py-1 text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-indigo-500">
+            <select id="dept-filter" onchange="applyGlobalFilters()" class="text-xs font-medium bg-white border border-[#CBD5E1] rounded-md px-3 py-1 text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-slate-400">
               <option value="All">All Departments</option>
               <option value="Apparel">Apparel / Ready-To-Wear</option>
               <option value="Accessories">Leather Goods & Accessories</option>
@@ -252,7 +248,7 @@
 
           <!-- Executive Briefing Canvas Button (Harmonized) -->
           <button onclick="toggleModal(true)" class="flex items-center space-x-1.5 bg-slate-50 hover:bg-slate-100 text-[#0F172A] border border-[#CBD5E1] px-3 py-1 rounded-md text-xs font-semibold transition shadow-xs">
-            <svg class="w-3.5 h-3.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <svg class="w-3.5 h-3.5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             <span>Executive Briefing</span>
           </button>
         </div>
@@ -294,7 +290,7 @@
 
         <!-- Metric Governance Tooltip -->
         <div class="metric-tooltip absolute top-12 left-4 right-4 bg-[#0F172A] text-white p-2.5 rounded shadow-xl text-[11px] z-30 border border-slate-700 pointer-events-none">
-          <strong class="text-indigo-300 block mb-0.5">DAX Metric Definition:</strong>
+          <strong class="text-blue-200 block mb-0.5">DAX Metric Definition:</strong>
           <code>[Net Sales (AED)] = SUM(Fact_POS_Transactions[NetSalesAmt])</code>
           <p class="text-slate-300 mt-1">Excludes 5% UAE VAT and customer promotional deductions.</p>
         </div>
@@ -488,17 +484,17 @@
         </div>
         <div class="flex items-center space-x-2">
           <button onclick="simulateTransfer()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold px-3 py-1 rounded transition shadow-xs active:scale-95">Simulate Transfer</button>
-          <button onclick="approveTransfer()" class="shimmer-btn bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-3.5 py-1 rounded transition shadow-xs active:scale-95">Approve Dispatch</button>
+          <button onclick="approveTransfer()" class="btn-executive-action text-white text-xs font-semibold px-3.5 py-1 rounded transition shadow-xs">Approve Dispatch</button>
         </div>
       </section>
 
       <!-- ========================================================================= -->
       <!-- ZONE 4: WHAT-IF SIMULATOR (Y: 252 to 670 | 40% W: 752px)                 -->
       <!-- ========================================================================= -->
-      <section class="pos-sim-ctrl bg-white border border-[#E2E8F0] border-t-2 border-t-[#6366F1] rounded-lg p-2.5 shadow-sm flex flex-col justify-between">
+      <section class="pos-sim-ctrl bg-white border border-[#E2E8F0] border-t-2 border-t-[#1E3A8A] rounded-lg p-2.5 shadow-sm flex flex-col justify-between">
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-2">
-            <span class="w-2 h-2 rounded-full bg-[#6366F1]"></span>
+            <span class="w-2 h-2 rounded-full bg-[#1E3A8A]"></span>
             <h2 class="text-xs font-bold text-[#0F172A] uppercase tracking-wider">What-If Markdown Elasticity Simulator</h2>
           </div>
           <!-- Feasibility Verdict Badge -->
@@ -511,7 +507,7 @@
         <div class="my-0.5">
           <div class="flex items-center justify-between mb-0.5">
             <label for="discount-slider" class="text-[11px] font-semibold text-[#0F172A]">Simulated Promotional Markdown:</label>
-            <span class="text-xs font-bold text-[#6366F1] bg-slate-50 px-2 py-0.5 rounded border border-slate-200" id="slider-val-label">25% Markdown</span>
+            <span class="text-xs font-bold text-[#1E3A8A] bg-slate-100 px-2 py-0.5 rounded border border-slate-200" id="slider-val-label">25% Markdown</span>
           </div>
           <input type="range" id="discount-slider" min="0" max="30" step="5" value="25" oninput="handleSliderChange(this.value)">
           <div class="flex justify-between text-[9px] text-[#64748B] font-semibold mt-0.5 px-1">
@@ -520,7 +516,7 @@
             <span>10%</span>
             <span>15%</span>
             <span>20%</span>
-            <span class="text-[#6366F1] font-bold">25%</span>
+            <span class="text-[#1E3A8A] font-bold">25%</span>
             <span>30%</span>
           </div>
         </div>
@@ -541,7 +537,7 @@
           </div>
           <div class="bg-slate-50 px-1.5 py-1 rounded border border-slate-200 text-center">
             <span class="text-[9px] uppercase font-semibold text-[#64748B] block leading-none mb-1">Capital ROI</span>
-            <span class="text-xs font-bold text-[#6366F1] block leading-none" id="sim-cap-roi">1.46x</span>
+            <span class="text-xs font-bold text-[#1E3A8A] block leading-none" id="sim-cap-roi">1.46x</span>
           </div>
         </div>
       </section>
@@ -555,7 +551,7 @@
           </div>
           <div class="flex items-center space-x-3 text-[10px]">
             <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-sm bg-[#0F172A] mr-1"></span>Baseline GM ($)</span>
-            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-sm bg-[#6366F1] mr-1"></span>Simulated GM ($)</span>
+            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-sm bg-[#2563EB] mr-1"></span>Simulated GM ($)</span>
             <span class="flex items-center"><span class="w-2.5 h-1 rounded bg-[#F59E0B] mr-1"></span>Capital Released</span>
           </div>
         </div>
@@ -589,7 +585,7 @@
 
           <!-- Right: Search & Export -->
           <div class="flex items-center space-x-2 text-xs">
-            <input type="text" id="grid-search" placeholder="Search SKU, Product, Store..." oninput="renderTable()" class="text-xs bg-slate-50 border border-slate-200 rounded px-2.5 py-1 text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-indigo-500 w-56">
+            <input type="text" id="grid-search" placeholder="Search SKU, Product, Store..." oninput="renderTable()" class="text-xs bg-slate-50 border border-slate-200 rounded px-2.5 py-1 text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-slate-400 w-56">
 
             <button onclick="exportCSV()" class="bg-slate-100 hover:bg-slate-200 text-[#0F172A] text-xs font-semibold px-2.5 py-1 rounded border border-slate-300 transition flex items-center active:scale-95">
               <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -629,7 +625,7 @@
     <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full border border-slate-200 overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
       <div class="bg-[#0F172A] text-white px-6 py-4 flex items-center justify-between">
         <div class="flex items-center space-x-3">
-          <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white">ℹ️</div>
+          <div class="w-8 h-8 rounded-lg bg-[#1E3A8A] flex items-center justify-center font-bold text-white">ℹ️</div>
           <div>
             <h2 class="text-base font-bold tracking-tight">Executive Control Tower Architecture Brief</h2>
             <p class="text-xs text-slate-400">Enterprise Decision Engineering & Semantic Model Blueprint</p>
@@ -643,7 +639,7 @@
       <div class="p-6 space-y-5 text-xs text-[#0F172A] max-h-[80vh] overflow-y-auto custom-scroll">
         <div class="border border-slate-200 rounded-lg p-4 bg-slate-50">
           <div class="flex items-center space-x-2 mb-2">
-            <span class="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-xs">1</span>
+            <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-900 font-bold flex items-center justify-center text-xs">1</span>
             <h3 class="font-bold text-sm text-[#0F172A]">Commercial Problem Solved</h3>
           </div>
           <p class="text-[#64748B] leading-relaxed">
@@ -662,7 +658,7 @@
               <p class="text-[#64748B]">Annualized gross margin return per AED of inventory capital invested, linking velocity to margin.</p>
             </div>
             <div class="bg-white p-2.5 rounded border border-slate-200">
-              <strong class="text-indigo-700 block mb-1">Price Elasticity ($\% \Delta Q = -\epsilon \times \% \Delta P$)</strong>
+              <strong class="text-blue-900 block mb-1">Price Elasticity ($\% \Delta Q = -\epsilon \times \% \Delta P$)</strong>
               <p class="text-[#64748B]">Modeled category volume lift vs. margin surrendered to test discount feasibility.</p>
             </div>
             <div class="bg-white p-2.5 rounded border border-slate-200">
@@ -763,14 +759,14 @@
         container.style.width = `${1920 * scale}px`;
         container.style.height = `${1080 * scale}px`;
         
-        btnFit.className = "px-3 py-1 rounded text-white bg-indigo-600 font-semibold transition";
+        btnFit.className = "px-3 py-1 rounded text-white bg-slate-900 font-semibold transition";
         btnNative.className = "px-3 py-1 rounded text-slate-300 hover:text-white transition";
       } else {
         canvas.style.transform = `scale(1)`;
         container.style.width = `1920px`;
         container.style.height = `1080px`;
         
-        btnNative.className = "px-3 py-1 rounded text-white bg-indigo-600 font-semibold transition";
+        btnNative.className = "px-3 py-1 rounded text-white bg-slate-900 font-semibold transition";
         btnFit.className = "px-3 py-1 rounded text-slate-300 hover:text-white transition";
       }
     }
@@ -790,7 +786,7 @@
     }
 
     window.addEventListener('resize', () => {
-      if (document.getElementById('btn-fit').classList.contains('bg-indigo-600')) {
+      if (document.getElementById('btn-fit').classList.contains('bg-slate-900')) {
         setViewMode('fit');
       }
     });
@@ -890,7 +886,7 @@
       // Dynamic Slider Track Gradient Fill
       const pctPos = (discountPct / 0.30) * 100;
       const slider = document.getElementById('discount-slider');
-      slider.style.background = `linear-gradient(to right, #6366F1 0%, #6366F1 ${pctPos}%, #E2E8F0 ${pctPos}%, #E2E8F0 100%)`;
+      slider.style.background = `linear-gradient(to right, #1E3A8A 0%, #1E3A8A ${pctPos}%, #CBD5E1 ${pctPos}%, #CBD5E1 100%)`;
 
       // Update Verdict Badge (Aligned strictly with DAX [Breakeven Feasibility Verdict])
       const badge = document.getElementById('sim-verdict-badge');
@@ -953,7 +949,7 @@
                    <title>${d.subcat} Baseline GM: AED ${Math.round(d.baselineGM).toLocaleString()}</title>
                  </rect>`;
         
-        html += `<rect x="${gx + barWidth + 3}" y="${ySim}" width="${barWidth}" height="${hSim}" fill="#6366F1" rx="2" class="transition-all duration-300">
+        html += `<rect x="${gx + barWidth + 3}" y="${ySim}" width="${barWidth}" height="${hSim}" fill="#2563EB" rx="2" class="transition-all duration-300">
                    <title>${d.subcat} Simulated GM: AED ${Math.round(d.simGM).toLocaleString()}</title>
                  </rect>`;
 
@@ -1007,7 +1003,7 @@
 
         const isHighlighted = selectedSkuHighlight === pos.sku;
         const strokeWidth = isHighlighted ? 4 : 2;
-        const strokeColor = isHighlighted ? '#6366F1' : '#FFFFFF';
+        const strokeColor = isHighlighted ? '#1E3A8A' : '#FFFFFF';
 
         pointsHtml += `
           <g class="cursor-pointer transition-transform duration-200 hover:scale-125" 
@@ -1031,7 +1027,7 @@
       const y = e.clientY - rect.top - 20;
 
       tooltip.innerHTML = `
-        <div class="font-bold text-indigo-300 border-b border-slate-700 pb-1 mb-1.5 flex items-center justify-between">
+        <div class="font-bold text-slate-200 border-b border-slate-700 pb-1 mb-1.5 flex items-center justify-between">
           <span>${store}</span>
           <span class="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-300">${sku}</span>
         </div>
@@ -1042,7 +1038,7 @@
           <span>Directive: <strong class="${wos < 2 ? 'text-red-400' : wos > 8 ? 'text-amber-400' : 'text-emerald-400'}">${wos < 2 ? 'PULL' : wos > 8 ? 'PUSH' : 'HOLD'}</strong></span>
         </div>
         <div class="text-[10px] text-slate-300 italic border-t border-slate-800 pt-1 leading-snug">${directive}</div>
-        <div class="text-[9px] text-indigo-400 mt-1 font-semibold uppercase tracking-wider">👉 Click to drill down into Action Grid</div>
+        <div class="text-[9px] text-slate-400 mt-1 font-semibold uppercase tracking-wider">👉 Click to drill down into Action Grid</div>
       `;
       tooltip.style.left = `${Math.min(x, 820)}px`;
       tooltip.style.top = `${Math.max(10, y)}px`;
@@ -1112,7 +1108,7 @@
       data.forEach(item => {
         let wosBadge = `<span class="px-2 py-0.5 rounded-full font-bold text-[11px] bg-emerald-50 text-emerald-700 border border-emerald-200">${item.wos.toFixed(1)} Wks</span>`;
         if (item.wos < 2.0) {
-          wosBadge = `<span class="px-2 py-0.5 rounded-full font-bold text-[11px] bg-red-100 text-red-800 border border-red-300 animate-pulse">${item.wos.toFixed(1)} Wks (LOW)</span>`;
+          wosBadge = `<span class="px-2 py-0.5 rounded-full font-bold text-[11px] bg-red-100 text-red-800 border border-red-300">${item.wos.toFixed(1)} Wks (LOW)</span>`;
         } else if (item.wos > 10.0) {
           wosBadge = `<span class="px-2 py-0.5 rounded-full font-bold text-[11px] bg-amber-100 text-amber-800 border border-amber-300">${item.wos.toFixed(1)} Wks (HIGH)</span>`;
         }
@@ -1131,7 +1127,7 @@
         if (item.directive.includes('Stockout') || item.directive.includes('Urgent') || item.directive.includes('PULL')) {
           directiveBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200 mr-1.5 shrink-0">PULL</span>`;
         } else if (item.directive.includes('RESTOCK') || item.directive.includes('PRIORITY')) {
-          directiveBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 mr-1.5 shrink-0">RESTOCK</span>`;
+          directiveBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-900 border border-blue-200 mr-1.5 shrink-0">RESTOCK</span>`;
         } else if (item.directive.includes('OPTIMAL')) {
           directiveBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 mr-1.5 shrink-0">OPTIMAL</span>`;
         } else {
@@ -1141,7 +1137,7 @@
         const cleanDirective = item.directive.replace(/[⚠️🚨📦✅]/g, '').trim();
 
         const isSelected = selectedSkuHighlight === item.sku;
-        const rowBg = isSelected ? "bg-indigo-50/70" : "hover:bg-slate-50";
+        const rowBg = isSelected ? "bg-blue-50/80" : "hover:bg-slate-50";
 
         rows += `
           <tr id="row-${item.sku}" class="${rowBg} transition border-b border-slate-100 cursor-pointer" onclick="highlightFromRow('${item.sku}')">
@@ -1199,7 +1195,7 @@
     // --- 9. INTER-MALL DIRECTIVE SIMULATION & APPROVAL ---
     function simulateTransfer() {
       const banner = document.getElementById('banner-text');
-      banner.innerHTML = `<span class="text-indigo-800 font-bold">SIMULATION ACTIVE:</span> 450 units re-routed from Yas Mall to Dubai Mall. Projected Stockout Risk reduced to 0.0%; Projected Dubai Mall STR sustained at 78.5%.`;
+      banner.innerHTML = `<span class="text-blue-950 font-bold">SIMULATION ACTIVE:</span> 450 units re-routed from Yas Mall to Dubai Mall. Projected Stockout Risk reduced to 0.0%; Projected Dubai Mall STR sustained at 78.5%.`;
       
       document.getElementById('kpi-wos').innerText = '4.2 Wks';
       document.getElementById('wos-badge-status').className = 'px-2 py-0.5 text-[10px] font-bold bg-emerald-50 text-emerald-700 rounded border border-emerald-200';
