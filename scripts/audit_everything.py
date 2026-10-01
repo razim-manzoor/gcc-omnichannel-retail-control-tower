@@ -156,17 +156,20 @@ def run_audit():
         print(f"Measures in BIM but NOT in C#: {missing_in_cs}")
         # Note: BIM might have additional helper measures, let's see
 
-    # 6. Check Web UI index.html alignment
+    # 6. Check Web UI index.html and modular JS/CSS alignment
     print("\n--- Checking Web Control Tower Alignment ---")
     web_path = "web/index.html"
     web_content = open(web_path, encoding='utf-8').read()
+    js_data_path = "web/js/data.js"
+    js_data_content = open(js_data_path, encoding='utf-8').read() if os.path.exists(js_data_path) else ""
+    full_web_content = web_content + "\n" + js_data_content
     
     # Check if heuristic multipliers exist
     heuristic_patterns = [r'\*\s*180\b', r'\*\s*120\b', r'\*\s*45\b']
     for pat in heuristic_patterns:
-        if re.search(pat, web_content):
-            issues.append(f"Found forbidden heuristic multiplier pattern '{pat}' in web/index.html!")
-            print(f"  [FAIL] Heuristic multiplier '{pat}' found in web/index.html")
+        if re.search(pat, full_web_content):
+            issues.append(f"Found forbidden heuristic multiplier pattern '{pat}' in web application code!")
+            print(f"  [FAIL] Heuristic multiplier '{pat}' found in web application")
         else:
             print(f"  [PASS] No heuristic pattern '{pat}'")
 
@@ -182,13 +185,13 @@ def run_audit():
     else:
         issues.append("Web UI missing 69.7% margin benchmark")
 
-    # Check Base Unit Volumes in web UI
+    # Check Base Unit Volumes in web data
     expected_skus = ["RTW-BLZ-LIN-001", "LEA-TOT-GLD-002", "FTW-SNK-LTH-003", "DRS-SLK-EVN-004", "BTY-EXT-OUD-005", "RTW-TEE-COT-006"]
     for sku in expected_skus:
-        if sku in web_content:
-            print(f"  [PASS] SKU {sku} present in web UI simulation matrix")
+        if sku in full_web_content:
+            print(f"  [PASS] SKU {sku} present in web application data layer")
         else:
-            issues.append(f"SKU {sku} missing from web/index.html")
+            issues.append(f"SKU {sku} missing from web application")
 
     # 7. Check Case Study & Readme
     print("\n--- Checking Documentation & Case Study Alignment ---")

@@ -1,0 +1,147 @@
+/* ==========================================================================
+   GCC Omnichannel Retail Control Tower - Master Executive Stylesheet
+   Designed for 1920x1080 (16:9) Fixed Landscape Canvas
+   Palette: Corporate Navy (#1E3A8A), Slate (#0F172A), Sapphire (#2563EB)
+   ========================================================================== */
+
+/* 1. Base Typography & Surface */
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #0F172A;
+  color: #0F172A;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* 2. Master Canvas Coordinate Grid (1920x1080) */
+#dashboard-canvas {
+  width: 1920px;
+  height: 1080px;
+  min-width: 1920px;
+  min-height: 1080px;
+  max-width: 1920px;
+  max-height: 1080px;
+  background-color: #F8FAFC;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+  transform-origin: top left;
+}
+
+/* Precision Coordinates per Executive C-Suite UX Spec */
+.pos-hdr { position: absolute !important; left: 16px; top: 16px; width: 1888px; height: 74px; }
+
+.pos-kpi-1 { position: absolute !important; left: 16px; top: 106px; width: 457px; height: 130px; }
+.pos-kpi-2 { position: absolute !important; left: 493px; top: 106px; width: 457px; height: 130px; }
+.pos-kpi-3 { position: absolute !important; left: 970px; top: 106px; width: 457px; height: 130px; }
+.pos-kpi-4 { position: absolute !important; left: 1447px; top: 106px; width: 457px; height: 130px; }
+
+.pos-diag { position: absolute !important; left: 16px; top: 252px; width: 1120px; height: 360px; }
+.pos-alert { position: absolute !important; left: 16px; top: 622px; width: 1120px; height: 48px; }
+
+.pos-sim-ctrl { position: absolute !important; left: 1152px; top: 252px; width: 752px; height: 140px; }
+.pos-sim-chart { position: absolute !important; left: 1152px; top: 404px; width: 752px; height: 266px; }
+
+.pos-grid { position: absolute !important; left: 16px; top: 686px; width: 1888px; height: 374px; }
+
+/* 3. Institutional Executive Slider */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  background: linear-gradient(to right, #1E3A8A 0%, #1E3A8A 83.3%, #CBD5E1 83.3%, #CBD5E1 100%);
+  height: 5px;
+  border-radius: 4px;
+  outline: none;
+  transition: background 0.1s ease;
+  cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  background: #1E3A8A;
+  cursor: pointer;
+  border: 2.5px solid #FFFFFF;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.35);
+  transition: transform 0.1s ease, background-color 0.15s ease;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: #1E40AF;
+}
+
+input[type=range]::-webkit-slider-thumb:active {
+  transform: scale(1.05);
+  background: #0F172A;
+}
+
+/* 4. High-Density Scrollbars */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 3px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* 5. Executive Action Buttons */
+.btn-executive-action {
+  background-color: #059669;
+  color: #FFFFFF;
+  font-weight: 600;
+  border: 1px solid #047857;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+.btn-executive-action:hover {
+  background-color: #047857;
+}
+.btn-executive-action:active {
+  transform: scale(0.98);
+}
+
+/* 6. Dynamic Visual FX & Tooltips */
+@keyframes row-flash {
+  0% { background-color: #EEF2FF; }
+  50% { background-color: #E0E7FF; }
+  100% { background-color: transparent; }
+}
+.row-highlight {
+  animation: row-flash 2.5s ease-out;
+}
+
+.metric-tooltip {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.has-tooltip:hover .metric-tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+/* SVG Text Halo for Sub-Second Data Readability */
+.svg-text-halo {
+  paint-order: stroke fill;
+  stroke: #FFFFFF;
+  stroke-width: 3.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
