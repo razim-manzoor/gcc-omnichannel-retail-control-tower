@@ -1,0 +1,48 @@
+# Obsidian Second Brain Junction
+.brain/
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing & Coverage
+coverage/
+.nyc_output/
+
+# Production Build Outputs
+.next/
+out/
+build/
+dist/
+
+# Environment & Secrets (Strictly Never Commit Credentials)
+.env
+.env*.local
+.env.production
+*.pem
+*.key
+*.cert
+
+# Python / Virtual Environs
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+
+# Scratch & Temporary Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+scratch_*.py
+scratch_*.ts
+scratch_*.js
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+*.lnk
