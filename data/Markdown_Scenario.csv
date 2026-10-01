@@ -1,0 +1,12 @@
+ScenarioDiscountPct,DiscountDisplayLabel,SimulationSortOrder
+0.0,0% (Full Price),0
+0.05,5% Off,1
+0.1,10% Off,2
+0.15,15% Off,3
+0.2,20% Off,4
+0.25,25% Off,5
+0.3,30% Off,6
+0.35,35% Off,7
+0.4,40% Off,8
+0.45,45% Off,9
+0.5,50% Off,10

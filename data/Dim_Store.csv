@@ -1,0 +1,10 @@
+StoreKey,StoreCode,StoreName,Channel,Emirate,Country,GrossLeasableAreaSqFt,ClusterTier,HubFulfillmentEligible
+-1,UNKNOWN,Unknown / Unassigned,Unknown,Unknown,Unknown,0,Unknown,False
+1,DXB-TDM-01,The Dubai Mall Flagship,Physical Flagship,Dubai,United Arab Emirates,14500,Flagship,True
+2,DXB-MOE-02,Mall of the Emirates Boutique,Physical Boutique,Dubai,United Arab Emirates,7200,Boutique,True
+3,AUH-YAS-01,Yas Mall Abu Dhabi,Physical Boutique,Abu Dhabi,United Arab Emirates,6800,Boutique,True
+4,DXB-OUT-01,Dubai Outlet Mall Clearance,Physical Outlet,Dubai,United Arab Emirates,4500,Outlet,False
+5,ECOM-UAE-01,UAE Central DC & Digital Hub,Digital E-Commerce,Dubai,United Arab Emirates,55000,Fulfillment Hub,True
+6,AUH-GAL-02,The Galleria Al Maryah Island,Physical Flagship,Abu Dhabi,United Arab Emirates,9500,Flagship,True
+7,JED-RSM-01,Red Sea Mall Flagship Jeddah,Physical Flagship,Makkah Region,Saudi Arabia,11000,Flagship,True
+8,RUH-KGC-01,Kingdom Centre Flagship Riyadh,Physical Flagship,Riyadh Province,Saudi Arabia,12000,Flagship,True

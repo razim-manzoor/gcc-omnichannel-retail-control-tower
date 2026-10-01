@@ -1,0 +1,482 @@
+{
+  "name": "Omnichannel_Retail_Control_Tower",
+  "compatibilityLevel": 1600,
+  "model": {
+    "culture": "en-US",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "tables": [
+      {
+        "name": "_Measures",
+        "description": "Centralized Repository for GCC Omnichannel Retail & Markdown Elasticity Measures",
+        "columns": [
+          {
+            "name": "RowId",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "RowId"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Partition",
+            "dataView": "full",
+            "source": {
+              "type": "m",
+              "expression": "let\n    Source = #table(type table[RowId = Int64.Type], {{1}})\nin\n    Source"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Units Sold",
+            "expression": "SUM ( Fact_POS_Transactions[UnitsSold] )",
+            "formatString": "#,##0",
+            "displayFolder": "01 Financial & Commercial Core",
+            "description": "Base Additive Metrics: Total units sold across POS checkouts"
+          },
+          {
+            "name": "Gross Sales (AED)",
+            "expression": "SUM ( Fact_POS_Transactions[GrossSalesAmt] )",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "01 Financial & Commercial Core",
+            "description": "Base Additive Metrics: Gross ticket sales before any discount or markdown deductions"
+          },
+          {
+            "name": "Markdown Discount (AED)",
+            "expression": "SUM ( Fact_POS_Transactions[DiscountAmt] )",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "01 Financial & Commercial Core",
+            "description": "Base Additive Metrics: Total promotional discounts, vouchers, and price markdowns deducted at checkout"
+          },
+          {
+            "name": "Net Revenue (AED)",
+            "expression": "SUM ( Fact_POS_Transactions[NetSalesAmt] )",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "01 Financial & Commercial Core",
+            "description": "Base Additive Metrics: Realized net sales revenue after discounts (Net Sales = Gross - Discount)"
+          },
+          {
+            "name": "Total COGS (AED)",
+            "expression": "SUM ( Fact_POS_Transactions[ExtendedCostAmt] )",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "01 Financial & Commercial Core",
+            "description": "Base Additive Metrics: Total Cost of Goods Sold (COGS) based on landed unit cost snapshot"
+          },
+          {
+            "name": "Gross Margin (AED)",
+            "expression": "[Net Revenue (AED)] - [Total COGS (AED)]",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "01 Financial & Commercial Core",
+            "description": "Commercial Profitability: Absolute Gross Margin in AED realized from completed transactions"
+          },
+          {
+            "name": "Gross Margin %",
+            "expression": "DIVIDE ( [Gross Margin (AED)], [Net Revenue (AED)], 0 )",
+            "formatString": "0.0%",
+            "displayFolder": "01 Financial & Commercial Core",
+            "description": "Commercial Profitability: Gross Margin percentage of net revenue"
+          },
+          {
+            "name": "Markdown Depth %",
+            "expression": "DIVIDE ( [Markdown Discount (AED)], [Gross Sales (AED)], 0 )",
+            "formatString": "0.0%",
+            "displayFolder": "01 Financial & Commercial Core",
+            "description": "Commercial Profitability: Markdown depth percentage relative to gross sales"
+          },
+          {
+            "name": "Average Unit Retail (AUR)",
+            "expression": "DIVIDE ( [Net Revenue (AED)], [Units Sold], 0 )",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "01 Financial & Commercial Core",
+            "description": "Commercial Profitability: Average Realized Selling Price per unit sold"
+          },
+          {
+            "name": "Average Unit Cost (AUC)",
+            "expression": "DIVIDE ( [Total COGS (AED)], [Units Sold], 0 )",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "01 Financial & Commercial Core",
+            "description": "Commercial Profitability: Average Cost of Goods Sold per unit sold"
+          },
+          {
+            "name": "Ending On Hand Units",
+            "expression": "VAR LastAvailableDate = MAX ( Dim_Date[FullDate] )\nVAR TargetDateKey = \n    YEAR ( LastAvailableDate ) * 10000 \n    + MONTH ( LastAvailableDate ) * 100 \n    + DAY ( LastAvailableDate )\nRETURN\n    CALCULATE (\n        SUM ( Fact_Daily_Inventory[OnHandUnits] ),\n        Fact_Daily_Inventory[SnapshotDateKey] = TargetDateKey,\n        REMOVEFILTERS ( Dim_Date )\n    )",
+            "formatString": "#,##0",
+            "displayFolder": "02 Semi-Additive Inventory Snapshots",
+            "description": "Strict Point-in-Time Snapshot Filtering (Closing Balance On-Hand)"
+          },
+          {
+            "name": "Ending In-Transit Units",
+            "expression": "VAR LastAvailableDate = MAX ( Dim_Date[FullDate] )\nVAR TargetDateKey = \n    YEAR ( LastAvailableDate ) * 10000 \n    + MONTH ( LastAvailableDate ) * 100 \n    + DAY ( LastAvailableDate )\nRETURN\n    CALCULATE (\n        SUM ( Fact_Daily_Inventory[InTransitUnits] ),\n        Fact_Daily_Inventory[SnapshotDateKey] = TargetDateKey,\n        REMOVEFILTERS ( Dim_Date )\n    )",
+            "formatString": "#,##0",
+            "displayFolder": "02 Semi-Additive Inventory Snapshots",
+            "description": "Strict Point-in-Time Snapshot Filtering (Closing Balance In-Transit)"
+          },
+          {
+            "name": "Ending Inventory Cost (AED)",
+            "expression": "VAR LastAvailableDate = MAX ( Dim_Date[FullDate] )\nVAR TargetDateKey = \n    YEAR ( LastAvailableDate ) * 10000 \n    + MONTH ( LastAvailableDate ) * 100 \n    + DAY ( LastAvailableDate )\nRETURN\n    CALCULATE (\n        SUM ( Fact_Daily_Inventory[InventoryCostValueAmt] ),\n        Fact_Daily_Inventory[SnapshotDateKey] = TargetDateKey,\n        REMOVEFILTERS ( Dim_Date )\n    )",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "02 Semi-Additive Inventory Snapshots",
+            "description": "Strict Point-in-Time Snapshot Filtering (Closing Inventory Landed Cost Value)"
+          },
+          {
+            "name": "Average Inventory Cost (AED)",
+            "expression": "AVERAGEX (\n    KEEPFILTERS ( VALUES ( Dim_Date[DateKey] ) ),\n    CALCULATE ( SUM ( Fact_Daily_Inventory[InventoryCostValueAmt] ) )\n)",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "02 Semi-Additive Inventory Snapshots",
+            "description": "Daily Average Inventory Value over the active evaluation window"
+          },
+          {
+            "name": "Sell-Through Rate %",
+            "expression": "VAR SoldUnits = [Units Sold]\nVAR OnHand = [Ending On Hand Units]\nVAR PipelineTotal = SoldUnits + OnHand\nRETURN\n    DIVIDE ( SoldUnits, PipelineTotal, 0 )",
+            "formatString": "0.0%",
+            "displayFolder": "03 Asset Productivity & Supply Velocity",
+            "description": "Sell-Through Rate (STR %) = Units Sold / (Units Sold + Ending On-Hand Units)"
+          },
+          {
+            "name": "Units Sold Trailing 4W",
+            "expression": "VAR CurrentMaxDate = MAX ( Dim_Date[FullDate] )\nRETURN\n    CALCULATE (\n        [Units Sold],\n        DATESINPERIOD ( Dim_Date[FullDate], CurrentMaxDate, -28, DAY )\n    )",
+            "formatString": "#,##0",
+            "displayFolder": "03 Asset Productivity & Supply Velocity",
+            "description": "Trailing 28-Day Run Rate to smooth weekly footfall cycles"
+          },
+          {
+            "name": "Weekly Sales Run Rate (T4W)",
+            "expression": "DIVIDE ( [Units Sold Trailing 4W], 4, 0 )",
+            "formatString": "#,##0.0",
+            "displayFolder": "03 Asset Productivity & Supply Velocity",
+            "description": "Weekly Sales Velocity over trailing 4 weeks"
+          },
+          {
+            "name": "Weeks of Supply",
+            "expression": "DIVIDE ( [Ending On Hand Units], [Weekly Sales Run Rate (T4W)], BLANK () )",
+            "formatString": "0.0 \"Wks\"",
+            "displayFolder": "03 Asset Productivity & Supply Velocity",
+            "description": "Weeks of Supply (WOS / Forward Stock Cover)"
+          },
+          {
+            "name": "GMROI",
+            "expression": "VAR EvaluatedDays = COUNTROWS ( VALUES ( Dim_Date[DateKey] ) )\nVAR AnnualizationFactor = DIVIDE ( 365, MAX ( 1, EvaluatedDays ), 1 )\nVAR AnnualizedMargin = [Gross Margin (AED)] * AnnualizationFactor\nVAR AvgInventory = [Average Inventory Cost (AED)]\nRETURN\n    DIVIDE ( AnnualizedMargin, AvgInventory, 0 )",
+            "formatString": "0.00\"x\"",
+            "displayFolder": "03 Asset Productivity & Supply Velocity",
+            "description": "Gross Margin Return on Investment (GMROI) = Annualized Margin / Average Inventory at Cost"
+          },
+          {
+            "name": "Net Revenue MTD",
+            "expression": "TOTALMTD ( [Net Revenue (AED)], Dim_Date[FullDate] )",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "04 Time Intelligence & Variance",
+            "description": "Month-To-Date Net Revenue"
+          },
+          {
+            "name": "Net Revenue YTD",
+            "expression": "TOTALYTD ( [Net Revenue (AED)], Dim_Date[FullDate] )",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "04 Time Intelligence & Variance",
+            "description": "Year-To-Date Net Revenue"
+          },
+          {
+            "name": "Net Revenue Prior Period",
+            "expression": "VAR SelectedDays = COUNTROWS ( VALUES ( Dim_Date[DateKey] ) )\nVAR MinDate = MIN ( Dim_Date[FullDate] )\nRETURN\n    CALCULATE (\n        [Net Revenue (AED)],\n        DATESBETWEEN (\n            Dim_Date[FullDate],\n            MinDate - SelectedDays,\n            MinDate - 1\n        )\n    )",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "04 Time Intelligence & Variance",
+            "description": "Net Revenue for dynamic prior comparative period matching current selection length"
+          },
+          {
+            "name": "Net Revenue Growth %",
+            "expression": "VAR CurrentRev = [Net Revenue (AED)]\nVAR PriorRev = [Net Revenue Prior Period]\nRETURN\n    DIVIDE ( CurrentRev - PriorRev, PriorRev, BLANK () )",
+            "formatString": "+0.0%;-0.0%;0.0%",
+            "displayFolder": "04 Time Intelligence & Variance",
+            "description": "Period-over-period Net Revenue percentage growth"
+          },
+          {
+            "name": "Stock Health Classification",
+            "expression": "VAR STR = [Sell-Through Rate %]\nVAR WOS = [Weeks of Supply]\nRETURN\n    SWITCH (\n        TRUE (),\n        ISBLANK ( WOS ), \"NO_VELOCITY\",\n        STR >= 0.70 && WOS < 2.5, \"CRITICAL_STOCKOUT_RISK\",\n        STR <= 0.25 && WOS > 10.0, \"OVERSTOCK_CASH_TRAP\",\n        WOS >= 3.0 && WOS <= 6.0, \"BALANCED_EQUILIBRIUM\",\n        \"ATTENTION_MONITOR\"\n    )",
+            "displayFolder": "05 Prescriptive Stock Balancing",
+            "description": "Categorical Status based on velocity divergence & inventory cover"
+          },
+          {
+            "name": "Target Safety Stock Units",
+            "expression": "CEILING ( [Weekly Sales Run Rate (T4W)] * 4, 1 )",
+            "formatString": "#,##0",
+            "displayFolder": "05 Prescriptive Stock Balancing",
+            "description": "Target buffer = 4.0 Weeks of Supply"
+          },
+          {
+            "name": "Inter-Mall Net Unit Variance",
+            "expression": "[Ending On Hand Units] - [Target Safety Stock Units]",
+            "formatString": "+#,##0;-#,##0;0",
+            "displayFolder": "05 Prescriptive Stock Balancing",
+            "description": "Net Unit Variance relative to Target Safety Stock buffer"
+          },
+          {
+            "name": "Inter-Mall Rebalance Directive",
+            "expression": "VAR Status = [Stock Health Classification]\nVAR StoreCode = SELECTEDVALUE ( Dim_Store[StoreCode] )\nVAR UnitVariance = [Inter-Mall Net Unit Variance]\nRETURN\n    SWITCH (\n        Status,\n        \"CRITICAL_STOCKOUT_RISK\", \n            \"⚠️ PULL INVENTORY: Request \" & FORMAT ( ABS ( UnitVariance ), \"#,##0\" ) & \" units from Yas Mall / Regional DC.\",\n        \"OVERSTOCK_CASH_TRAP\", \n            \"📦 PUSH INVENTORY: Surplus of \" & FORMAT ( UnitVariance, \"#,##0\" ) & \" units. Dispatch to The Dubai Mall or trigger Tier-1 markdown.\",\n        \"BALANCED_EQUILIBRIUM\", \n            \"🟢 OPTIMAL: Target weeks of supply maintained.\",\n        BLANK ()\n    )",
+            "displayFolder": "05 Prescriptive Stock Balancing",
+            "description": "Prescriptive Transfer Recommendation & Action Directive"
+          },
+          {
+            "name": "Merchandising Action Trigger",
+            "expression": "VAR STR = [Sell-Through Rate %]\nVAR WOS = [Weeks of Supply]\nVAR Elasticity = [Effective Elasticity Coeff]\nVAR OnHand = [Ending On Hand Units]\nRETURN\n    SWITCH (\n        TRUE (),\n        STR >= 0.70 && WOS < 2.0, \n            \"🚨 INTER-MALL PULL: Stockout in <14 days. Rebalance from Yas Mall/DC.\",\n        STR < 0.25 && WOS > 12.0 && Elasticity <= -1.40,\n            \"🏷️ TIER-2 MARKDOWN (25-30%): Highly elastic. Discount will release working capital fast.\",\n        STR < 0.25 && WOS > 12.0 && Elasticity > -1.40,\n            \"🔄 TRANSFER TO E-COM: Inelastic demand. Hold price; reallocate to digital hub.\",\n        WOS >= 3.0 && WOS <= 6.0, \n            \"🟢 HEALTHY: Operating at optimal sell-through equilibrium.\",\n        \"MONITOR VELOCITY\"\n    )",
+            "displayFolder": "05 Prescriptive Stock Balancing",
+            "description": "Real-time omnichannel merchandising trigger evaluating inter-mall pull, markdown liquidation, or e-com reallocation"
+          },
+          {
+            "name": "Simulated Discount %",
+            "expression": "SELECTEDVALUE ( 'Markdown_Scenario'[ScenarioDiscountPct], 0.00 )",
+            "formatString": "0.0%",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Harvests the selected discount percentage from disconnected parameter table Markdown_Scenario"
+          },
+          {
+            "name": "Effective Elasticity Coeff",
+            "expression": "VAR AggUnits = [Units Sold]\nRETURN\n    IF (\n        AggUnits > 0,\n        DIVIDE (\n            SUMX (\n                Fact_POS_Transactions,\n                Fact_POS_Transactions[UnitsSold] * RELATED ( Dim_Product[ElasticityCoefficient] )\n            ),\n            AggUnits,\n            -1.50\n        ),\n        -1.50\n    )",
+            "formatString": "0.00",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Weighted average elasticity across selected products or transaction context"
+          },
+          {
+            "name": "Simulated Volume Lift %",
+            "expression": "VAR Discount = [Simulated Discount %]\nVAR Elasticity = [Effective Elasticity Coeff]\nRETURN\n    -1 * ( Elasticity * Discount )",
+            "formatString": "+0.0%;-0.0%;0.0%",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Projected demand volume lift percentage driven by effective elasticity and scenario discount"
+          },
+          {
+            "name": "Simulated Units Sold",
+            "expression": "VAR BaseUnits = [Units Sold]\nVAR Lift = [Simulated Volume Lift %]\nRETURN\n    BaseUnits * ( 1 + Lift )",
+            "formatString": "#,##0",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Total projected simulated unit sales volume under the selected discount scenario"
+          },
+          {
+            "name": "Incremental Units Cleared",
+            "expression": "MAX ( 0, [Simulated Units Sold] - [Units Sold] )",
+            "formatString": "#,##0",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Additional units cleared beyond baseline sales velocity"
+          },
+          {
+            "name": "Simulated Effective AUR (AED)",
+            "expression": "VAR BaselineAUR = [Average Unit Retail (AUR)]\nVAR Discount = [Simulated Discount %]\nRETURN\n    BaselineAUR * ( 1 - Discount )",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Simulated realized average selling price per unit after scenario markdown"
+          },
+          {
+            "name": "Simulated Net Revenue (AED)",
+            "expression": "[Simulated Units Sold] * [Simulated Effective AUR (AED)]",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Simulated net sales revenue realized under the markdown scenario"
+          },
+          {
+            "name": "Simulated Total COGS (AED)",
+            "expression": "VAR UnitCost = [Average Unit Cost (AUC)]\nRETURN\n    [Simulated Units Sold] * UnitCost",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Simulated Cost of Goods Sold for the total projected volume"
+          },
+          {
+            "name": "Simulated Gross Margin (AED)",
+            "expression": "[Simulated Net Revenue (AED)] - [Simulated Total COGS (AED)]",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Simulated Gross Margin realized under the markdown scenario"
+          },
+          {
+            "name": "Gross Margin Delta (AED)",
+            "expression": "[Simulated Gross Margin (AED)] - [Gross Margin (AED)]",
+            "formatString": "+#,##0 \"AED\";-#,##0 \"AED\";0 \"AED\"",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Gross margin variance between markdown simulation and baseline actuals"
+          },
+          {
+            "name": "Working Capital Released (AED)",
+            "expression": "VAR UnitCost = [Average Unit Cost (AUC)]\nVAR ExtraUnits = [Incremental Units Cleared]\nRETURN\n    ExtraUnits * UnitCost",
+            "formatString": "#,##0 \"AED\"",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Additional inventory landed cost converted from warehouse shelves to liquid cash"
+          },
+          {
+            "name": "Breakeven Unit Volume",
+            "expression": "VAR BaselineGM = [Gross Margin (AED)]\nVAR DiscountedUnitAUR = [Simulated Effective AUR (AED)]\nVAR UnitCost = [Average Unit Cost (AUC)]\nVAR UnitContributionMargin = DiscountedUnitAUR - UnitCost\nRETURN\n    IF (\n        UnitContributionMargin > 0,\n        DIVIDE ( BaselineGM, UnitContributionMargin, BLANK () ),\n        BLANK ()\n    )",
+            "formatString": "#,##0",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Exact number of units required under discounted unit contribution margin to yield 100% of baseline Gross Margin"
+          },
+          {
+            "name": "Breakeven Unit Gap",
+            "expression": "[Simulated Units Sold] - [Breakeven Unit Volume]",
+            "formatString": "+#,##0;-#,##0;0",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Unit surplus or deficit against breakeven volume hurdle"
+          },
+          {
+            "name": "Breakeven Feasibility Verdict",
+            "expression": "VAR SimUnits = [Simulated Units Sold]\nVAR BEUnits = [Breakeven Unit Volume]\nVAR MarginDelta = [Gross Margin Delta (AED)]\nRETURN\n    SWITCH (\n        TRUE (),\n        [Simulated Discount %] == 0, \"BASELINE (Full Price)\",\n        MarginDelta >= 0, \"✅ ACCRETIVE: Generates +\" & FORMAT ( MarginDelta, \"#,##0 AED\" ) & \" Net Profit\",\n        MarginDelta < 0 && SimUnits >= BEUnits, \"⚖️ VOLUME BUFFERED: Clears stock with neutral margin\",\n        \"❌ DILUTIVE: Destroys \" & FORMAT ( ABS ( MarginDelta ), \"#,##0 AED\" ) & \" Gross Margin\"\n    )",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Executive green/red feasibility verdict classifying commercial profitability vs volume buffer"
+          },
+          {
+            "name": "Capital vs Margin ROI Ratio",
+            "expression": "VAR MarginSacrificed = ABS ( MIN ( 0, [Gross Margin Delta (AED)] ) )\nVAR CapitalReleased = [Working Capital Released (AED)]\nRETURN\n    IF (\n        MarginSacrificed > 0,\n        DIVIDE ( CapitalReleased, MarginSacrificed, BLANK () ),\n        BLANK ()\n    )",
+            "formatString": "0.00\"x\"",
+            "displayFolder": "06 Markdown Simulation & Sensitivity",
+            "description": "Working Capital Unlocked per 1 AED of Gross Margin Sacrificed"
+          }
+        ]
+      },
+      {
+        "name": "Dim_Date",
+        "description": "Conformed Gregorian & GCC Retail Calendar Dimension",
+        "columns": [
+          { "name": "DateKey", "dataType": "int64", "isKey": true, "sourceColumn": "DateKey" },
+          { "name": "FullDate", "dataType": "dateTime", "sourceColumn": "FullDate", "formatString": "yyyy-MM-dd" },
+          { "name": "FiscalYear", "dataType": "int64", "sourceColumn": "FiscalYear" },
+          { "name": "FiscalQuarter", "dataType": "string", "sourceColumn": "FiscalQuarter" },
+          { "name": "FiscalMonthNum", "dataType": "int64", "sourceColumn": "FiscalMonthNum" },
+          { "name": "FiscalMonthName", "dataType": "string", "sourceColumn": "FiscalMonthName" },
+          { "name": "RetailWeekNum", "dataType": "int64", "sourceColumn": "RetailWeekNum" },
+          { "name": "DayOfWeekName", "dataType": "string", "sourceColumn": "DayOfWeekName" },
+          { "name": "DayOfWeekNum", "dataType": "int64", "sourceColumn": "DayOfWeekNum" },
+          { "name": "IsWeekendGCC", "dataType": "boolean", "sourceColumn": "IsWeekendGCC" },
+          { "name": "IsRetailPeakSeason", "dataType": "boolean", "sourceColumn": "IsRetailPeakSeason" }
+        ],
+        "partitions": [{ "name": "Partition", "dataView": "full", "source": { "type": "m", "expression": "let Source = Sql.Database(\"server\", \"db\"){[Schema=\"dbo\",Item=\"Dim_Date\"]}[Data] in Source" } }]
+      },
+      {
+        "name": "Dim_Store",
+        "description": "Conformed Retail Stores, Boutiques, Outlets, and Fulfillment Hubs",
+        "columns": [
+          { "name": "StoreKey", "dataType": "int64", "isKey": true, "sourceColumn": "StoreKey" },
+          { "name": "StoreCode", "dataType": "string", "sourceColumn": "StoreCode" },
+          { "name": "StoreName", "dataType": "string", "sourceColumn": "StoreName" },
+          { "name": "Channel", "dataType": "string", "sourceColumn": "Channel" },
+          { "name": "Emirate", "dataType": "string", "sourceColumn": "Emirate" },
+          { "name": "Country", "dataType": "string", "sourceColumn": "Country" },
+          { "name": "GrossLeasableAreaSqFt", "dataType": "int64", "sourceColumn": "GrossLeasableAreaSqFt", "formatString": "#,##0" },
+          { "name": "ClusterTier", "dataType": "string", "sourceColumn": "ClusterTier" },
+          { "name": "HubFulfillmentEligible", "dataType": "boolean", "sourceColumn": "HubFulfillmentEligible" }
+        ],
+        "partitions": [{ "name": "Partition", "dataView": "full", "source": { "type": "m", "expression": "let Source = Sql.Database(\"server\", \"db\"){[Schema=\"dbo\",Item=\"Dim_Store\"]}[Data] in Source" } }]
+      },
+      {
+        "name": "Dim_Product",
+        "description": "Denormalized SKU Master with Markdown Elasticity Coefficients",
+        "columns": [
+          { "name": "ProductKey", "dataType": "int64", "isKey": true, "sourceColumn": "ProductKey" },
+          { "name": "SKU", "dataType": "string", "sourceColumn": "SKU" },
+          { "name": "ProductName", "dataType": "string", "sourceColumn": "ProductName" },
+          { "name": "Department", "dataType": "string", "sourceColumn": "Department" },
+          { "name": "Category", "dataType": "string", "sourceColumn": "Category" },
+          { "name": "SubCategory", "dataType": "string", "sourceColumn": "SubCategory" },
+          { "name": "Brand", "dataType": "string", "sourceColumn": "Brand" },
+          { "name": "BrandTier", "dataType": "string", "sourceColumn": "BrandTier" },
+          { "name": "BaseUnitCostAED", "dataType": "decimal", "sourceColumn": "BaseUnitCostAED", "formatString": "#,##0.00 \"AED\"" },
+          { "name": "BaseRetailPriceAED", "dataType": "decimal", "sourceColumn": "BaseRetailPriceAED", "formatString": "#,##0.00 \"AED\"" },
+          { "name": "ElasticityCoefficient", "dataType": "decimal", "sourceColumn": "ElasticityCoefficient", "formatString": "0.00" }
+        ],
+        "partitions": [{ "name": "Partition", "dataView": "full", "source": { "type": "m", "expression": "let Source = Sql.Database(\"server\", \"db\"){[Schema=\"dbo\",Item=\"Dim_Product\"]}[Data] in Source" } }]
+      },
+      {
+        "name": "Fact_POS_Transactions",
+        "description": "Grain: 1 record per SKU line item per checkout basket",
+        "columns": [
+          { "name": "TransactionLineKey", "dataType": "int64", "isKey": true, "sourceColumn": "TransactionLineKey" },
+          { "name": "DateKey", "dataType": "int64", "sourceColumn": "DateKey" },
+          { "name": "StoreKey", "dataType": "int64", "sourceColumn": "StoreKey" },
+          { "name": "ProductKey", "dataType": "int64", "sourceColumn": "ProductKey" },
+          { "name": "BasketID", "dataType": "string", "sourceColumn": "BasketID" },
+          { "name": "PaymentType", "dataType": "string", "sourceColumn": "PaymentType" },
+          { "name": "UnitsSold", "dataType": "int64", "sourceColumn": "UnitsSold" },
+          { "name": "GrossSalesAmt", "dataType": "decimal", "sourceColumn": "GrossSalesAmt" },
+          { "name": "DiscountAmt", "dataType": "decimal", "sourceColumn": "DiscountAmt" },
+          { "name": "NetSalesAmt", "dataType": "decimal", "sourceColumn": "NetSalesAmt" },
+          { "name": "ExtendedCostAmt", "dataType": "decimal", "sourceColumn": "ExtendedCostAmt" },
+          { "name": "TaxAmtAED", "dataType": "decimal", "sourceColumn": "TaxAmtAED" }
+        ],
+        "partitions": [{ "name": "Partition", "dataView": "full", "source": { "type": "m", "expression": "let Source = Sql.Database(\"server\", \"db\"){[Schema=\"dbo\",Item=\"Fact_POS_Transactions\"]}[Data] in Source" } }]
+      },
+      {
+        "name": "Fact_Daily_Inventory",
+        "description": "Grain: 1 record per SKU per Store per Calendar Day (Closing Balance)",
+        "columns": [
+          { "name": "InventorySnapshotKey", "dataType": "int64", "isKey": true, "sourceColumn": "InventorySnapshotKey" },
+          { "name": "SnapshotDateKey", "dataType": "int64", "sourceColumn": "SnapshotDateKey" },
+          { "name": "StoreKey", "dataType": "int64", "sourceColumn": "StoreKey" },
+          { "name": "ProductKey", "dataType": "int64", "sourceColumn": "ProductKey" },
+          { "name": "OnHandUnits", "dataType": "int64", "sourceColumn": "OnHandUnits" },
+          { "name": "InTransitUnits", "dataType": "int64", "sourceColumn": "InTransitUnits" },
+          { "name": "ReservedUnits", "dataType": "int64", "sourceColumn": "ReservedUnits" },
+          { "name": "AvailableUnits", "dataType": "int64", "sourceColumn": "AvailableUnits" },
+          { "name": "UnitCostSnapshotAmt", "dataType": "decimal", "sourceColumn": "UnitCostSnapshotAmt" },
+          { "name": "InventoryCostValueAmt", "dataType": "decimal", "sourceColumn": "InventoryCostValueAmt" }
+        ],
+        "partitions": [{ "name": "Partition", "dataView": "full", "source": { "type": "m", "expression": "let Source = Sql.Database(\"server\", \"db\"){[Schema=\"dbo\",Item=\"Fact_Daily_Inventory\"]}[Data] in Source" } }]
+      },
+      {
+        "name": "Markdown_Scenario",
+        "description": "Disconnected Parameter Table driving What-If Elasticity Simulations",
+        "columns": [
+          { "name": "ScenarioDiscountPct", "dataType": "decimal", "isKey": true, "sourceColumn": "ScenarioDiscountPct", "formatString": "0.0%" },
+          { "name": "DiscountDisplayLabel", "dataType": "string", "sourceColumn": "DiscountDisplayLabel", "sortByColumn": "SimulationSortOrder" },
+          { "name": "SimulationSortOrder", "dataType": "int64", "sourceColumn": "SimulationSortOrder" }
+        ],
+        "partitions": [{ "name": "Partition", "dataView": "full", "source": { "type": "m", "expression": "let Source = Sql.Database(\"server\", \"db\"){[Schema=\"dbo\",Item=\"Markdown_Scenario\"]}[Data] in Source" } }]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "Rel_POS_Date",
+        "fromTable": "Fact_POS_Transactions",
+        "fromColumn": "DateKey",
+        "toTable": "Dim_Date",
+        "toColumn": "DateKey",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "Rel_POS_Store",
+        "fromTable": "Fact_POS_Transactions",
+        "fromColumn": "StoreKey",
+        "toTable": "Dim_Store",
+        "toColumn": "StoreKey",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "Rel_POS_Product",
+        "fromTable": "Fact_POS_Transactions",
+        "fromColumn": "ProductKey",
+        "toTable": "Dim_Product",
+        "toColumn": "ProductKey",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "Rel_Inv_Date",
+        "fromTable": "Fact_Daily_Inventory",
+        "fromColumn": "SnapshotDateKey",
+        "toTable": "Dim_Date",
+        "toColumn": "DateKey",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "Rel_Inv_Store",
+        "fromTable": "Fact_Daily_Inventory",
+        "fromColumn": "StoreKey",
+        "toTable": "Dim_Store",
+        "toColumn": "StoreKey",
+        "crossFilteringBehavior": "oneDirection"
+      },
+      {
+        "name": "Rel_Inv_Product",
+        "fromTable": "Fact_Daily_Inventory",
+        "fromColumn": "ProductKey",
+        "toTable": "Dim_Product",
+        "toColumn": "ProductKey",
+        "crossFilteringBehavior": "oneDirection"
+      }
+    ]
+  }
+}

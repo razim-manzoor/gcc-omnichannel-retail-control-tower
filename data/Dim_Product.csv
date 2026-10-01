@@ -1,0 +1,116 @@
+ProductKey,SKU,ProductName,Department,Category,SubCategory,Brand,BrandTier,BaseUnitCostAED,BaseRetailPriceAED,ElasticityCoefficient
+-1,UNKNOWN,Unknown / Unassigned,Unknown,Unknown,Unknown,Unknown,Unknown,0.0,0.0,-1.0
+101,RTW-BLZ-LIN-001,Unstructured Linen Blazer Sand,Apparel,Menswear,Tailored Jackets,Private Label Atelier,Bridge Luxury,450.0,1450.0,-1.8
+102,LEA-TOT-GLD-002,Grain Calfskin Everyday Tote Noir,Accessories,Leather Goods,Tote Bags,Maison Rivoli,Ultra-Luxury,1850.0,5200.0,-0.65
+103,FTW-SNK-LTH-003,Heritage Tennis Sneaker White,Footwear,Menswear,Sneakers,AeroSport Milano,Mass Premium,180.0,650.0,-2.2
+104,DRS-SLK-EVN-004,Bias-Cut Silk Evening Gown Emerald,Apparel,Womenswear,Dresses,Private Label Atelier,Bridge Luxury,620.0,2100.0,-1.4
+105,BTY-EXT-OUD-005,Desert Amber Extrait de Parfum 100ml,Beauty,Fragrance,Niche Perfumery,Sultanate Parfums,Ultra-Luxury,320.0,1150.0,-0.45
+106,RTW-TEE-COT-006,Supima Heavyweight Cotton T-Shirt,Apparel,Menswear,T-Shirts,Basics Lab,Mass Premium,45.0,195.0,-2.5
+107,APP-TAI-CAL-107,Atelier Sartorial Calfskin Tailored Jacket Slate,Apparel,Menswear,Tailored Jackets,Atelier Sartorial,Bridge Luxury,360.0,1350.0,-1.79
+108,APP-TAI-COT-108,Atelier Sartorial Cotton Tailored Jacket Olive,Apparel,Menswear,Tailored Jackets,Atelier Sartorial,Bridge Luxury,420.0,1575.0,-1.61
+109,APP-TAI-SIL-109,Atelier Sartorial Silk Tailored Jacket Sand,Apparel,Menswear,Tailored Jackets,Atelier Sartorial,Bridge Luxury,480.0,1800.0,-1.68
+110,APP-TAI-WOO-110,Atelier Sartorial Wool Tailored Jacket Emerald,Apparel,Menswear,Tailored Jackets,Atelier Sartorial,Bridge Luxury,540.0,2025.0,-1.72
+111,APP-CAS-SAF-111,Maison Al-Sharq Saffiano Cashmere Sweater Sand,Apparel,Menswear,Cashmere Sweaters,Maison Al-Sharq,Ultra-Luxury,585.0,2160.0,-0.95
+112,APP-CAS-CAS-112,Maison Al-Sharq Cashmere Cashmere Sweater Emerald,Apparel,Menswear,Cashmere Sweaters,Maison Al-Sharq,Ultra-Luxury,682.5,2520.0,-0.95
+113,APP-CAS-SUE-113,Maison Al-Sharq Suede Cashmere Sweater Burgundy,Apparel,Menswear,Cashmere Sweaters,Maison Al-Sharq,Ultra-Luxury,780.0,2880.0,-0.98
+114,APP-CAS-LIN-114,Maison Al-Sharq Linen Cashmere Sweater Slate,Apparel,Menswear,Cashmere Sweaters,Maison Al-Sharq,Ultra-Luxury,877.5,3240.0,-0.74
+115,APP-CHI-CAL-115,Basics Lab Calfskin Chino Trouser Burgundy,Apparel,Menswear,Chino Trousers,Basics Lab,Mass Premium,72.0,265.5,-2.07
+116,APP-CHI-COT-116,Basics Lab Cotton Chino Trouser Slate,Apparel,Menswear,Chino Trousers,Basics Lab,Mass Premium,84.0,309.75,-2.04
+117,APP-CHI-SIL-117,Basics Lab Silk Chino Trouser Olive,Apparel,Menswear,Chino Trousers,Basics Lab,Mass Premium,96.0,354.0,-2.24
+118,APP-CHI-WOO-118,Basics Lab Wool Chino Trouser Sand,Apparel,Menswear,Chino Trousers,Basics Lab,Mass Premium,108.0,398.25,-1.96
+119,APP-CAS-SAF-119,Riviera Heritage Saffiano Casual Linen Shirt Olive,Apparel,Menswear,Casual Linen Shirts,Riviera Heritage,Bridge Luxury,108.0,405.0,-1.55
+120,APP-CAS-CAS-120,Riviera Heritage Cashmere Casual Linen Shirt Sand,Apparel,Menswear,Casual Linen Shirts,Riviera Heritage,Bridge Luxury,126.0,472.5,-1.74
+121,APP-CAS-SUE-121,Riviera Heritage Suede Casual Linen Shirt Emerald,Apparel,Menswear,Casual Linen Shirts,Riviera Heritage,Bridge Luxury,144.0,540.0,-1.75
+122,APP-CAS-LIN-122,Riviera Heritage Linen Casual Linen Shirt Burgundy,Apparel,Menswear,Casual Linen Shirts,Riviera Heritage,Bridge Luxury,162.0,607.5,-1.74
+123,APP-COC-CAL-123,Atelier Sartorial Calfskin Cocktail Dresse Emerald,Apparel,Womenswear,Cocktail Dresses,Atelier Sartorial,Bridge Luxury,495.0,1755.0,-1.41
+124,APP-COC-COT-124,Atelier Sartorial Cotton Cocktail Dresse Burgundy,Apparel,Womenswear,Cocktail Dresses,Atelier Sartorial,Bridge Luxury,577.5,2047.5,-1.34
+125,APP-COC-SIL-125,Atelier Sartorial Silk Cocktail Dresse Slate,Apparel,Womenswear,Cocktail Dresses,Atelier Sartorial,Bridge Luxury,660.0,2340.0,-1.37
+126,APP-COC-WOO-126,Atelier Sartorial Wool Cocktail Dresse Olive,Apparel,Womenswear,Cocktail Dresses,Atelier Sartorial,Bridge Luxury,742.5,2632.5,-1.41
+127,APP-SIL-SAF-127,Maison Rivoli Saffiano Silk Blouse Slate,Apparel,Womenswear,Silk Blouses,Maison Rivoli,Ultra-Luxury,378.0,1440.0,-0.87
+128,APP-SIL-CAS-128,Maison Rivoli Cashmere Silk Blouse Olive,Apparel,Womenswear,Silk Blouses,Maison Rivoli,Ultra-Luxury,441.0,1680.0,-1.01
+129,APP-SIL-SUE-129,Maison Rivoli Suede Silk Blouse Sand,Apparel,Womenswear,Silk Blouses,Maison Rivoli,Ultra-Luxury,504.0,1920.0,-0.96
+130,APP-SIL-LIN-130,Maison Rivoli Linen Silk Blouse Emerald,Apparel,Womenswear,Silk Blouses,Maison Rivoli,Ultra-Luxury,567.0,2160.0,-0.94
+131,APP-PLE-CAL-131,Riviera Heritage Calfskin Pleated Midi Skirt Sand,Apparel,Womenswear,Pleated Midi Skirts,Riviera Heritage,Bridge Luxury,189.0,675.0,-1.51
+132,APP-PLE-COT-132,Riviera Heritage Cotton Pleated Midi Skirt Emerald,Apparel,Womenswear,Pleated Midi Skirts,Riviera Heritage,Bridge Luxury,220.5,787.5,-1.41
+133,APP-PLE-SIL-133,Riviera Heritage Silk Pleated Midi Skirt Burgundy,Apparel,Womenswear,Pleated Midi Skirts,Riviera Heritage,Bridge Luxury,252.0,900.0,-1.59
+134,APP-PLE-WOO-134,Riviera Heritage Wool Pleated Midi Skirt Slate,Apparel,Womenswear,Pleated Midi Skirts,Riviera Heritage,Bridge Luxury,283.5,1012.5,-1.5
+135,APP-HIG-SAF-135,Atelier Sartorial Saffiano High-Rise Tailored Pant Burgundy,Apparel,Womenswear,High-Rise Tailored Pants,Atelier Sartorial,Bridge Luxury,234.0,801.0,-1.42
+136,APP-HIG-CAS-136,Atelier Sartorial Cashmere High-Rise Tailored Pant Slate,Apparel,Womenswear,High-Rise Tailored Pants,Atelier Sartorial,Bridge Luxury,273.0,934.5,-1.59
+137,APP-HIG-SUE-137,Atelier Sartorial Suede High-Rise Tailored Pant Olive,Apparel,Womenswear,High-Rise Tailored Pants,Atelier Sartorial,Bridge Luxury,312.0,1068.0,-1.42
+138,APP-HIG-LIN-138,Atelier Sartorial Linen High-Rise Tailored Pant Sand,Apparel,Womenswear,High-Rise Tailored Pants,Atelier Sartorial,Bridge Luxury,351.0,1201.5,-1.55
+139,APP-TRE-CAL-139,Maison Al-Sharq Calfskin Trench Coat Olive,Apparel,Womenswear,Trench Coats,Maison Al-Sharq,Ultra-Luxury,882.0,3240.0,-0.83
+140,APP-TRE-COT-140,Maison Al-Sharq Cotton Trench Coat Sand,Apparel,Womenswear,Trench Coats,Maison Al-Sharq,Ultra-Luxury,1029.0,3780.0,-0.57
+141,APP-TRE-SIL-141,Maison Al-Sharq Silk Trench Coat Emerald,Apparel,Womenswear,Trench Coats,Maison Al-Sharq,Ultra-Luxury,1176.0,4320.0,-0.56
+142,APP-TRE-WOO-142,Maison Al-Sharq Wool Trench Coat Burgundy,Apparel,Womenswear,Trench Coats,Maison Al-Sharq,Ultra-Luxury,1323.0,4860.0,-0.61
+143,LEA-CRO-SAF-143,Maison Rivoli Saffiano Crossbody Pouche Emerald,Leather Goods,Fine Leather,Crossbody Pouches,Maison Rivoli,Ultra-Luxury,855.0,2880.0,-0.66
+144,LEA-CRO-CAS-144,Maison Rivoli Cashmere Crossbody Pouche Burgundy,Leather Goods,Fine Leather,Crossbody Pouches,Maison Rivoli,Ultra-Luxury,997.5,3360.0,-0.72
+145,LEA-CRO-SUE-145,Maison Rivoli Suede Crossbody Pouche Slate,Leather Goods,Fine Leather,Crossbody Pouches,Maison Rivoli,Ultra-Luxury,1140.0,3840.0,-0.54
+146,LEA-CRO-LIN-146,Maison Rivoli Linen Crossbody Pouche Olive,Leather Goods,Fine Leather,Crossbody Pouches,Maison Rivoli,Ultra-Luxury,1282.5,4320.0,-0.62
+147,LEA-BES-CAL-147,Oryx Studio Calfskin Bespoke Briefcase Slate,Leather Goods,Fine Leather,Bespoke Briefcases,Oryx Studio,Ultra-Luxury,1260.0,4320.0,-0.66
+148,LEA-BES-COT-148,Oryx Studio Cotton Bespoke Briefcase Olive,Leather Goods,Fine Leather,Bespoke Briefcases,Oryx Studio,Ultra-Luxury,1470.0,5040.0,-0.55
+149,LEA-BES-SIL-149,Oryx Studio Silk Bespoke Briefcase Sand,Leather Goods,Fine Leather,Bespoke Briefcases,Oryx Studio,Ultra-Luxury,1680.0,5760.0,-0.69
+150,LEA-BES-WOO-150,Oryx Studio Wool Bespoke Briefcase Emerald,Leather Goods,Fine Leather,Bespoke Briefcases,Oryx Studio,Ultra-Luxury,1890.0,6480.0,-0.43
+151,LEA-BIF-SAF-151,Maison Rivoli Saffiano Bifold Wallet Sand,Leather Goods,Leather Accessories,Bifold Wallets,Maison Rivoli,Ultra-Luxury,252.0,855.0,-0.87
+152,LEA-BIF-CAS-152,Maison Rivoli Cashmere Bifold Wallet Emerald,Leather Goods,Leather Accessories,Bifold Wallets,Maison Rivoli,Ultra-Luxury,294.0,997.5,-0.75
+153,LEA-BIF-SUE-153,Maison Rivoli Suede Bifold Wallet Burgundy,Leather Goods,Leather Accessories,Bifold Wallets,Maison Rivoli,Ultra-Luxury,336.0,1140.0,-0.86
+154,LEA-BIF-LIN-154,Maison Rivoli Linen Bifold Wallet Slate,Leather Goods,Leather Accessories,Bifold Wallets,Maison Rivoli,Ultra-Luxury,378.0,1282.5,-0.79
+155,LEA-SIG-CAL-155,Oryx Studio Calfskin Signature Belt Burgundy,Leather Goods,Leather Accessories,Signature Belts,Oryx Studio,Bridge Luxury,171.0,612.0,-1.24
+156,LEA-SIG-COT-156,Oryx Studio Cotton Signature Belt Slate,Leather Goods,Leather Accessories,Signature Belts,Oryx Studio,Bridge Luxury,199.5,714.0,-1.34
+157,LEA-SIG-SIL-157,Oryx Studio Silk Signature Belt Olive,Leather Goods,Leather Accessories,Signature Belts,Oryx Studio,Bridge Luxury,228.0,816.0,-1.11
+158,LEA-SIG-WOO-158,Oryx Studio Wool Signature Belt Sand,Leather Goods,Leather Accessories,Signature Belts,Oryx Studio,Bridge Luxury,256.5,918.0,-1.17
+159,LEA-TRA-SAF-159,Riviera Heritage Saffiano Travel Duffle Bag Olive,Leather Goods,Fine Leather,Travel Duffle Bags,Riviera Heritage,Bridge Luxury,522.0,1755.0,-1.02
+160,LEA-TRA-CAS-160,Riviera Heritage Cashmere Travel Duffle Bag Sand,Leather Goods,Fine Leather,Travel Duffle Bags,Riviera Heritage,Bridge Luxury,609.0,2047.5,-1.03
+161,LEA-TRA-SUE-161,Riviera Heritage Suede Travel Duffle Bag Emerald,Leather Goods,Fine Leather,Travel Duffle Bags,Riviera Heritage,Bridge Luxury,696.0,2340.0,-1.12
+162,LEA-TRA-LIN-162,Riviera Heritage Linen Travel Duffle Bag Burgundy,Leather Goods,Fine Leather,Travel Duffle Bags,Riviera Heritage,Bridge Luxury,783.0,2632.5,-1.02
+163,FOO-ITA-CAL-163,Atelier Sartorial Calfskin Italian Penny Loafer Emerald,Footwear,Mens Footwear,Italian Penny Loafers,Atelier Sartorial,Bridge Luxury,342.0,1215.0,-1.42
+164,FOO-ITA-COT-164,Atelier Sartorial Cotton Italian Penny Loafer Burgundy,Footwear,Mens Footwear,Italian Penny Loafers,Atelier Sartorial,Bridge Luxury,399.0,1417.5,-1.39
+165,FOO-ITA-SIL-165,Atelier Sartorial Silk Italian Penny Loafer Slate,Footwear,Mens Footwear,Italian Penny Loafers,Atelier Sartorial,Bridge Luxury,456.0,1620.0,-1.44
+166,FOO-ITA-WOO-166,Atelier Sartorial Wool Italian Penny Loafer Olive,Footwear,Mens Footwear,Italian Penny Loafers,Atelier Sartorial,Bridge Luxury,513.0,1822.5,-1.35
+167,FOO-MIN-SAF-167,AeroSport Milano Saffiano Minimalist Court Trainer Slate,Footwear,Mens Footwear,Minimalist Court Trainers,AeroSport Milano,Mass Premium,144.0,522.0,-2.18
+168,FOO-MIN-CAS-168,AeroSport Milano Cashmere Minimalist Court Trainer Olive,Footwear,Mens Footwear,Minimalist Court Trainers,AeroSport Milano,Mass Premium,168.0,609.0,-2.22
+169,FOO-MIN-SUE-169,AeroSport Milano Suede Minimalist Court Trainer Sand,Footwear,Mens Footwear,Minimalist Court Trainers,AeroSport Milano,Mass Premium,192.0,696.0,-2.05
+170,FOO-MIN-LIN-170,AeroSport Milano Linen Minimalist Court Trainer Emerald,Footwear,Mens Footwear,Minimalist Court Trainers,AeroSport Milano,Mass Premium,216.0,783.0,-2.19
+171,FOO-SLI-CAL-171,Maison Rivoli Calfskin Slingback Pump Sand,Footwear,Womens Footwear,Slingback Pumps,Maison Rivoli,Ultra-Luxury,558.0,1980.0,-0.82
+172,FOO-SLI-COT-172,Maison Rivoli Cotton Slingback Pump Emerald,Footwear,Womens Footwear,Slingback Pumps,Maison Rivoli,Ultra-Luxury,651.0,2310.0,-0.74
+173,FOO-SLI-SIL-173,Maison Rivoli Silk Slingback Pump Burgundy,Footwear,Womens Footwear,Slingback Pumps,Maison Rivoli,Ultra-Luxury,744.0,2640.0,-0.86
+174,FOO-SLI-WOO-174,Maison Rivoli Wool Slingback Pump Slate,Footwear,Womens Footwear,Slingback Pumps,Maison Rivoli,Ultra-Luxury,837.0,2970.0,-0.66
+175,FOO-STR-SAF-175,Atelier Sartorial Saffiano Strappy Metallic Sandal Burgundy,Footwear,Womens Footwear,Strappy Metallic Sandals,Atelier Sartorial,Bridge Luxury,288.0,990.0,-1.53
+176,FOO-STR-CAS-176,Atelier Sartorial Cashmere Strappy Metallic Sandal Slate,Footwear,Womens Footwear,Strappy Metallic Sandals,Atelier Sartorial,Bridge Luxury,336.0,1155.0,-1.25
+177,FOO-STR-SUE-177,Atelier Sartorial Suede Strappy Metallic Sandal Olive,Footwear,Womens Footwear,Strappy Metallic Sandals,Atelier Sartorial,Bridge Luxury,384.0,1320.0,-1.32
+178,FOO-STR-LIN-178,Atelier Sartorial Linen Strappy Metallic Sandal Sand,Footwear,Womens Footwear,Strappy Metallic Sandals,Atelier Sartorial,Bridge Luxury,432.0,1485.0,-1.49
+179,FOO-SUE-CAL-179,Riviera Heritage Calfskin Suede Ankle Boot Olive,Footwear,Womens Footwear,Suede Ankle Boots,Riviera Heritage,Bridge Luxury,405.0,1395.0,-1.35
+180,FOO-SUE-COT-180,Riviera Heritage Cotton Suede Ankle Boot Sand,Footwear,Womens Footwear,Suede Ankle Boots,Riviera Heritage,Bridge Luxury,472.5,1627.5,-1.11
+181,FOO-SUE-SIL-181,Riviera Heritage Silk Suede Ankle Boot Emerald,Footwear,Womens Footwear,Suede Ankle Boots,Riviera Heritage,Bridge Luxury,540.0,1860.0,-1.14
+182,FOO-SUE-WOO-182,Riviera Heritage Wool Suede Ankle Boot Burgundy,Footwear,Womens Footwear,Suede Ankle Boots,Riviera Heritage,Bridge Luxury,607.5,2092.5,-1.13
+183,ACC-TIT-SAF-183,Optique Privée Saffiano Titanium Sunglasse Emerald,Accessories,Eyewear,Titanium Sunglasses,Optique Privée,Bridge Luxury,216.0,765.0,-1.02
+184,ACC-TIT-CAS-184,Optique Privée Cashmere Titanium Sunglasse Burgundy,Accessories,Eyewear,Titanium Sunglasses,Optique Privée,Bridge Luxury,252.0,892.5,-1.23
+185,ACC-TIT-SUE-185,Optique Privée Suede Titanium Sunglasse Slate,Accessories,Eyewear,Titanium Sunglasses,Optique Privée,Bridge Luxury,288.0,1020.0,-1.14
+186,ACC-TIT-LIN-186,Optique Privée Linen Titanium Sunglasse Olive,Accessories,Eyewear,Titanium Sunglasses,Optique Privée,Bridge Luxury,324.0,1147.5,-1.22
+187,ACC-PRI-CAL-187,Maison Al-Sharq Calfskin Printed Silk Carré Slate,Accessories,Silk & Scarves,Printed Silk Carré,Maison Al-Sharq,Ultra-Luxury,261.0,990.0,-0.54
+188,ACC-PRI-COT-188,Maison Al-Sharq Cotton Printed Silk Carré Olive,Accessories,Silk & Scarves,Printed Silk Carré,Maison Al-Sharq,Ultra-Luxury,304.5,1155.0,-0.61
+189,ACC-PRI-SIL-189,Maison Al-Sharq Silk Printed Silk Carré Sand,Accessories,Silk & Scarves,Printed Silk Carré,Maison Al-Sharq,Ultra-Luxury,348.0,1320.0,-0.7
+190,ACC-PRI-WOO-190,Maison Al-Sharq Wool Printed Silk Carré Emerald,Accessories,Silk & Scarves,Printed Silk Carré,Maison Al-Sharq,Ultra-Luxury,391.5,1485.0,-0.78
+191,ACC-MIN-SAF-191,Atelier Horlogerie Saffiano Minimalist Chronograph Sand,Accessories,Timepieces & Jewelry,Minimalist Chronograph,Atelier Horlogerie,Bridge Luxury,765.0,2610.0,-0.86
+192,ACC-MIN-CAS-192,Atelier Horlogerie Cashmere Minimalist Chronograph Emerald,Accessories,Timepieces & Jewelry,Minimalist Chronograph,Atelier Horlogerie,Bridge Luxury,892.5,3045.0,-0.85
+193,ACC-MIN-SUE-193,Atelier Horlogerie Suede Minimalist Chronograph Burgundy,Accessories,Timepieces & Jewelry,Minimalist Chronograph,Atelier Horlogerie,Bridge Luxury,1020.0,3480.0,-0.73
+194,ACC-MIN-LIN-194,Atelier Horlogerie Linen Minimalist Chronograph Slate,Accessories,Timepieces & Jewelry,Minimalist Chronograph,Atelier Horlogerie,Bridge Luxury,1147.5,3915.0,-0.76
+195,ACC-CAS-CAL-195,Maison Al-Sharq Calfskin Cashmere Stole Burgundy,Accessories,Silk & Scarves,Cashmere Stoles,Maison Al-Sharq,Ultra-Luxury,378.0,1350.0,-0.63
+196,ACC-CAS-COT-196,Maison Al-Sharq Cotton Cashmere Stole Slate,Accessories,Silk & Scarves,Cashmere Stoles,Maison Al-Sharq,Ultra-Luxury,441.0,1575.0,-0.76
+197,ACC-CAS-SIL-197,Maison Al-Sharq Silk Cashmere Stole Olive,Accessories,Silk & Scarves,Cashmere Stoles,Maison Al-Sharq,Ultra-Luxury,504.0,1800.0,-0.86
+198,ACC-CAS-WOO-198,Maison Al-Sharq Wool Cashmere Stole Sand,Accessories,Silk & Scarves,Cashmere Stoles,Maison Al-Sharq,Ultra-Luxury,567.0,2025.0,-0.69
+199,BEA-ROY-SAF-199,Sultanate Parfums Saffiano Royal Oud Absolu 100ml Olive,Beauty & Fragrance,Haute Parfumerie,Royal Oud Absolu 100ml,Sultanate Parfums,Ultra-Luxury,342.0,1305.0,-0.32
+200,BEA-ROY-CAS-200,Sultanate Parfums Cashmere Royal Oud Absolu 100ml Sand,Beauty & Fragrance,Haute Parfumerie,Royal Oud Absolu 100ml,Sultanate Parfums,Ultra-Luxury,399.0,1522.5,-0.38
+201,BEA-ROY-SUE-201,Sultanate Parfums Suede Royal Oud Absolu 100ml Emerald,Beauty & Fragrance,Haute Parfumerie,Royal Oud Absolu 100ml,Sultanate Parfums,Ultra-Luxury,456.0,1740.0,-0.32
+202,BEA-ROY-LIN-202,Sultanate Parfums Linen Royal Oud Absolu 100ml Burgundy,Beauty & Fragrance,Haute Parfumerie,Royal Oud Absolu 100ml,Sultanate Parfums,Ultra-Luxury,513.0,1957.5,-0.4
+203,BEA-TAI-CAL-203,Sultanate Parfums Calfskin Taif Rose & Musk 50ml Emerald,Beauty & Fragrance,Haute Parfumerie,Taif Rose & Musk 50ml,Sultanate Parfums,Ultra-Luxury,216.0,828.0,-0.49
+204,BEA-TAI-COT-204,Sultanate Parfums Cotton Taif Rose & Musk 50ml Burgundy,Beauty & Fragrance,Haute Parfumerie,Taif Rose & Musk 50ml,Sultanate Parfums,Ultra-Luxury,252.0,966.0,-0.52
+205,BEA-TAI-SIL-205,Sultanate Parfums Silk Taif Rose & Musk 50ml Slate,Beauty & Fragrance,Haute Parfumerie,Taif Rose & Musk 50ml,Sultanate Parfums,Ultra-Luxury,288.0,1104.0,-0.64
+206,BEA-TAI-WOO-206,Sultanate Parfums Wool Taif Rose & Musk 50ml Olive,Beauty & Fragrance,Haute Parfumerie,Taif Rose & Musk 50ml,Sultanate Parfums,Ultra-Luxury,324.0,1242.0,-0.62
+207,BEA-CAV-SAF-207,Laboratoire Suisse Saffiano Caviar Renewal Serum Slate,Beauty & Fragrance,Skincare Prestige,Caviar Renewal Serum,Laboratoire Suisse,Ultra-Luxury,369.0,1440.0,-0.69
+208,BEA-CAV-CAS-208,Laboratoire Suisse Cashmere Caviar Renewal Serum Olive,Beauty & Fragrance,Skincare Prestige,Caviar Renewal Serum,Laboratoire Suisse,Ultra-Luxury,430.5,1680.0,-0.51
+209,BEA-CAV-SUE-209,Laboratoire Suisse Suede Caviar Renewal Serum Sand,Beauty & Fragrance,Skincare Prestige,Caviar Renewal Serum,Laboratoire Suisse,Ultra-Luxury,492.0,1920.0,-0.61
+210,BEA-CAV-LIN-210,Laboratoire Suisse Linen Caviar Renewal Serum Emerald,Beauty & Fragrance,Skincare Prestige,Caviar Renewal Serum,Laboratoire Suisse,Ultra-Luxury,553.5,2160.0,-0.55
+211,BEA-PRE-CAL-211,Sultanate Parfums Calfskin Prestige Bakhoor & Diffuser Sand,Beauty & Fragrance,Home Ambiance,Prestige Bakhoor & Diffuser,Sultanate Parfums,Bridge Luxury,126.0,432.0,-1.08
+212,BEA-PRE-COT-212,Sultanate Parfums Cotton Prestige Bakhoor & Diffuser Emerald,Beauty & Fragrance,Home Ambiance,Prestige Bakhoor & Diffuser,Sultanate Parfums,Bridge Luxury,147.0,504.0,-1.28
+213,BEA-PRE-SIL-213,Sultanate Parfums Silk Prestige Bakhoor & Diffuser Burgundy,Beauty & Fragrance,Home Ambiance,Prestige Bakhoor & Diffuser,Sultanate Parfums,Bridge Luxury,168.0,576.0,-1.23
+214,BEA-PRE-WOO-214,Sultanate Parfums Wool Prestige Bakhoor & Diffuser Slate,Beauty & Fragrance,Home Ambiance,Prestige Bakhoor & Diffuser,Sultanate Parfums,Bridge Luxury,189.0,648.0,-1.12

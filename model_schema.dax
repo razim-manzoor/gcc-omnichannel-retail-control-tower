@@ -1,0 +1,379 @@
+// ==============================================================================
+// DAX Semantic Layer & Tabular Measure Architecture
+// Control Tower: GCC Omnichannel Retail & Markdown Elasticity
+// Target Engine: Power BI Tabular Engine (VertiPaq)
+// Measure Repository Table: _Measures
+// ==============================================================================
+
+// ==============================================================================
+// FOLDER: 01 Financial & Commercial Core
+// ==============================================================================
+
+/// Base Additive Metrics: Total units sold across POS checkouts
+[Units Sold] = 
+SUM ( Fact_POS_Transactions[UnitsSold] )
+
+/// Base Additive Metrics: Gross ticket sales before any discount or markdown deductions
+[Gross Sales (AED)] = 
+SUM ( Fact_POS_Transactions[GrossSalesAmt] )
+
+/// Base Additive Metrics: Total promotional discounts, vouchers, and price markdowns deducted at checkout
+[Markdown Discount (AED)] = 
+SUM ( Fact_POS_Transactions[DiscountAmt] )
+
+/// Base Additive Metrics: Realized net sales revenue after discounts (Net Sales = Gross - Discount)
+[Net Revenue (AED)] = 
+SUM ( Fact_POS_Transactions[NetSalesAmt] )
+
+/// Base Additive Metrics: Total Cost of Goods Sold (COGS) based on landed unit cost snapshot
+[Total COGS (AED)] = 
+SUM ( Fact_POS_Transactions[ExtendedCostAmt] )
+
+/// Commercial Profitability: Absolute Gross Margin in AED realized from completed transactions
+[Gross Margin (AED)] = 
+[Net Revenue (AED)] - [Total COGS (AED)]
+
+/// Commercial Profitability: Gross Margin percentage of net revenue
+[Gross Margin %] = 
+DIVIDE ( [Gross Margin (AED)], [Net Revenue (AED)], 0 )
+
+/// Commercial Profitability: Markdown depth percentage relative to gross sales
+[Markdown Depth %] = 
+DIVIDE ( [Markdown Discount (AED)], [Gross Sales (AED)], 0 )
+
+/// Commercial Profitability: Average Unit Retail (AUR / Realized Selling Price per unit sold)
+[Average Unit Retail (AUR)] = 
+DIVIDE ( [Net Revenue (AED)], [Units Sold], 0 )
+
+/// Commercial Profitability: Average Unit Cost (AUC / Realized COGS per unit sold)
+[Average Unit Cost (AUC)] = 
+DIVIDE ( [Total COGS (AED)], [Units Sold], 0 )
+
+
+// ==============================================================================
+// FOLDER: 02 Semi-Additive Inventory Snapshots
+// ==============================================================================
+
+/// Strict Point-in-Time Snapshot Filtering (Closing Balance On-Hand)
+[Ending On Hand Units] = 
+VAR LastAvailableDate = MAX ( Dim_Date[FullDate] )
+VAR TargetDateKey = 
+    YEAR ( LastAvailableDate ) * 10000 
+    + MONTH ( LastAvailableDate ) * 100 
+    + DAY ( LastAvailableDate )
+RETURN
+    CALCULATE (
+        SUM ( Fact_Daily_Inventory[OnHandUnits] ),
+        Fact_Daily_Inventory[SnapshotDateKey] = TargetDateKey,
+        REMOVEFILTERS ( Dim_Date )
+    )
+
+/// Strict Point-in-Time Snapshot Filtering (Closing Balance In-Transit)
+[Ending In-Transit Units] = 
+VAR LastAvailableDate = MAX ( Dim_Date[FullDate] )
+VAR TargetDateKey = 
+    YEAR ( LastAvailableDate ) * 10000 
+    + MONTH ( LastAvailableDate ) * 100 
+    + DAY ( LastAvailableDate )
+RETURN
+    CALCULATE (
+        SUM ( Fact_Daily_Inventory[InTransitUnits] ),
+        Fact_Daily_Inventory[SnapshotDateKey] = TargetDateKey,
+        REMOVEFILTERS ( Dim_Date )
+    )
+
+/// Strict Point-in-Time Snapshot Filtering (Closing Inventory Landed Cost Value)
+[Ending Inventory Cost (AED)] = 
+VAR LastAvailableDate = MAX ( Dim_Date[FullDate] )
+VAR TargetDateKey = 
+    YEAR ( LastAvailableDate ) * 10000 
+    + MONTH ( LastAvailableDate ) * 100 
+    + DAY ( LastAvailableDate )
+RETURN
+    CALCULATE (
+        SUM ( Fact_Daily_Inventory[InventoryCostValueAmt] ),
+        Fact_Daily_Inventory[SnapshotDateKey] = TargetDateKey,
+        REMOVEFILTERS ( Dim_Date )
+    )
+
+/// Daily Average Inventory Value over the active evaluation window
+[Average Inventory Cost (AED)] = 
+AVERAGEX (
+    KEEPFILTERS ( VALUES ( Dim_Date[DateKey] ) ),
+    CALCULATE ( SUM ( Fact_Daily_Inventory[InventoryCostValueAmt] ) )
+)
+
+
+// ==============================================================================
+// FOLDER: 03 Asset Productivity & Supply Velocity
+// ==============================================================================
+
+/// Sell-Through Rate (STR %) = Units Sold / (Units Sold + Ending On-Hand Units)
+[Sell-Through Rate %] = 
+VAR SoldUnits = [Units Sold]
+VAR OnHand = [Ending On Hand Units]
+VAR PipelineTotal = SoldUnits + OnHand
+RETURN
+    DIVIDE ( SoldUnits, PipelineTotal, 0 )
+
+/// Trailing 28-Day Run Rate to smooth weekly footfall cycles
+[Units Sold Trailing 4W] = 
+VAR CurrentMaxDate = MAX ( Dim_Date[FullDate] )
+RETURN
+    CALCULATE (
+        [Units Sold],
+        DATESINPERIOD ( Dim_Date[FullDate], CurrentMaxDate, -28, DAY )
+    )
+
+/// Weekly Sales Velocity over trailing 4 weeks
+[Weekly Sales Run Rate (T4W)] = 
+DIVIDE ( [Units Sold Trailing 4W], 4, 0 )
+
+/// Weeks of Supply (WOS / Forward Stock Cover)
+[Weeks of Supply] = 
+DIVIDE ( [Ending On Hand Units], [Weekly Sales Run Rate (T4W)], BLANK () )
+
+/// Gross Margin Return on Investment (GMROI) = Annualized Margin / Average Inventory at Cost
+[GMROI] = 
+VAR EvaluatedDays = COUNTROWS ( VALUES ( Dim_Date[DateKey] ) )
+VAR AnnualizationFactor = DIVIDE ( 365, MAX ( 1, EvaluatedDays ), 1 )
+VAR AnnualizedMargin = [Gross Margin (AED)] * AnnualizationFactor
+VAR AvgInventory = [Average Inventory Cost (AED)]
+RETURN
+    DIVIDE ( AnnualizedMargin, AvgInventory, 0 )
+
+
+// ==============================================================================
+// FOLDER: 04 Time Intelligence & Variance
+// ==============================================================================
+
+/// Month-To-Date Net Revenue
+[Net Revenue MTD] = 
+TOTALMTD ( [Net Revenue (AED)], Dim_Date[FullDate] )
+
+/// Year-To-Date Net Revenue
+[Net Revenue YTD] = 
+TOTALYTD ( [Net Revenue (AED)], Dim_Date[FullDate] )
+
+/// Net Revenue for dynamic prior comparative period matching current selection length
+[Net Revenue Prior Period] = 
+VAR SelectedDays = COUNTROWS ( VALUES ( Dim_Date[DateKey] ) )
+VAR MinDate = MIN ( Dim_Date[FullDate] )
+RETURN
+    CALCULATE (
+        [Net Revenue (AED)],
+        DATESBETWEEN (
+            Dim_Date[FullDate],
+            MinDate - SelectedDays,
+            MinDate - 1
+        )
+    )
+
+/// Period-over-period Net Revenue percentage growth
+[Net Revenue Growth %] = 
+VAR CurrentRev = [Net Revenue (AED)]
+VAR PriorRev = [Net Revenue Prior Period]
+RETURN
+    DIVIDE ( CurrentRev - PriorRev, PriorRev, BLANK () )
+
+
+// ==============================================================================
+// FOLDER: 05 Prescriptive Stock Balancing
+// ==============================================================================
+
+/// Categorical Status based on velocity divergence & inventory cover
+[Stock Health Classification] = 
+VAR STR = [Sell-Through Rate %]
+VAR WOS = [Weeks of Supply]
+RETURN
+    SWITCH (
+        TRUE (),
+        ISBLANK ( WOS ), "NO_VELOCITY",
+        STR >= 0.70 && WOS < 2.5, "CRITICAL_STOCKOUT_RISK",
+        STR <= 0.25 && WOS > 10.0, "OVERSTOCK_CASH_TRAP",
+        WOS >= 3.0 && WOS <= 6.0, "BALANCED_EQUILIBRIUM",
+        "ATTENTION_MONITOR"
+    )
+
+/// Target buffer = 4.0 Weeks of Supply
+[Target Safety Stock Units] = 
+CEILING ( [Weekly Sales Run Rate (T4W)] * 4, 1 )
+
+/// Net Unit Variance relative to Target Safety Stock buffer
+[Inter-Mall Net Unit Variance] = 
+[Ending On Hand Units] - [Target Safety Stock Units]
+
+/// Prescriptive Transfer Recommendation & Action Directive
+[Inter-Mall Rebalance Directive] = 
+VAR Status = [Stock Health Classification]
+VAR StoreCode = SELECTEDVALUE ( Dim_Store[StoreCode] )
+VAR UnitVariance = [Inter-Mall Net Unit Variance]
+RETURN
+    SWITCH (
+        Status,
+        "CRITICAL_STOCKOUT_RISK", 
+            "⚠️ PULL INVENTORY: Request " & FORMAT ( ABS ( UnitVariance ), "#,##0" ) & " units from Yas Mall / Regional DC.",
+        "OVERSTOCK_CASH_TRAP", 
+            "📦 PUSH INVENTORY: Surplus of " & FORMAT ( UnitVariance, "#,##0" ) & " units. Dispatch to The Dubai Mall or trigger Tier-1 markdown.",
+        "BALANCED_EQUILIBRIUM", 
+            "🟢 OPTIMAL: Target weeks of supply maintained.",
+        BLANK ()
+    )
+
+/// Real-time omnichannel merchandising trigger evaluating inter-mall pull, markdown liquidation, or e-com reallocation
+[Merchandising Action Trigger] = 
+VAR STR = [Sell-Through Rate %]
+VAR WOS = [Weeks of Supply]
+VAR Elasticity = [Effective Elasticity Coeff]
+VAR OnHand = [Ending On Hand Units]
+RETURN
+    SWITCH (
+        TRUE (),
+        // Stockout risk in high footfall stores
+        STR >= 0.70 && WOS < 2.0, 
+            "🚨 INTER-MALL PULL: Stockout in <14 days. Rebalance from Yas Mall/DC.",
+        
+        // Overstock with high price elasticity -> Markdown will liquidate stock quickly
+        STR < 0.25 && WOS > 12.0 && Elasticity <= -1.40,
+            "🏷️ TIER-2 MARKDOWN (25-30%): Highly elastic. Discount will release working capital fast.",
+            
+        // Overstock with low elasticity -> Markdowns won't drive volume, will only burn margin
+        STR < 0.25 && WOS > 12.0 && Elasticity > -1.40,
+            "🔄 TRANSFER TO E-COM: Inelastic demand. Hold price; reallocate to digital hub.",
+            
+        WOS >= 3.0 && WOS <= 6.0, 
+            "🟢 HEALTHY: Operating at optimal sell-through equilibrium.",
+            
+        "MONITOR VELOCITY"
+    )
+
+
+// ==============================================================================
+// FOLDER: 06 Markdown Simulation & Sensitivity
+// ==============================================================================
+
+// ============================================================================
+// 1. Parameter Harvester
+// ============================================================================
+/// Harvests the selected discount percentage from disconnected parameter table Markdown_Scenario
+[Simulated Discount %] = 
+SELECTEDVALUE ( 'Markdown_Scenario'[ScenarioDiscountPct], 0.00 )
+
+// ============================================================================
+// 2. Elasticity-Driven Volume Lift Engine
+// ============================================================================
+/// Weighted average elasticity across selected products or transaction context
+[Effective Elasticity Coeff] = 
+VAR AggUnits = [Units Sold]
+RETURN
+    IF (
+        AggUnits > 0,
+        DIVIDE (
+            SUMX (
+                Fact_POS_Transactions,
+                Fact_POS_Transactions[UnitsSold] * RELATED ( Dim_Product[ElasticityCoefficient] )
+            ),
+            AggUnits,
+            -1.50
+        ),
+        -1.50
+    )
+
+/// Projected demand volume lift percentage driven by effective elasticity and scenario discount
+[Simulated Volume Lift %] = 
+VAR Discount = [Simulated Discount %]
+VAR Elasticity = [Effective Elasticity Coeff]
+RETURN
+    -1 * ( Elasticity * Discount )
+
+/// Total projected simulated unit sales volume under the selected discount scenario
+[Simulated Units Sold] = 
+VAR BaseUnits = [Units Sold]
+VAR Lift = [Simulated Volume Lift %]
+RETURN
+    BaseUnits * ( 1 + Lift )
+
+/// Additional units cleared beyond baseline sales velocity
+[Incremental Units Cleared] = 
+MAX ( 0, [Simulated Units Sold] - [Units Sold] )
+
+// ============================================================================
+// 3. Simulated Financial P&L & Trade-Offs
+// ============================================================================
+/// Simulated realized average selling price per unit after scenario markdown
+[Simulated Effective AUR (AED)] = 
+VAR BaselineAUR = [Average Unit Retail (AUR)]
+VAR Discount = [Simulated Discount %]
+RETURN
+    BaselineAUR * ( 1 - Discount )
+
+/// Simulated net sales revenue realized under the markdown scenario
+[Simulated Net Revenue (AED)] = 
+[Simulated Units Sold] * [Simulated Effective AUR (AED)]
+
+/// Simulated Cost of Goods Sold for the total projected volume
+[Simulated Total COGS (AED)] = 
+VAR UnitCost = [Average Unit Cost (AUC)]
+RETURN
+    [Simulated Units Sold] * UnitCost
+
+/// Simulated Gross Margin realized under the markdown scenario
+[Simulated Gross Margin (AED)] = 
+[Simulated Net Revenue (AED)] - [Simulated Total COGS (AED)]
+
+/// Gross margin variance between markdown simulation and baseline actuals (Profit Accretion / Dilution)
+[Gross Margin Delta (AED)] = 
+[Simulated Gross Margin (AED)] - [Gross Margin (AED)]
+
+/// Additional inventory landed cost converted from warehouse shelves to liquid cash
+[Working Capital Released (AED)] = 
+VAR UnitCost = [Average Unit Cost (AUC)]
+VAR ExtraUnits = [Incremental Units Cleared]
+RETURN
+    ExtraUnits * UnitCost
+
+// ============================================================================
+// 4. Breakeven Hurdle & Commercial Decision Gate
+// ============================================================================
+/// Exact number of units required under discounted unit contribution margin to yield 100% of baseline Gross Margin
+[Breakeven Unit Volume] = 
+VAR BaselineGM = [Gross Margin (AED)]
+VAR DiscountedUnitAUR = [Simulated Effective AUR (AED)]
+VAR UnitCost = [Average Unit Cost (AUC)]
+VAR UnitContributionMargin = DiscountedUnitAUR - UnitCost
+RETURN
+    IF (
+        UnitContributionMargin > 0,
+        DIVIDE ( BaselineGM, UnitContributionMargin, BLANK () ),
+        BLANK ()
+    )
+
+/// Unit surplus or deficit against breakeven volume hurdle (Positive = Accretive, Negative = Dilutive)
+[Breakeven Unit Gap] = 
+[Simulated Units Sold] - [Breakeven Unit Volume]
+
+/// Executive green/red feasibility verdict classifying commercial profitability vs volume buffer
+[Breakeven Feasibility Verdict] = 
+VAR SimUnits = [Simulated Units Sold]
+VAR BEUnits = [Breakeven Unit Volume]
+VAR MarginDelta = [Gross Margin Delta (AED)]
+RETURN
+    SWITCH (
+        TRUE (),
+        [Simulated Discount %] == 0, "BASELINE (Full Price)",
+        MarginDelta >= 0, "✅ ACCRETIVE: Generates +" & FORMAT ( MarginDelta, "#,##0 AED" ) & " Net Profit",
+        MarginDelta < 0 && SimUnits >= BEUnits, "⚖️ VOLUME BUFFERED: Clears stock with neutral margin",
+        "❌ DILUTIVE: Destroys " & FORMAT ( ABS ( MarginDelta ), "#,##0 AED" ) & " Gross Margin"
+    )
+
+/// Working capital unlocked per 1 AED of Gross Margin surrendered
+[Capital vs Margin ROI Ratio] = 
+VAR MarginSacrificed = ABS ( MIN ( 0, [Gross Margin Delta (AED)] ) )
+VAR CapitalReleased = [Working Capital Released (AED)]
+RETURN
+    IF (
+        MarginSacrificed > 0,
+        DIVIDE ( CapitalReleased, MarginSacrificed, BLANK () ),
+        BLANK ()
+    )
+
