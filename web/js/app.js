@@ -1,6 +1,6 @@
 /**
  * GCC Omnichannel Retail Control Tower - Master Application Coordinator
- * ES Module Entry Point orchestrating State, Simulation, Visuals, and DOM Event Streams
+ * Fluid Responsive Orchestrator linking State, Simulation, Visuals, and DOM Event Streams
  */
 
 import { rawProducts, rawStores, initialInventoryPositions } from './data.js';
@@ -22,48 +22,12 @@ export const state = {
 };
 
 // --- Viewport & Modal Orchestration ---
-export function setViewMode(mode) {
-  const canvas = document.getElementById('dashboard-canvas');
-  const btnFit = document.getElementById('btn-fit');
-  const btnNative = document.getElementById('btn-native');
-  const container = document.getElementById('canvas-container');
-  if (!canvas || !container) return;
-
-  if (mode === 'fit') {
-    const availWidth = window.innerWidth - 32;
-    const availHeight = window.innerHeight - 60;
-    const scale = Math.min(availWidth / 1920, availHeight / 1080);
-    
-    canvas.style.transform = `scale(${scale})`;
-    container.style.width = `${1920 * scale}px`;
-    container.style.height = `${1080 * scale}px`;
-    
-    if (btnFit && btnNative) {
-      btnFit.className = "px-3 py-1 rounded text-white bg-slate-900 font-semibold transition";
-      btnNative.className = "px-3 py-1 rounded text-slate-300 hover:text-white transition";
-    }
-  } else {
-    canvas.style.transform = `scale(1)`;
-    container.style.width = `1920px`;
-    container.style.height = `1080px`;
-    
-    if (btnFit && btnNative) {
-      btnNative.className = "px-3 py-1 rounded text-white bg-slate-900 font-semibold transition";
-      btnFit.className = "px-3 py-1 rounded text-slate-300 hover:text-white transition";
-    }
-  }
-}
-
 export function toggleFullScreen() {
   if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen().then(() => {
-      setTimeout(() => setViewMode('fit'), 200);
-    });
+    document.documentElement.requestFullscreen().catch(() => {});
   } else {
     if (document.exitFullscreen) {
-      document.exitFullscreen().then(() => {
-        setTimeout(() => setViewMode('fit'), 200);
-      });
+      document.exitFullscreen().catch(() => {});
     }
   }
 }
@@ -120,8 +84,8 @@ export function applyGlobalFilters() {
     if (gmroiElem) gmroiElem.innerText = '4.10x';
     if (wosElem) wosElem.innerText = '2.4 Wks';
   } else {
-    if (revElem) revElem.innerText = '14,820,400 AED';
-    if (gmElem) gmElem.innerText = '52.4%';
+    if (revElem) revElem.innerText = '24,820,400 AED';
+    if (gmElem) gmElem.innerText = '69.7%';
     if (gmroiElem) gmroiElem.innerText = '3.42x';
     if (wosElem) wosElem.innerText = '4.8 Wks';
   }
@@ -132,10 +96,10 @@ export function applyGlobalFilters() {
 export function setQuarter(q, btn) {
   state.currentQuarter = q;
   document.querySelectorAll('.quarter-btn').forEach(b => {
-    b.className = "quarter-btn px-2.5 py-0.5 text-xs font-semibold rounded text-[#64748B] hover:text-[#0F172A]";
+    b.className = "quarter-btn px-2.5 py-1 text-xs font-semibold rounded text-slate-600 hover:text-slate-900 transition";
   });
   if (btn) {
-    btn.className = "quarter-btn px-2.5 py-0.5 text-xs font-semibold rounded bg-white text-[#0F172A] shadow-xs";
+    btn.className = "quarter-btn px-2.5 py-1 text-xs font-semibold rounded bg-white text-slate-900 shadow-xs border border-slate-200";
   }
   applyGlobalFilters();
 }
@@ -143,10 +107,10 @@ export function setQuarter(q, btn) {
 export function setStatusChip(status, btn) {
   state.currentStatusChip = status;
   document.querySelectorAll('.status-chip').forEach(b => {
-    b.className = "status-chip px-2.5 py-0.5 rounded text-[10px] font-semibold bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100 transition cursor-pointer flex items-center";
+    b.className = "status-chip px-3 py-1 rounded-lg text-xs font-medium bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100 transition cursor-pointer flex items-center";
   });
   if (btn) {
-    btn.className = "status-chip px-2.5 py-0.5 rounded text-[10px] font-semibold bg-[#0F172A] text-white transition cursor-pointer shadow-xs flex items-center";
+    btn.className = "status-chip px-3 py-1 rounded-lg text-xs font-semibold bg-slate-900 text-white transition cursor-pointer shadow-xs flex items-center";
   }
   updateAllVisuals();
 }
@@ -171,14 +135,14 @@ export function resetFilters() {
 
   document.querySelectorAll('.quarter-btn').forEach((b, idx) => {
     b.className = idx === 0 
-      ? "quarter-btn px-2.5 py-0.5 text-xs font-semibold rounded bg-white text-[#0F172A] shadow-xs" 
-      : "quarter-btn px-2.5 py-0.5 text-xs font-semibold rounded text-[#64748B] hover:text-[#0F172A]";
+      ? "quarter-btn px-2.5 py-1 text-xs font-semibold rounded bg-white text-slate-900 shadow-xs border border-slate-200" 
+      : "quarter-btn px-2.5 py-1 text-xs font-semibold rounded text-slate-600 hover:text-slate-900 transition";
   });
 
   document.querySelectorAll('.status-chip').forEach((b, idx) => {
     b.className = idx === 0
-      ? "status-chip px-2 py-0.5 rounded text-[10px] font-semibold bg-[#0F172A] text-white transition cursor-pointer shadow-xs"
-      : "status-chip px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-[#64748B] hover:text-[#0F172A] border border-slate-200 transition cursor-pointer";
+      ? "status-chip px-3 py-1 rounded-lg text-xs font-semibold bg-slate-900 text-white transition cursor-pointer shadow-xs"
+      : "status-chip px-3 py-1 rounded-lg text-xs font-medium bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200 transition cursor-pointer";
   });
 
   applyGlobalFilters();
@@ -229,7 +193,7 @@ export function handleExportCSV() {
 export function simulateTransfer() {
   const banner = document.getElementById('banner-text');
   if (banner) {
-    banner.innerHTML = `<span class="text-blue-950 font-bold">SIMULATION ACTIVE:</span> 450 units re-routed from Yas Mall to Dubai Mall. Projected Stockout Risk reduced to 0.0%; Projected Dubai Mall STR sustained at 78.5%.`;
+    banner.innerHTML = `<strong class="text-blue-900">SIMULATION ACTIVE:</strong> 450 units re-routed from Yas Mall to Dubai Mall. Projected Stockout Risk reduced to 0.0%; Projected Dubai Mall STR sustained at 78.5%.`;
   }
   
   const kpiWos = document.getElementById('kpi-wos');
@@ -243,14 +207,14 @@ export function simulateTransfer() {
 
   const wosBar = document.getElementById('wos-progress-bar');
   if (wosBar) {
-    wosBar.className = 'bg-[#10B981] h-full rounded-full transition-all duration-500';
+    wosBar.className = 'bg-emerald-500 h-full rounded-full transition-all duration-500';
     wosBar.style.width = '42%';
   }
 
   const badge = document.getElementById('sim-verdict-badge');
   if (badge) {
-    badge.className = "px-2 py-0.5 text-[11px] font-bold rounded bg-[#D1FAE5] text-[#065F46] border border-emerald-300 flex items-center";
-    badge.innerText = "✅ REBALANCING OPTIMAL: Zero lost revenue";
+    badge.className = "px-2.5 py-1 text-xs font-bold rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center";
+    badge.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span> REBALANCING OPTIMAL: Zero lost revenue`;
   }
 }
 
@@ -266,7 +230,6 @@ export function updateAllVisuals() {
 }
 
 // Bind to window for HTML event handlers
-window.setViewMode = setViewMode;
 window.toggleFullScreen = toggleFullScreen;
 window.toggleModal = toggleModal;
 window.setQuarter = setQuarter;
@@ -283,7 +246,6 @@ window.exportCSV = handleExportCSV;
 
 // Initialization
 window.addEventListener('DOMContentLoaded', () => {
-  setViewMode('fit');
   updateAllVisuals();
   
   const searchInput = document.getElementById('grid-search');
@@ -291,12 +253,5 @@ window.addEventListener('DOMContentLoaded', () => {
     searchInput.addEventListener('input', () => {
       updateAllVisuals();
     });
-  }
-});
-
-window.addEventListener('resize', () => {
-  const btnFit = document.getElementById('btn-fit');
-  if (btnFit && btnFit.classList.contains('bg-slate-900')) {
-    setViewMode('fit');
   }
 });

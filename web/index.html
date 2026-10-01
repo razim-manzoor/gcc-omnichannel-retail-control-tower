@@ -7,554 +7,447 @@
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <link rel="stylesheet" href="css/control_tower.css">
 </head>
-<body class="flex flex-col items-center min-h-screen">
+<body class="bg-slate-50 text-slate-900 min-h-screen">
 
   <!-- ========================================================================= -->
-  <!-- TOP EXECUTIVE VIEWPORT TOOLBAR                                            -->
+  <!-- TOP EXECUTIVE NAVIGATION BAR                                              -->
   <!-- ========================================================================= -->
-  <header class="w-full bg-[#0F172A] text-white px-6 py-2.5 flex items-center justify-between text-xs border-b border-slate-800 z-50 select-none">
-    <div class="flex items-center space-x-3">
-      <div class="flex items-center space-x-2">
-        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-        <span class="font-bold tracking-wider text-slate-100 uppercase text-[11px]">VertiPaq Live Tabular Session</span>
-      </div>
-      <span class="text-slate-500">|</span>
-      <span class="text-slate-300">Format: <strong class="text-white">16:9 Landscape</strong> (1920 × 1080 px)</span>
-      <span class="text-slate-500">|</span>
-      <span class="text-slate-400">Governance: <strong class="text-slate-200">3-Second C-Suite Diagnostic Rule</strong></span>
-    </div>
-
-    <div class="flex items-center space-x-3">
-      <!-- Scale Toggle -->
-      <div class="bg-slate-800 rounded p-0.5 flex border border-slate-700">
-        <button id="btn-fit" class="px-3 py-1 rounded text-white bg-slate-900 font-semibold transition" onclick="setViewMode('fit')">Fit Canvas to Screen</button>
-        <button id="btn-native" class="px-3 py-1 rounded text-slate-300 hover:text-white transition" onclick="setViewMode('native')">100% Native 1080p</button>
-      </div>
-
-      <!-- Fullscreen / Boardroom Mode Button -->
-      <button onclick="toggleFullScreen()" title="Toggle Fullscreen Boardroom Mode" class="flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1 rounded font-semibold transition">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path></svg>
-        <span>Boardroom Mode</span>
-      </button>
+  <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200/80 px-6 py-3 transition-all">
+    <div class="max-w-[1720px] mx-auto flex flex-wrap items-center justify-between gap-4">
       
-      <!-- Executive Briefing Modal Button -->
-      <button onclick="toggleModal(true)" class="flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 px-3 py-1 rounded font-semibold transition shadow-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-        <span>Executive Briefing & Architecture</span>
-      </button>
+      <!-- Brand & Title -->
+      <div class="flex items-center space-x-3.5">
+        <div class="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center text-white font-bold text-sm tracking-tighter shadow-sm">
+          <span class="text-amber-400 font-extrabold">L</span>R
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-base font-bold text-slate-900 tracking-tight">GCC Omnichannel Retail Control Tower</h1>
+            <span class="px-2 py-0.5 text-[10px] font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-full">FY2026 Live</span>
+          </div>
+          <p class="text-[11px] text-slate-500 font-medium">The Dubai Mall • MOE Boutique • Yas Mall • Riyadh Kingdom Centre • UAE Central DC</p>
+        </div>
+      </div>
+
+      <!-- Global Slicers & Action Strip -->
+      <div class="flex flex-wrap items-center gap-3">
+        
+        <!-- Last Ingestion Pill -->
+        <div class="hidden sm:flex items-center space-x-1.5 text-xs text-slate-500 bg-slate-100/80 px-2.5 py-1 rounded-md border border-slate-200/60 font-medium">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>Ingested Today, 08:30 GST</span>
+        </div>
+
+        <!-- Fiscal Quarter Filter -->
+        <div class="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+          <button class="quarter-btn px-2.5 py-1 text-xs font-semibold rounded bg-white text-slate-900 shadow-xs border border-slate-200" onclick="setQuarter('All', this)">All</button>
+          <button class="quarter-btn px-2.5 py-1 text-xs font-semibold rounded text-slate-600 hover:text-slate-900" onclick="setQuarter('Q1', this)">Q1</button>
+          <button class="quarter-btn px-2.5 py-1 text-xs font-semibold rounded text-slate-600 hover:text-slate-900" onclick="setQuarter('Q2', this)">Q2</button>
+          <button class="quarter-btn px-2.5 py-1 text-xs font-semibold rounded text-slate-600 hover:text-slate-900" onclick="setQuarter('Q3', this)">Q3</button>
+          <button class="quarter-btn px-2.5 py-1 text-xs font-semibold rounded text-slate-600 hover:text-slate-900" onclick="setQuarter('Q4', this)">Q4</button>
+        </div>
+
+        <!-- Store Channel Dropdown -->
+        <select id="channel-filter" onchange="applyGlobalFilters()" class="text-xs font-semibold bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-400 shadow-xs">
+          <option value="All">All Channels (8 GCC Locations)</option>
+          <option value="Physical Flagship">Physical Flagships</option>
+          <option value="Physical Boutique">Physical Boutiques</option>
+          <option value="Digital E-Commerce">Digital Central DC</option>
+          <option value="Physical Outlet">Physical Outlets</option>
+        </select>
+
+        <!-- Department Dropdown -->
+        <select id="dept-filter" onchange="applyGlobalFilters()" class="text-xs font-semibold bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-400 shadow-xs">
+          <option value="All">All Departments</option>
+          <option value="Apparel">Apparel / RTW</option>
+          <option value="Accessories">Leather Goods</option>
+          <option value="Footwear">Footwear & Sneakers</option>
+          <option value="Beauty">Beauty & High Perfumery</option>
+        </select>
+
+        <!-- Reset Button -->
+        <button onclick="resetFilters()" title="Reset Filters" class="p-1.5 text-slate-400 hover:text-slate-700 bg-white hover:bg-slate-100 rounded-lg border border-slate-200 transition shadow-xs">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        </button>
+
+        <!-- Executive Briefing Modal Button -->
+        <button onclick="toggleModal(true)" class="flex items-center space-x-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition shadow-xs">
+          <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>Executive Briefing</span>
+        </button>
+      </div>
+
     </div>
   </header>
 
   <!-- ========================================================================= -->
-  <!-- 1920x1080 MASTER CANVAS WRAPPER                                           -->
+  <!-- MAIN FLUID EXECUTIVE DASHBOARD CONTAINER                                  -->
   <!-- ========================================================================= -->
-  <div id="canvas-container" class="relative my-auto flex items-center justify-center p-0 transition-all duration-300">
-    <div id="dashboard-canvas">
+  <main class="max-w-[1720px] mx-auto px-6 py-6 space-y-6">
 
-      <!-- ========================================================================= -->
-      <!-- ZONE 1: EXECUTIVE GLOBAL HEADER STRIP (Y: 16 to 90 | H: 74px)            -->
-      <!-- ========================================================================= -->
-      <section class="pos-hdr bg-white border border-[#E2E8F0] rounded-lg px-6 flex items-center justify-between shadow-sm">
-        <!-- Brand & Title -->
-        <div class="flex items-center space-x-4">
-          <div class="w-10 h-10 rounded-lg bg-[#0F172A] flex items-center justify-center text-white shadow-inner font-bold text-lg tracking-tighter">
-            <span class="text-amber-400 font-black">L</span>R
-          </div>
-          <div>
-            <div class="flex items-center space-x-2">
-              <h1 class="text-lg font-bold text-[#0F172A] tracking-tight">GCC Omnichannel Retail & Markdown Elasticity Control Tower</h1>
-              <span class="px-2 py-0.5 text-[11px] font-semibold bg-slate-100 text-slate-800 border border-slate-200 rounded-full">FY2026 Active</span>
-            </div>
-            <p class="text-xs text-[#64748B]">Executive Performance Dashboard • The Dubai Mall | Mall of the Emirates | Yas Mall | E-Commerce DC</p>
-          </div>
-        </div>
-
-        <!-- Global Slicers -->
-        <div class="flex items-center space-x-4">
-          <div class="text-right border-r border-[#E2E8F0] pr-4">
-            <span class="text-[10px] text-[#64748B] block uppercase tracking-wider font-semibold">Last Ingestion</span>
-            <span class="text-xs font-semibold text-[#0F172A]">Today, 08:30 GST</span>
-          </div>
-
-          <!-- Fiscal Quarter Chiclets -->
-          <div class="flex flex-col">
-            <span class="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold mb-1">Fiscal Quarter</span>
-            <div class="flex bg-slate-100 p-0.5 rounded-md border border-[#E2E8F0]">
-              <button class="quarter-btn px-2.5 py-0.5 text-xs font-semibold rounded bg-white text-[#0F172A] shadow-xs" onclick="setQuarter('All', this)">All</button>
-              <button class="quarter-btn px-2.5 py-0.5 text-xs font-semibold rounded text-[#64748B] hover:text-[#0F172A]" onclick="setQuarter('Q1', this)">Q1</button>
-              <button class="quarter-btn px-2.5 py-0.5 text-xs font-semibold rounded text-[#64748B] hover:text-[#0F172A]" onclick="setQuarter('Q2', this)">Q2</button>
-              <button class="quarter-btn px-2.5 py-0.5 text-xs font-semibold rounded text-[#64748B] hover:text-[#0F172A]" onclick="setQuarter('Q3', this)">Q3</button>
-              <button class="quarter-btn px-2.5 py-0.5 text-xs font-semibold rounded text-[#64748B] hover:text-[#0F172A]" onclick="setQuarter('Q4', this)">Q4</button>
-            </div>
-          </div>
-
-          <!-- Channel Slicer Dropdown -->
-          <div class="flex flex-col">
-            <span class="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold mb-1">Store Channel</span>
-            <select id="channel-filter" onchange="applyGlobalFilters()" class="text-xs font-medium bg-white border border-[#CBD5E1] rounded-md px-3 py-1 text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-slate-400">
-              <option value="All">All Channels (8 GCC Locations)</option>
-              <option value="Physical Flagship">Physical Flagships (Dubai Mall, Riyadh, Jeddah, Galleria)</option>
-              <option value="Physical Boutique">Physical Boutiques (MOE & Yas Mall)</option>
-              <option value="Digital E-Commerce">Digital E-Commerce Central DC</option>
-              <option value="Physical Outlet">Physical Outlets (Dubai Outlet Mall)</option>
-            </select>
-          </div>
-
-          <!-- Department Slicer Dropdown -->
-          <div class="flex flex-col">
-            <span class="text-[10px] text-[#64748B] uppercase tracking-wider font-semibold mb-1">Merchandise Dept</span>
-            <select id="dept-filter" onchange="applyGlobalFilters()" class="text-xs font-medium bg-white border border-[#CBD5E1] rounded-md px-3 py-1 text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-slate-400">
-              <option value="All">All Departments</option>
-              <option value="Apparel">Apparel / Ready-To-Wear</option>
-              <option value="Accessories">Leather Goods & Accessories</option>
-              <option value="Footwear">Footwear & Sneakers</option>
-              <option value="Beauty">Beauty & High Perfumery</option>
-            </select>
-          </div>
-
-          <!-- Reset Filter Button -->
-          <button onclick="resetFilters()" title="Reset All Slicers" class="p-1.5 text-slate-400 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-md border border-slate-200 transition">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-          </button>
-
-          <!-- Executive Briefing Canvas Button (Harmonized) -->
-          <button onclick="toggleModal(true)" class="flex items-center space-x-1.5 bg-slate-50 hover:bg-slate-100 text-[#0F172A] border border-[#CBD5E1] px-3 py-1 rounded-md text-xs font-semibold transition shadow-xs">
-            <svg class="w-3.5 h-3.5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span>Executive Briefing</span>
-          </button>
-        </div>
-      </section>
-
-      <!-- ========================================================================= -->
-      <!-- ZONE 2: HERO COMMERCIAL KPI STRIP (Y: 106 to 236 | H: 130px)             -->
-      <!-- ========================================================================= -->
-      <!-- KPI 1: Net Revenue -->
-      <section class="pos-kpi-1 bg-white border border-[#E2E8F0] rounded-lg p-3.5 shadow-sm flex flex-col justify-between has-tooltip">
+    <!-- ======================================================================= -->
+    <!-- ZONE 1: EXECUTIVE KPI RIBBON (4 Metric Cards)                           -->
+    <!-- ======================================================================= -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      
+      <!-- KPI 1: Net Commercial Revenue -->
+      <div class="luxury-card p-4 flex flex-col justify-between">
         <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-1.5">
-            <span class="text-xs uppercase tracking-wider text-[#64748B] font-semibold">Net Commercial Revenue</span>
-            <span class="cursor-help text-slate-400 hover:text-[#0F172A] text-xs">ⓘ</span>
-          </div>
-          <span class="px-2 py-0.5 text-[10px] font-bold bg-slate-100 text-[#0F172A] rounded">AED Currency</span>
+          <span class="text-[11px] uppercase tracking-wider text-slate-500 font-bold">Net Commercial Revenue</span>
+          <span class="text-[10px] font-semibold font-mono bg-slate-100 text-slate-600 px-2 py-0.5 rounded">AED</span>
         </div>
-        <div>
-          <div class="text-[30px] font-semibold text-[#0F172A] leading-tight" id="kpi-net-revenue">24,820,400 AED</div>
-          <div class="flex items-center justify-between mt-0.5">
-            <span class="text-xs font-semibold text-[#10B981] flex items-center">
+        <div class="my-2">
+          <div class="text-2xl font-bold font-mono tracking-tight text-slate-900" id="kpi-net-revenue">24,820,400 AED</div>
+          <div class="flex items-center justify-between text-xs mt-1">
+            <span class="text-emerald-700 font-bold flex items-center">
               <svg class="w-3.5 h-3.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"></path></svg>
               +8.2% vs Plan
             </span>
-            <span class="text-[11px] text-[#64748B]">Focus Qtr Plan: 22,940,000 AED</span>
+            <span class="text-slate-400 font-medium">Plan: 22.94M</span>
           </div>
         </div>
         <div>
-          <div class="relative w-full bg-slate-100 h-1.5 rounded-full overflow-hidden flex">
-            <div class="bg-slate-700 h-full transition-all duration-500" style="width: 92.4%;"></div>
-            <div class="bg-emerald-500 h-full transition-all duration-500" style="width: 7.6%;"></div>
+          <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden flex">
+            <div class="bg-slate-700 h-full rounded-l-full" style="width: 92%;"></div>
+            <div class="bg-emerald-500 h-full rounded-r-full" style="width: 8%;"></div>
           </div>
-          <div class="flex justify-between items-center text-[9px] text-[#64748B] mt-0.5">
+          <div class="flex justify-between items-center text-[10px] font-mono text-slate-400 mt-1">
             <span>0</span>
-            <span class="text-slate-500 font-medium">Attainment: 108.2%</span>
-            <span class="text-emerald-600 font-bold">24.82M</span>
+            <span class="text-slate-600 font-medium font-sans">Attainment: 108.2%</span>
+            <span class="text-emerald-700 font-bold">24.82M</span>
           </div>
         </div>
-
-        <!-- Metric Governance Tooltip -->
-        <div class="metric-tooltip absolute top-12 left-4 right-4 bg-[#0F172A] text-white p-2.5 rounded shadow-xl text-[11px] z-30 border border-slate-700 pointer-events-none">
-          <strong class="text-blue-200 block mb-0.5">DAX Metric Definition:</strong>
-          <code>[Net Sales (AED)] = SUM(Fact_POS_Transactions[NetSalesAmt])</code>
-          <p class="text-slate-300 mt-1">Excludes 5% UAE VAT and customer promotional deductions.</p>
-        </div>
-      </section>
+      </div>
 
       <!-- KPI 2: Gross Margin % -->
-      <section class="pos-kpi-2 bg-white border border-[#E2E8F0] rounded-lg p-3.5 shadow-sm flex flex-col justify-between has-tooltip">
+      <div class="luxury-card p-4 flex flex-col justify-between">
         <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-1.5">
-            <span class="text-xs uppercase tracking-wider text-[#64748B] font-semibold">Gross Margin %</span>
-            <span class="cursor-help text-slate-400 hover:text-[#0F172A] text-xs">ⓘ</span>
-          </div>
-          <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-50 text-emerald-700 rounded border border-emerald-200">Floor: 65.0%</span>
+          <span class="text-[11px] uppercase tracking-wider text-slate-500 font-bold">Gross Margin %</span>
+          <span class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200/80">Floor: 65.0%</span>
         </div>
-        <div>
-          <div class="text-[30px] font-semibold text-[#0F172A] leading-tight" id="kpi-gross-margin">69.7%</div>
-          <div class="flex items-center justify-between mt-0.5">
-            <span class="text-xs font-semibold text-[#10B981] flex items-center">
+        <div class="my-2">
+          <div class="text-2xl font-bold font-mono tracking-tight text-slate-900" id="kpi-gross-margin">69.7%</div>
+          <div class="flex items-center justify-between text-xs mt-1">
+            <span class="text-emerald-700 font-bold flex items-center">
               <svg class="w-3.5 h-3.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"></path></svg>
-              +3.6% vs Target (66.1%)
+              +3.6% vs Target
             </span>
-            <span class="text-[11px] text-[#64748B]">AED 17,299,800 Margin $</span>
+            <span class="text-slate-400 font-medium font-mono">AED 17.3M Margin</span>
           </div>
         </div>
         <div>
           <div class="relative w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
             <div class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 69.7%;"></div>
-            <div class="absolute top-0 bottom-0 left-[65%] w-0.5 bg-slate-800" title="Floor: 65.0%"></div>
+            <div class="absolute top-0 bottom-0 left-[65%] w-0.5 bg-slate-900" title="Floor: 65.0%"></div>
           </div>
-          <div class="flex justify-between items-center text-[9px] text-[#64748B] mt-0.5">
+          <div class="flex justify-between items-center text-[10px] font-mono text-slate-400 mt-1">
             <span>0%</span>
-            <span class="text-slate-500 font-medium">Floor 65.0% Marker</span>
-            <span class="text-emerald-600 font-bold">69.7%</span>
+            <span class="text-slate-500 font-sans">Floor 65.0% Marker</span>
+            <span class="text-emerald-700 font-bold">69.7%</span>
           </div>
         </div>
+      </div>
 
-        <div class="metric-tooltip absolute top-12 left-4 right-4 bg-[#0F172A] text-white p-2.5 rounded shadow-xl text-[11px] z-30 border border-slate-700 pointer-events-none">
-          <strong class="text-emerald-300 block mb-0.5">DAX Metric Definition:</strong>
-          <code>[Gross Margin %] = DIVIDE([Gross Margin (AED)], [Net Sales (AED)])</code>
-          <p class="text-slate-300 mt-1">Net sales minus landed cost of goods sold. Executive floor target is 50.0%.</p>
-        </div>
-      </section>
-
-      <!-- KPI 3: GMROI Asset Productivity -->
-      <section class="pos-kpi-3 bg-white border border-[#E2E8F0] rounded-lg p-3.5 shadow-sm flex flex-col justify-between has-tooltip">
+      <!-- KPI 3: GMROI -->
+      <div class="luxury-card p-4 flex flex-col justify-between">
         <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-1.5">
-            <span class="text-xs uppercase tracking-wider text-[#64748B] font-semibold">GMROI (Asset Productivity)</span>
-            <span class="cursor-help text-slate-400 hover:text-[#0F172A] text-xs">ⓘ</span>
-          </div>
-          <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-50 text-emerald-700 rounded border border-emerald-200">Accretive</span>
+          <span class="text-[11px] uppercase tracking-wider text-slate-500 font-bold">GMROI (Asset Productivity)</span>
+          <span class="text-[10px] font-bold bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200/80">Accretive</span>
         </div>
-        <div>
-          <div class="text-[30px] font-semibold text-[#0F172A] leading-tight" id="kpi-gmroi">3.42x</div>
-          <div class="flex items-center justify-between mt-0.5">
-            <span class="text-xs font-semibold text-[#10B981] flex items-center">
+        <div class="my-2">
+          <div class="text-2xl font-bold font-mono tracking-tight text-slate-900" id="kpi-gmroi">3.42x</div>
+          <div class="flex items-center justify-between text-xs mt-1">
+            <span class="text-emerald-700 font-bold flex items-center">
               <svg class="w-3.5 h-3.5 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"></path></svg>
               +0.35x vs Benchmark
             </span>
-            <span class="text-[11px] text-[#64748B]">Benchmark: &gt; 3.00x</span>
+            <span class="text-slate-400 font-medium">Hurdle: &gt; 3.00x</span>
           </div>
         </div>
         <div>
           <div class="relative w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
             <div class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 68.4%;"></div>
-            <div class="absolute top-0 bottom-0 left-[60%] w-0.5 bg-slate-800" title="Benchmark: 3.00x"></div>
+            <div class="absolute top-0 bottom-0 left-[60%] w-0.5 bg-slate-900" title="Benchmark: 3.00x"></div>
           </div>
-          <div class="flex justify-between items-center text-[9px] text-[#64748B] mt-0.5">
+          <div class="flex justify-between items-center text-[10px] font-mono text-slate-400 mt-1">
             <span>0.0x</span>
-            <span class="text-slate-500 font-medium">Benchmark 3.00x Marker</span>
-            <span class="text-emerald-600 font-bold">3.42x</span>
+            <span class="text-slate-500 font-sans">Benchmark 3.00x</span>
+            <span class="text-emerald-700 font-bold">3.42x</span>
           </div>
         </div>
-
-        <div class="metric-tooltip absolute top-12 left-4 right-4 bg-[#0F172A] text-white p-2.5 rounded shadow-xl text-[11px] z-30 border border-slate-700 pointer-events-none">
-          <strong class="text-emerald-300 block mb-0.5">DAX Metric Definition:</strong>
-          <code>[GMROI] = DIVIDE([Annualized Gross Margin $], [Average Inventory Cost Value])</code>
-          <p class="text-slate-300 mt-1">Annualized margin return per 1 AED of inventory capital invested.</p>
-        </div>
-      </section>
+      </div>
 
       <!-- KPI 4: Weeks of Supply -->
-      <section class="pos-kpi-4 bg-white border border-[#E2E8F0] rounded-lg p-3.5 shadow-sm flex flex-col justify-between has-tooltip">
+      <div class="luxury-card p-4 flex flex-col justify-between">
         <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-1.5">
-            <span class="text-xs uppercase tracking-wider text-[#64748B] font-semibold">Inventory Cover (WOS)</span>
-            <span class="cursor-help text-slate-400 hover:text-[#0F172A] text-xs">ⓘ</span>
-          </div>
-          <span class="px-2 py-0.5 text-[10px] font-bold bg-amber-50 text-amber-700 rounded border border-amber-200" id="wos-badge-status">Attention</span>
+          <span class="text-[11px] uppercase tracking-wider text-slate-500 font-bold">Inventory Cover (WOS)</span>
+          <span class="text-[10px] font-bold bg-amber-50 text-amber-700 px-2 py-0.5 rounded border border-amber-200/80" id="wos-badge-status">Attention</span>
         </div>
-        <div>
-          <div class="text-[30px] font-semibold text-[#0F172A] leading-tight" id="kpi-wos">4.8 Wks</div>
-          <div class="flex items-center justify-between mt-0.5">
-            <span class="text-xs font-semibold text-[#F59E0B] flex items-center" id="wos-band-label">
-              Optimal Band: 4.0 - 6.0 Wks
-            </span>
-            <span class="text-[11px] text-[#64748B]">On-Hand: 42,850 Units</span>
+        <div class="my-2">
+          <div class="text-2xl font-bold font-mono tracking-tight text-slate-900" id="kpi-wos">4.8 Wks</div>
+          <div class="flex items-center justify-between text-xs mt-1">
+            <span class="text-amber-600 font-bold" id="wos-band-label">Optimal Band: 4.0 - 6.0 Wks</span>
+            <span class="text-slate-400 font-medium font-mono">42,850 Units</span>
           </div>
         </div>
         <div>
           <div class="relative w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-            <div class="absolute top-0 bottom-0 left-[20%] w-[10%] bg-emerald-200" title="Optimal: 4.0 - 6.0 Wks"></div>
+            <div class="absolute top-0 bottom-0 left-[20%] w-[10%] bg-emerald-200" title="Optimal: 4-6 Wks"></div>
             <div class="bg-amber-500 h-full rounded-full transition-all duration-500" id="wos-progress-bar" style="width: 24%;"></div>
           </div>
-          <div class="flex justify-between items-center text-[9px] text-[#64748B] mt-0.5">
+          <div class="flex justify-between items-center text-[10px] font-mono text-slate-400 mt-1">
             <span>0 Wks</span>
-            <span class="text-emerald-700 font-medium">Optimal Band (4-6 Wks)</span>
+            <span class="text-emerald-700 font-medium font-sans">Optimal Band (4-6W)</span>
             <span class="text-slate-500">20+ Wks</span>
           </div>
         </div>
+      </div>
 
-        <div class="metric-tooltip absolute top-12 left-4 right-4 bg-[#0F172A] text-white p-2.5 rounded shadow-xl text-[11px] z-30 border border-slate-700 pointer-events-none">
-          <strong class="text-amber-300 block mb-0.5">DAX Metric Definition:</strong>
-          <code>[Weeks of Supply] = DIVIDE([Closing On Hand Units], [Weekly Run Rate Units])</code>
-          <p class="text-slate-300 mt-1">Critical threshold: &lt; 2.0 Wks = Stockout Danger | &gt; 8.0 Wks = Cash Trap.</p>
-        </div>
-      </section>
+    </section>
 
-      <!-- ========================================================================= -->
-      <!-- ZONE 3: DIAGNOSTIC MATRIX (Y: 252 to 670 | 60% W: 1120px)                -->
-      <!-- ========================================================================= -->
-      <section class="pos-diag bg-white border border-[#E2E8F0] rounded-lg p-4 shadow-sm flex flex-col justify-between">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-          <div>
-            <h2 class="text-sm font-bold text-[#0F172A]">Store Velocity vs. Supply Health Diagnostic Matrix</h2>
-            <p class="text-[11px] text-[#64748B]">Sell-Through Rate (STR %) vs. Weeks of Supply (WOS) • Click any bubble to isolate in Action Grid</p>
-          </div>
-          <div class="flex items-center space-x-3 text-[11px]">
-            <span class="flex items-center font-medium text-slate-600"><span class="w-2 h-2 rounded-full bg-rose-500 mr-1.5 inline-block"></span>Stockout Deficit (STR &gt; 65%, WOS &lt; 3.0)</span>
-            <span class="flex items-center font-medium text-slate-600"><span class="w-2 h-2 rounded-full bg-amber-500 mr-1.5 inline-block"></span>Cash Trap (STR &lt; 65%, WOS &gt; 6.0)</span>
-            <span class="flex items-center font-medium text-slate-600"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 inline-block"></span>Balanced (3.0 - 6.0 Wks)</span>
-          </div>
-        </div>
-
-        <div class="relative w-full h-[280px] mt-1" id="scatter-container">
-          <svg id="scatter-svg" class="w-full h-full" viewBox="0 0 1088 280">
-            <!-- Background Quadrant Shading -->
-            <rect x="60" y="20" width="154" height="117" fill="#FEE2E2" fill-opacity="0.2" rx="4" />
-            <text x="208" y="34" fill="#991B1B" font-size="8.5" font-weight="700" letter-spacing="0.5px" fill-opacity="0.45" text-anchor="end">STOCKOUT DEFICIT ZONE</text>
-
-            <rect x="368" y="137" width="670" height="103" fill="#FEF3C7" fill-opacity="0.2" rx="4" />
-            <text x="380" y="228" fill="#92400E" font-size="8.5" font-weight="700" letter-spacing="0.5px" fill-opacity="0.45" text-anchor="start">AGED OVERSTOCK (CASH TRAP)</text>
-
-            <rect x="214" y="20" width="154" height="220" fill="#ECFDF5" fill-opacity="0.2" />
-            <text x="291" y="34" fill="#065F46" font-size="8.5" font-weight="700" letter-spacing="0.5px" fill-opacity="0.45" text-anchor="middle">BALANCED OPTIMAL BAND (3-6 WKS)</text>
-
-            <!-- Axes & Reference lines -->
-            <line x1="60" y1="20" x2="60" y2="240" stroke="#CBD5E1" stroke-width="1.5" />
-            <line x1="60" y1="240" x2="1050" y2="240" stroke="#CBD5E1" stroke-width="1.5" />
-
-            <line x1="60" y1="97" x2="1050" y2="97" stroke="#10B981" stroke-width="1.5" stroke-dasharray="4,4" />
-            <text x="960" y="92" fill="#10B981" font-size="10" font-weight="600">STR Benchmark 65%</text>
-
-            <line x1="214" y1="20" x2="214" y2="240" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="3,3" />
-            <text x="216" y="252" fill="#F59E0B" font-size="10" font-weight="600">3.0 Wks</text>
-
-            <line x1="368" y1="20" x2="368" y2="240" stroke="#F59E0B" stroke-width="1.2" stroke-dasharray="3,3" />
-            <text x="370" y="252" fill="#F59E0B" font-size="10" font-weight="600">6.0 Wks</text>
-
-            <text x="20" y="25" fill="#64748B" font-size="10" text-anchor="start">100%</text>
-            <text x="28" y="97" fill="#64748B" font-size="10" text-anchor="start">65%</text>
-            <text x="32" y="150" fill="#64748B" font-size="10" text-anchor="start">40%</text>
-            <text x="40" y="238" fill="#64748B" font-size="10" text-anchor="start">0%</text>
-            <text x="15" y="130" fill="#0F172A" font-size="11" font-weight="600" transform="rotate(-90 15,130)" text-anchor="middle">Sell-Through Rate (STR %)</text>
-
-            <text x="60" y="265" fill="#64748B" font-size="10" text-anchor="middle">0 Wks</text>
-            <text x="550" y="265" fill="#64748B" font-size="10" text-anchor="middle">10 Wks</text>
-            <text x="800" y="265" fill="#64748B" font-size="10" text-anchor="middle">15 Wks</text>
-            <text x="1050" y="265" fill="#64748B" font-size="10" text-anchor="middle">20+ Wks</text>
-            <text x="550" y="278" fill="#0F172A" font-size="11" font-weight="600" text-anchor="middle">Weeks of Supply (WOS Cover)</text>
-
-            <!-- Dynamic Scatter Bubbles -->
-            <g id="scatter-points-group"></g>
-          </svg>
-
-          <!-- Interactive Tooltip -->
-          <div id="scatter-tooltip" class="absolute hidden bg-[#0F172A] text-white p-3 rounded-lg shadow-2xl text-xs pointer-events-none z-30 border border-slate-700 max-w-xs transition-opacity duration-150"></div>
-        </div>
-      </section>
-
-      <!-- Prescriptive Inter-Mall Banner (Y: 622, H: 48px) -->
-      <section class="pos-alert bg-[#FFFBEB] border border-[#FDE68A] rounded-lg px-4 flex items-center justify-between text-[#92400E] shadow-xs">
-        <div class="flex items-center space-x-2.5">
-          <div class="bg-amber-100 text-amber-800 border border-amber-300 rounded-md p-1 flex items-center justify-center shrink-0">
-            <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-          </div>
-          <div>
-            <span class="font-bold text-xs tracking-tight">PRESCRIPTIVE BALANCING ACTION:</span>
-            <span class="text-xs ml-1 font-medium text-[#78350F]" id="banner-text">Pull 450 units of High-Velocity RTW Linen & Footwear from Yas Mall to The Dubai Mall Flagship (Protects AED 185k lost revenue; unlocks AED 142k working capital).</span>
-          </div>
-        </div>
-        <div class="flex items-center space-x-2">
-          <button onclick="simulateTransfer()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-semibold px-3 py-1 rounded transition shadow-xs active:scale-95">Simulate Transfer</button>
-          <button onclick="approveTransfer()" class="btn-executive-action text-white text-xs font-semibold px-3.5 py-1 rounded transition shadow-xs">Approve Dispatch</button>
-        </div>
-      </section>
-
-      <!-- ========================================================================= -->
-      <!-- ZONE 4: WHAT-IF SIMULATOR (Y: 252 to 670 | 40% W: 752px)                 -->
-      <!-- ========================================================================= -->
-      <section class="pos-sim-ctrl bg-white border border-[#E2E8F0] border-t-2 border-t-[#1E3A8A] rounded-lg p-2.5 shadow-sm flex flex-col justify-between">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-2">
-            <span class="w-2 h-2 rounded-full bg-[#1E3A8A]"></span>
-            <h2 class="text-xs font-bold text-[#0F172A] uppercase tracking-wider">What-If Markdown Elasticity Simulator</h2>
-          </div>
-          <!-- Feasibility Verdict Badge -->
-          <div id="sim-verdict-badge" class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center">
-            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span> ACCRETIVE YIELD
-          </div>
-        </div>
-
-        <!-- Slider Row -->
-        <div class="my-0.5">
-          <div class="flex items-center justify-between mb-0.5">
-            <label for="discount-slider" class="text-[11px] font-semibold text-[#0F172A]">Simulated Promotional Markdown:</label>
-            <span class="text-xs font-bold text-[#1E3A8A] bg-slate-100 px-2 py-0.5 rounded border border-slate-200" id="slider-val-label">25% Markdown</span>
-          </div>
-          <input type="range" id="discount-slider" min="0" max="30" step="5" value="25" oninput="handleSliderChange(this.value)">
-          <div class="flex justify-between text-[9px] text-[#64748B] font-semibold mt-0.5 px-1">
-            <span>0% (Full Price)</span>
-            <span>5%</span>
-            <span>10%</span>
-            <span>15%</span>
-            <span>20%</span>
-            <span class="text-[#1E3A8A] font-bold">25%</span>
-            <span>30%</span>
-          </div>
-        </div>
-
-        <!-- Live Simulation Hurdle Output Strip -->
-        <div class="grid grid-cols-4 gap-1.5 pt-1 border-t border-slate-100">
-          <div class="bg-slate-50 px-1.5 py-1 rounded border border-slate-200 text-center">
-            <span class="text-[9px] uppercase font-semibold text-[#64748B] block leading-none mb-1">Working Cap</span>
-            <span class="text-xs font-bold text-[#10B981] block leading-none" id="sim-cap-released">+307,013 AED</span>
-          </div>
-          <div class="bg-slate-50 px-1.5 py-1 rounded border border-slate-200 text-center">
-            <span class="text-[9px] uppercase font-semibold text-[#64748B] block leading-none mb-1">Margin Delta</span>
-            <span class="text-xs font-bold text-[#EF4444] block leading-none" id="sim-margin-sacrificed">-210,338 AED</span>
-          </div>
-          <div class="bg-slate-50 px-1.5 py-1 rounded border border-slate-200 text-center">
-            <span class="text-[9px] uppercase font-semibold text-[#64748B] block leading-none mb-1">BE Gap</span>
-            <span class="text-xs font-bold text-[#0F172A] block leading-none" id="sim-be-gap">-54 Units</span>
-          </div>
-          <div class="bg-slate-50 px-1.5 py-1 rounded border border-slate-200 text-center">
-            <span class="text-[9px] uppercase font-semibold text-[#64748B] block leading-none mb-1">Capital ROI</span>
-            <span class="text-xs font-bold text-[#1E3A8A] block leading-none" id="sim-cap-roi">1.46x</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Bottom Sensitivity Clustered Chart (Y: 404, H: 266px) -->
-      <section class="pos-sim-chart bg-white border border-[#E2E8F0] rounded-lg p-3.5 shadow-sm flex flex-col justify-between">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-1.5">
-          <div>
-            <h3 class="text-xs font-bold text-[#0F172A]">Elasticity Margin Sensitivity by Category</h3>
-            <p class="text-[10px] text-[#64748B]">Baseline Gross Margin vs. Simulated Margin $ with Capital Release Line</p>
-          </div>
-          <div class="flex items-center space-x-3 text-[10px]">
-            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-sm bg-[#0F172A] mr-1"></span>Baseline GM ($)</span>
-            <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-sm bg-[#2563EB] mr-1"></span>Simulated GM ($)</span>
-            <span class="flex items-center"><span class="w-2.5 h-1 rounded bg-[#F59E0B] mr-1"></span>Capital Released</span>
-          </div>
-        </div>
-
-        <div class="relative w-full h-[200px]" id="sim-chart-container">
-          <svg id="sim-chart-svg" class="w-full h-full" viewBox="0 0 720 200"></svg>
-        </div>
-      </section>
-
-      <!-- ========================================================================= -->
-      <!-- ZONE 5: GRANULAR INVENTORY & REALLOCATION GRID (Y: 686 | H: 374px)        -->
-      <!-- ========================================================================= -->
-      <section class="pos-grid bg-white border border-[#E2E8F0] rounded-lg p-3.5 shadow-sm flex flex-col">
-        <div class="flex items-center justify-between mb-2">
-          <!-- Left: Title & Quick Filter Chips -->
-          <div class="flex items-center space-x-3">
-            <h2 class="text-xs font-bold text-[#0F172A] uppercase tracking-wider">Granular Inventory & Rebalance Allocation Matrix</h2>
-            <div class="flex items-center space-x-1.5">
-              <button class="status-chip px-2.5 py-0.5 rounded text-[10px] font-semibold bg-[#0F172A] text-white transition cursor-pointer" onclick="setStatusChip('All', this)">All (10)</button>
-              <button class="status-chip px-2.5 py-0.5 rounded text-[10px] font-semibold bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100 transition cursor-pointer flex items-center" onclick="setStatusChip('CRITICAL_STOCKOUT_RISK', this)">
-                <span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5 inline-block"></span>Stockout Risk (5)
-              </button>
-              <button class="status-chip px-2.5 py-0.5 rounded text-[10px] font-semibold bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100 transition cursor-pointer flex items-center" onclick="setStatusChip('OVERSTOCK_CASH_TRAP', this)">
-                <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 inline-block"></span>Cash Trap (3)
-              </button>
-              <button class="status-chip px-2.5 py-0.5 rounded text-[10px] font-semibold bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100 transition cursor-pointer flex items-center" onclick="setStatusChip('BALANCED', this)">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 inline-block"></span>Balanced (2)
-              </button>
+    <!-- ======================================================================= -->
+    <!-- ZONE 2: DIAGNOSTICS & SIMULATION BENTO (Left 7 cols, Right 5 cols)       -->
+    <!-- ======================================================================= -->
+    <section class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
+      
+      <!-- LEFT COLUMN: Diagnostic Matrix + Prescriptive Banner (7 cols) -->
+      <div class="xl:col-span-7 space-y-4">
+        
+        <!-- Diagnostic Scatter Plot Card -->
+        <div class="luxury-card p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-100">
+            <div>
+              <h2 class="text-sm font-bold text-slate-900 tracking-tight">Store Velocity vs. Supply Health Diagnostic Matrix</h2>
+              <p class="text-xs text-slate-500 mt-0.5">Sell-Through Rate (STR %) vs. Weeks of Supply Cover • Click bubble to cross-filter Action Grid</p>
+            </div>
+            <div class="flex items-center space-x-3 text-[11px] font-medium text-slate-600">
+              <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-rose-500 mr-1.5"></span>Stockout Deficit (&lt;3W)</span>
+              <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-amber-500 mr-1.5"></span>Cash Trap (&gt;6W)</span>
+              <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5"></span>Balanced (3-6W)</span>
             </div>
           </div>
 
-          <!-- Right: Search & Export -->
-          <div class="flex items-center space-x-2 text-xs">
-            <input type="text" id="grid-search" placeholder="Search SKU, Product, Store..." oninput="renderTable()" class="text-xs bg-slate-50 border border-slate-200 rounded px-2.5 py-1 text-[#0F172A] focus:outline-none focus:ring-1 focus:ring-slate-400 w-56">
+          <div class="relative w-full h-[300px] mt-2" id="scatter-container">
+            <svg id="scatter-svg" class="w-full h-full" viewBox="0 0 760 280">
+              <!-- Soft Watermark Quadrant Shading -->
+              <rect x="45" y="25" width="105" height="110" fill="#FEE2E2" fill-opacity="0.25" rx="6" />
+              <rect x="250" y="135" width="480" height="110" fill="#FEF3C7" fill-opacity="0.25" rx="6" />
+              <rect x="150" y="25" width="100" height="220" fill="#ECFDF5" fill-opacity="0.25" rx="4" />
 
-            <button onclick="exportCSV()" class="bg-slate-100 hover:bg-slate-200 text-[#0F172A] text-xs font-semibold px-2.5 py-1 rounded border border-slate-300 transition flex items-center active:scale-95">
-              <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-              Export Matrix
+
+
+              <!-- Reference Guidelines -->
+              <line x1="45" y1="135" x2="730" y2="135" stroke="#10B981" stroke-width="1.2" stroke-dasharray="4,4" />
+              <text x="725" y="130" fill="#10B981" font-size="9" font-weight="600" text-anchor="end">STR Benchmark 65%</text>
+
+              <line x1="150" y1="25" x2="150" y2="245" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="3,3" />
+              <line x1="250" y1="25" x2="250" y2="245" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="3,3" />
+
+              <!-- Axes -->
+              <line x1="45" y1="25" x2="45" y2="245" stroke="#CBD5E1" stroke-width="1.2" />
+              <line x1="45" y1="245" x2="730" y2="245" stroke="#CBD5E1" stroke-width="1.2" />
+
+              <!-- Y-Axis Ticks -->
+              <text x="35" y="30" fill="#94A3B8" font-size="9" font-family="var(--font-mono)" text-anchor="end">100%</text>
+              <text x="35" y="138" fill="#94A3B8" font-size="9" font-family="var(--font-mono)" text-anchor="end">65%</text>
+              <text x="35" y="247" fill="#94A3B8" font-size="9" font-family="var(--font-mono)" text-anchor="end">0%</text>
+
+              <!-- X-Axis Ticks -->
+              <text x="45" y="260" fill="#94A3B8" font-size="9" font-family="var(--font-mono)" text-anchor="middle">0W</text>
+              <text x="150" y="260" fill="#94A3B8" font-size="9" font-family="var(--font-mono)" text-anchor="middle">3W</text>
+              <text x="250" y="260" fill="#94A3B8" font-size="9" font-family="var(--font-mono)" text-anchor="middle">6W</text>
+              <text x="490" y="260" fill="#94A3B8" font-size="9" font-family="var(--font-mono)" text-anchor="middle">12W</text>
+              <text x="730" y="260" fill="#94A3B8" font-size="9" font-family="var(--font-mono)" text-anchor="middle">20W+</text>
+
+              <!-- Scatter Points Container -->
+              <g id="scatter-points-group"></g>
+            </svg>
+
+            <!-- Floating Tooltip -->
+            <div id="scatter-tooltip" class="absolute hidden bg-white text-slate-800 p-3 rounded-xl shadow-xl text-xs z-30 border border-slate-200/80 max-w-xs transition-opacity duration-150 pointer-events-none"></div>
+          </div>
+        </div>
+
+        <!-- Prescriptive Balancing Banner -->
+        <div class="luxury-card p-4 bg-gradient-to-r from-amber-50/70 via-white to-amber-50/40 border-amber-200/80 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-lg bg-amber-100/90 text-amber-800 flex items-center justify-center shrink-0 border border-amber-200">
+              <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="text-xs font-bold text-amber-900 tracking-tight uppercase">Prescriptive Rebalance Directive</span>
+                <span class="px-1.5 py-0.2 rounded text-[10px] font-bold bg-amber-200/60 text-amber-900 font-mono">Actionable</span>
+              </div>
+              <p class="text-xs text-amber-900/90 mt-0.5 leading-snug" id="banner-text">
+                Pull 450 units of High-Velocity RTW Linen & Footwear from Yas Mall to The Dubai Mall Flagship (Protects AED 185k lost revenue; unlocks AED 142k working capital).
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button onclick="simulateTransfer()" class="btn-primary-action px-3 py-1.5 text-xs font-semibold">Simulate Transfer</button>
+            <button onclick="approveTransfer()" class="btn-emerald-action px-3.5 py-1.5 text-xs font-semibold">Approve Dispatch</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: What-If Simulator + Sensitivity Chart (5 cols) -->
+      <div class="xl:col-span-5 space-y-4">
+        
+        <!-- What-If Markdown Elasticity Simulator -->
+        <div class="luxury-card p-5">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div>
+              <h2 class="text-sm font-bold text-slate-900 tracking-tight">What-If Markdown Elasticity Simulator</h2>
+              <p class="text-xs text-slate-500">Model demand volume lift vs. gross margin surrender</p>
+            </div>
+            <div id="sim-verdict-badge" class="px-2.5 py-1 text-xs font-bold rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span> ACCRETIVE YIELD
+            </div>
+          </div>
+
+          <!-- Slider Strip -->
+          <div class="my-4">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold text-slate-700">Simulated Promotional Markdown:</span>
+              <span class="text-xs font-mono font-bold text-slate-900 bg-slate-100 px-2.5 py-0.5 rounded-md border border-slate-200" id="slider-val-label">25% Markdown</span>
+            </div>
+            <input type="range" id="discount-slider" min="0" max="30" step="5" value="25" oninput="handleSliderChange(this.value)">
+            <div class="flex justify-between text-[10px] font-mono text-slate-400 font-semibold mt-1 px-1">
+              <span>0% (Full Price)</span>
+              <span>10%</span>
+              <span class="text-slate-900 font-bold">20%</span>
+              <span>30%</span>
+            </div>
+          </div>
+
+          <!-- 4 Hurdle Micro-Cards -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-100">
+            <div class="bg-slate-50/80 p-2.5 rounded-lg border border-slate-100 text-center">
+              <span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Working Cap</span>
+              <span class="text-xs font-mono font-bold text-emerald-600 block" id="sim-cap-released">+307,013 AED</span>
+            </div>
+            <div class="bg-slate-50/80 p-2.5 rounded-lg border border-slate-100 text-center">
+              <span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Margin Delta</span>
+              <span class="text-xs font-mono font-bold text-rose-600 block" id="sim-margin-sacrificed">-210,338 AED</span>
+            </div>
+            <div class="bg-slate-50/80 p-2.5 rounded-lg border border-slate-100 text-center">
+              <span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">BE Gap</span>
+              <span class="text-xs font-mono font-bold text-slate-800 block" id="sim-be-gap">-54 Units</span>
+            </div>
+            <div class="bg-slate-50/80 p-2.5 rounded-lg border border-slate-100 text-center">
+              <span class="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Capital ROI</span>
+              <span class="text-xs font-mono font-bold text-blue-700 block" id="sim-cap-roi">1.46x</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sensitivity Clustered Chart Card -->
+        <div class="luxury-card p-5">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <div>
+              <h3 class="text-xs font-bold text-slate-900 tracking-tight">Category Elasticity & Capital Yield</h3>
+              <p class="text-[11px] text-slate-500">Baseline vs. Simulated Margin with Capital Release Line</p>
+            </div>
+            <div class="flex items-center space-x-3 text-[10px] font-medium text-slate-500">
+              <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-xs bg-slate-800 mr-1"></span>Baseline</span>
+              <span class="flex items-center"><span class="w-2.5 h-2.5 rounded-xs bg-blue-600 mr-1"></span>Simulated</span>
+              <span class="flex items-center"><span class="w-2 h-2 rounded-full bg-amber-500 mr-1"></span>Released</span>
+            </div>
+          </div>
+
+          <div class="relative w-full h-[200px] mt-1" id="sim-chart-container">
+            <svg id="sim-chart-svg" class="w-full h-full" viewBox="0 0 640 180"></svg>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ======================================================================= -->
+    <!-- ZONE 3: GRANULAR ACTION GRID TABLE (Full Width)                         -->
+    <!-- ======================================================================= -->
+    <section class="luxury-card p-5 space-y-4">
+      
+      <!-- Table Header & Controls -->
+      <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+        <div class="flex flex-wrap items-center gap-3">
+          <h2 class="text-sm font-bold text-slate-900 tracking-tight">Granular Inventory & Rebalance Allocation Matrix</h2>
+          <div class="flex items-center space-x-1.5">
+            <button class="status-chip px-3 py-1 rounded-lg text-xs font-semibold bg-slate-900 text-white transition cursor-pointer shadow-xs" onclick="setStatusChip('All', this)">All (10)</button>
+            <button class="status-chip px-3 py-1 rounded-lg text-xs font-medium bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100 transition cursor-pointer flex items-center" onclick="setStatusChip('CRITICAL_STOCKOUT_RISK', this)">
+              <span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5 inline-block"></span>Stockout Risk (5)
+            </button>
+            <button class="status-chip px-3 py-1 rounded-lg text-xs font-medium bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100 transition cursor-pointer flex items-center" onclick="setStatusChip('OVERSTOCK_CASH_TRAP', this)">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5 inline-block"></span>Cash Trap (3)
             </button>
           </div>
         </div>
 
-        <!-- Table Container with Sticky Header -->
-        <div class="flex-1 overflow-y-auto custom-scroll border border-slate-200 rounded" id="table-scroll-container">
-          <table class="w-full text-left text-xs border-collapse">
-            <thead class="sticky top-0 bg-[#F8FAFC] text-[#475569] border-b border-[#CBD5E1] z-10 select-none text-[10px] uppercase tracking-wider font-semibold">
-              <tr>
-                <th class="py-2.5 px-3 w-64 cursor-pointer hover:bg-slate-100 hover:text-[#0F172A]" onclick="sortTable('sku')">SKU & Description ⇕</th>
-                <th class="py-2.5 px-3 w-48 cursor-pointer hover:bg-slate-100 hover:text-[#0F172A]" onclick="sortTable('store')">Location ⇕</th>
-                <th class="py-2.5 px-3 w-40 cursor-pointer hover:bg-slate-100 hover:text-[#0F172A]" onclick="sortTable('str')">Sell-Through Rate % ⇕</th>
-                <th class="py-2.5 px-3 w-32 cursor-pointer hover:bg-slate-100 hover:text-[#0F172A]" onclick="sortTable('wos')">WOS Cover ⇕</th>
-                <th class="py-2.5 px-3 w-24 cursor-pointer hover:bg-slate-100 hover:text-[#0F172A]" onclick="sortTable('gmroi')">GMROI ⇕</th>
-                <th class="py-2.5 px-3 w-24 text-right cursor-pointer hover:bg-slate-100 hover:text-[#0F172A]" onclick="sortTable('onhand')">On-Hand ⇕</th>
-                <th class="py-2.5 px-3 w-24 text-right">Target SS</th>
-                <th class="py-2.5 px-3 w-24 text-right">Unit Cost</th>
-                <th class="py-2.5 px-3">Prescriptive Rebalance Directive</th>
-              </tr>
-            </thead>
-            <tbody id="table-body" class="divide-y divide-slate-100 bg-white"></tbody>
-          </table>
-        </div>
-      </section>
-
-    </div>
-  </div>
-
-  <!-- ========================================================================= -->
-  <!-- MODAL: RECRUITER & C-SUITE SHOWCASE CALLOUT OVERLAY                       -->
-  <!-- ========================================================================= -->
-  <div id="briefing-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full border border-slate-200 overflow-hidden transform transition-all animate-in fade-in zoom-in-95 duration-200">
-      <div class="bg-[#0F172A] text-white px-6 py-4 flex items-center justify-between">
         <div class="flex items-center space-x-3">
-          <div class="w-8 h-8 rounded-lg bg-[#1E3A8A] flex items-center justify-center font-bold text-white">ℹ️</div>
-          <div>
-            <h2 class="text-base font-bold tracking-tight">Executive Control Tower Architecture Brief</h2>
-            <p class="text-xs text-slate-400">Enterprise Decision Engineering & Semantic Model Blueprint</p>
+          <!-- Search input -->
+          <div class="relative">
+            <input type="text" id="grid-search" placeholder="Search SKU, Product, Store..." class="w-64 text-xs bg-slate-50 border border-slate-200 rounded-lg pl-8 pr-3 py-1.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-slate-400 shadow-xs">
+            <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
           </div>
-        </div>
-        <button onclick="toggleModal(false)" class="text-slate-400 hover:text-white p-1 rounded-md hover:bg-slate-800 transition">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
-      </div>
 
-      <div class="p-6 space-y-5 text-xs text-[#0F172A] max-h-[80vh] overflow-y-auto custom-scroll">
-        <div class="border border-slate-200 rounded-lg p-4 bg-slate-50">
-          <div class="flex items-center space-x-2 mb-2">
-            <span class="w-5 h-5 rounded-full bg-blue-100 text-blue-900 font-bold flex items-center justify-center text-xs">1</span>
-            <h3 class="font-bold text-sm text-[#0F172A]">Commercial Problem Solved</h3>
-          </div>
-          <p class="text-[#64748B] leading-relaxed">
-            Eliminates inventory starvation in high-footfall GCC luxury flagships (<strong>The Dubai Mall</strong>) by dynamically flagging overstock in regional hubs (<strong>Yas Mall Abu Dhabi</strong>) and simulating markdown price elasticity before approving margin-dilutive sales. Rebalances physical capital across the Emirates to preserve full-margin retail sales velocity.
-          </p>
-        </div>
-
-        <div class="border border-slate-200 rounded-lg p-4 bg-slate-50">
-          <div class="flex items-center space-x-2 mb-2">
-            <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-xs">2</span>
-            <h3 class="font-bold text-sm text-[#0F172A]">Key Business Metrics Engineered</h3>
-          </div>
-          <div class="grid grid-cols-3 gap-3 text-xs">
-            <div class="bg-white p-2.5 rounded border border-slate-200">
-              <strong class="text-emerald-700 block mb-1">GMROI ($&gt; 3.00\text{x}$)</strong>
-              <p class="text-[#64748B]">Annualized gross margin return per AED of inventory capital invested, linking velocity to margin.</p>
-            </div>
-            <div class="bg-white p-2.5 rounded border border-slate-200">
-              <strong class="text-blue-900 block mb-1">Price Elasticity ($\% \Delta Q = -\epsilon \times \% \Delta P$)</strong>
-              <p class="text-[#64748B]">Modeled category volume lift vs. margin surrendered to test discount feasibility.</p>
-            </div>
-            <div class="bg-white p-2.5 rounded border border-slate-200">
-              <strong class="text-amber-700 block mb-1">Working Capital Release</strong>
-              <p class="text-[#64748B]">Locked liquidity converted to cash through cleared inventory, measured against margin sacrifice.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="border border-slate-200 rounded-lg p-4 bg-slate-50">
-          <div class="flex items-center space-x-2 mb-2">
-            <span class="w-5 h-5 rounded-full bg-slate-200 text-slate-800 font-bold flex items-center justify-center text-xs">3</span>
-            <h3 class="font-bold text-sm text-[#0F172A]">Enterprise Technical Stack</h3>
-          </div>
-          <ul class="list-disc list-inside space-y-1.5 text-[#64748B]">
-            <li><strong>Kimball Star Schema:</strong> 2 Fact Tables (POS Sales Transactions + Daily Inventory Snapshots) and 3 Conformed Dimensions (<code class="bg-slate-200 px-1 py-0.5 rounded text-[11px]">Dim_Date</code>, <code class="bg-slate-200 px-1 py-0.5 rounded text-[11px]">Dim_Store</code>, <code class="bg-slate-200 px-1 py-0.5 rounded text-[11px]">Dim_Product</code>) joined on integer surrogate keys.</li>
-            <li><strong>Tabular Semantic Model:</strong> C# TOM automation via Tabular Editor 3 deploying 6 curated measure folders into <code class="bg-slate-200 px-1 py-0.5 rounded text-[11px]">_Measures</code> repository.</li>
-            <li><strong>Advanced DAX:</strong> Semi-additive inventory snapshots via <code class="bg-slate-200 px-1 py-0.5 rounded text-[11px]">LASTNONBLANK</code>, zero bi-directional filters, and isolated parameter harvesting (<code class="bg-slate-200 px-1 py-0.5 rounded text-[11px]">Markdown_Scenario</code>).</li>
-            <li><strong>Verification Harness:</strong> Full analytical invariant and referential integrity assertions pre-validated in <code class="bg-slate-200 px-1 py-0.5 rounded text-[11px]">DuckDB</code>.</li>
-          </ul>
+          <!-- Export CSV -->
+          <button onclick="exportCSV()" class="flex items-center space-x-1.5 bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 px-3 py-1.5 rounded-lg text-xs font-semibold transition shadow-xs">
+            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            <span>Export CSV</span>
+          </button>
         </div>
       </div>
 
-      <div class="bg-slate-100 px-6 py-3 border-t border-slate-200 flex justify-end">
-        <button onclick="toggleModal(false)" class="bg-[#0F172A] hover:bg-slate-800 text-white font-semibold px-4 py-1.5 rounded text-xs transition">Dismiss Briefing</button>
+      <!-- Action Grid Table -->
+      <div class="overflow-x-auto custom-scroll">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50/60 select-none">
+              <th class="py-2.5 px-3 cursor-pointer hover:text-slate-800" onclick="sortTable('sku')">SKU & Description ↕</th>
+              <th class="py-2.5 px-3 cursor-pointer hover:text-slate-800" onclick="sortTable('storeName')">Location ↕</th>
+              <th class="py-2.5 px-3 cursor-pointer hover:text-slate-800 w-36" onclick="sortTable('str')">Sell-Through Rate % ↕</th>
+              <th class="py-2.5 px-3 cursor-pointer hover:text-slate-800" onclick="sortTable('wos')">WOS Cover ↕</th>
+              <th class="py-2.5 px-3 cursor-pointer hover:text-slate-800" onclick="sortTable('gmroi')">GMROI ↕</th>
+              <th class="py-2.5 px-3 text-right cursor-pointer hover:text-slate-800" onclick="sortTable('onHand')">On-Hand ↕</th>
+              <th class="py-2.5 px-3 text-right">Target SS</th>
+              <th class="py-2.5 px-3 text-right cursor-pointer hover:text-slate-800" onclick="sortTable('unitCost')">Unit Cost ↕</th>
+              <th class="py-2.5 px-3">Prescriptive Rebalance Directive</th>
+            </tr>
+          </thead>
+          <tbody id="table-body" class="divide-y divide-slate-100">
+            <!-- Populated dynamically via table.js -->
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- EXECUTIVE BRIEFING MODAL DIALOG                                           -->
+  <!-- ========================================================================= -->
+  <div id="briefing-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 hidden">
+    <div class="luxury-card bg-white max-w-2xl w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center space-x-2">
+          <div class="w-7 h-7 rounded-md bg-slate-900 text-white flex items-center justify-center font-bold text-xs">LR</div>
+          <h2 class="text-base font-bold text-slate-900 tracking-tight">Executive Architecture & Data Governance</h2>
+        </div>
+        <button onclick="toggleModal(false)" class="text-slate-400 hover:text-slate-700 text-lg font-bold">&times;</button>
+      </div>
+
+      <div class="space-y-3 text-xs text-slate-600 leading-relaxed">
+        <p><strong>Kimball Star Schema:</strong> Grounded in 115,008 POS transactional sales and 53,808 daily store inventory snapshots across 8 GCC retail nodes. 1-to-many single-direction relationships joined strictly on surrogate integer keys.</p>
+        <p><strong>Prescriptive Rebalance Logic:</strong> Cross-evaluates store-level Sell-Through Rate (STR %) against Weeks of Supply (WOS). Inter-mall transfers protect full-price gross margin without resorting to margin-diluting markdowns.</p>
+        <p><strong>Price Elasticity Engine:</strong> Dynamic microeconomic formulas (\(\% \Delta Q = -\epsilon \times \% \Delta P\)) project category unit lift against baseline profit hurdles to verify breakeven viability and working capital return on investment.</p>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 flex justify-end">
+        <button onclick="toggleModal(false)" class="btn-primary-action px-4 py-1.5 text-xs font-semibold">Dismiss Briefing</button>
       </div>
     </div>
   </div>
