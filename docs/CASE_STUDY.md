@@ -108,7 +108,7 @@ Within the first 60 days of simulation and prescriptive reallocation modeling:
 
 * **Live Interactive Canvas:** `web/index.html` (1920x1080 Executive Landscape Dashboard)
 * **Tabular Metadata Definition:** `tabular/model.bim` & `scripts/Apply_Tabular_Metadata.cs`
-* **Semantic Measure Repository:** `model_schema.dax` & `sql/02_dax_measures.dax` (30+ curated measures)
+* **Semantic Measure Repository:** `model_schema.dax` (43 production measures across 6 display folders)
 * **Power Query M Pipeline:** `power_query/` (Automated 6-query ingestion)
 * **Data Synthesis Engine:** `scripts/generate_data.py` (115,000+ records)
-* **Analytical Testing Engine:** `scripts/verify_schema.py` (DuckDB zero-copy validation in 6.2s)
+* **Analytical Testing Engine:** `scripts/verify_schema.py` (DuckDB zero-copy validation in 6.7s)

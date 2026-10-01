@@ -22,7 +22,6 @@ if sys.stdout.encoding != "utf-8":
 def run_verification(source_mode="csv"):
     base_dir = Path(__file__).resolve().parent.parent
     ddl_file = base_dir / "sql" / "01_star_schema_ddl.sql"
-    seed_file = base_dir / "sql" / "03_seed_mock_data.sql"
     data_dir = base_dir / "data"
     
     print("=" * 95)
@@ -41,34 +40,35 @@ def run_verification(source_mode="csv"):
     print("  -> All Dimensions, Facts, and Disconnected Parameter Tables created in memory.")
     
     # 2. Ingest Data
-    if source_mode == "csv" and (data_dir / "Fact_POS_Transactions.csv").exists():
-        print(f"\n[2/6] Ingesting Production CSV Dataset from: {data_dir} via DuckDB zero-copy...")
-        t_ingest = time.time()
-        
-        # Clear initial DDL seed rows to allow clean insertion from CSV
-        con.execute("DELETE FROM Dim_Date; DELETE FROM Dim_Store; DELETE FROM Dim_Product; DELETE FROM Markdown_Scenario;")
-        
-        # Load CSVs
-        con.execute(f"INSERT INTO Dim_Date SELECT * FROM read_csv_auto('{data_dir / 'Dim_Date.csv'}')")
-        con.execute(f"INSERT INTO Dim_Store SELECT * FROM read_csv_auto('{data_dir / 'Dim_Store.csv'}')")
-        con.execute(f"INSERT INTO Dim_Product SELECT * FROM read_csv_auto('{data_dir / 'Dim_Product.csv'}')")
-        con.execute(f"INSERT INTO Fact_POS_Transactions SELECT * FROM read_csv_auto('{data_dir / 'Fact_POS_Transactions.csv'}')")
-        con.execute(f"INSERT INTO Fact_Daily_Inventory SELECT * FROM read_csv_auto('{data_dir / 'Fact_Daily_Inventory.csv'}')")
-        con.execute(f"INSERT INTO Markdown_Scenario SELECT * FROM read_csv_auto('{data_dir / 'Markdown_Scenario.csv'}')")
-        
-        ingest_elapsed = time.time() - t_ingest
-        print(f"  -> Ingestion completed in {ingest_elapsed:.3f}s.")
-        print(f"     Dim_Date:               {con.execute('SELECT COUNT(*) FROM Dim_Date').fetchone()[0]:>8,d} rows")
-        print(f"     Dim_Store:              {con.execute('SELECT COUNT(*) FROM Dim_Store').fetchone()[0]:>8,d} rows")
-        print(f"     Dim_Product:            {con.execute('SELECT COUNT(*) FROM Dim_Product').fetchone()[0]:>8,d} rows")
-        print(f"     Fact_POS_Transactions:  {con.execute('SELECT COUNT(*) FROM Fact_POS_Transactions').fetchone()[0]:>8,d} rows")
-        print(f"     Fact_Daily_Inventory:   {con.execute('SELECT COUNT(*) FROM Fact_Daily_Inventory').fetchone()[0]:>8,d} rows")
-        print(f"     Markdown_Scenario:      {con.execute('SELECT COUNT(*) FROM Markdown_Scenario').fetchone()[0]:>8,d} rows")
-    else:
-        print(f"\n[2/6] Seeding Mock Transactional & Inventory Data from: {seed_file.name}")
-        seed_sql = seed_file.read_text(encoding="utf-8")
-        con.execute(seed_sql)
-        print("  -> Mock seed records loaded successfully.")
+    pos_csv = data_dir / "Fact_POS_Transactions.csv"
+    if not pos_csv.exists():
+        raise FileNotFoundError(
+            f"Production CSV dataset not found in {data_dir}.\n"
+            "Please run: python scripts/generate_data.py to synthesize the 115,000+ record dataset first."
+        )
+
+    print(f"\n[2/6] Ingesting Production CSV Dataset from: {data_dir} via DuckDB zero-copy...")
+    t_ingest = time.time()
+    
+    # Clear initial DDL seed rows to allow clean insertion from CSV
+    con.execute("DELETE FROM Dim_Date; DELETE FROM Dim_Store; DELETE FROM Dim_Product; DELETE FROM Markdown_Scenario;")
+    
+    # Load CSVs
+    con.execute(f"INSERT INTO Dim_Date SELECT * FROM read_csv_auto('{data_dir / 'Dim_Date.csv'}')")
+    con.execute(f"INSERT INTO Dim_Store SELECT * FROM read_csv_auto('{data_dir / 'Dim_Store.csv'}')")
+    con.execute(f"INSERT INTO Dim_Product SELECT * FROM read_csv_auto('{data_dir / 'Dim_Product.csv'}')")
+    con.execute(f"INSERT INTO Fact_POS_Transactions SELECT * FROM read_csv_auto('{data_dir / 'Fact_POS_Transactions.csv'}')")
+    con.execute(f"INSERT INTO Fact_Daily_Inventory SELECT * FROM read_csv_auto('{data_dir / 'Fact_Daily_Inventory.csv'}')")
+    con.execute(f"INSERT INTO Markdown_Scenario SELECT * FROM read_csv_auto('{data_dir / 'Markdown_Scenario.csv'}')")
+    
+    ingest_elapsed = time.time() - t_ingest
+    print(f"  -> Ingestion completed in {ingest_elapsed:.3f}s.")
+    print(f"     Dim_Date:               {con.execute('SELECT COUNT(*) FROM Dim_Date').fetchone()[0]:>8,d} rows")
+    print(f"     Dim_Store:              {con.execute('SELECT COUNT(*) FROM Dim_Store').fetchone()[0]:>8,d} rows")
+    print(f"     Dim_Product:            {con.execute('SELECT COUNT(*) FROM Dim_Product').fetchone()[0]:>8,d} rows")
+    print(f"     Fact_POS_Transactions:  {con.execute('SELECT COUNT(*) FROM Fact_POS_Transactions').fetchone()[0]:>8,d} rows")
+    print(f"     Fact_Daily_Inventory:   {con.execute('SELECT COUNT(*) FROM Fact_Daily_Inventory').fetchone()[0]:>8,d} rows")
+    print(f"     Markdown_Scenario:      {con.execute('SELECT COUNT(*) FROM Markdown_Scenario').fetchone()[0]:>8,d} rows")
     
     # 3. Dimensional Integrity Checks
     print("\n[3/6] Running Data Quality & Referential Integrity Assertions...")
@@ -396,7 +396,7 @@ def run_verification(source_mode="csv"):
     print("=" * 95)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Verify Kimball Star Schema and DAX Semantic Layer")
-    parser.add_argument("--mode", choices=["csv", "seed"], default="csv", help="Data source mode (csv=data folder, seed=sql mock seed)")
+    parser = argparse.ArgumentParser(description="Verify Kimball Star Schema and DAX Semantic Layer against CSV Data")
+    parser.add_argument("--mode", default="csv", help="Data source mode (csv=data folder)")
     args = parser.parse_args()
     run_verification(source_mode=args.mode)
