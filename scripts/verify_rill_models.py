@@ -29,14 +29,14 @@ def verify_rill():
     pos_count = con.execute("SELECT COUNT(*) FROM pos_analytics").fetchone()[0]
     inv_count = con.execute("SELECT COUNT(*) FROM inventory_analytics").fetchone()[0]
 
-    print(f"\n[1] Transformation Models Row Counts:")
+    print("\n[1] Transformation Models Row Counts:")
     print(f"    pos_analytics:       {pos_count:>8,d} rows (Expected: 115,008)")
     print(f"    inventory_analytics: {inv_count:>8,d} rows (Expected: 53,808)")
     assert pos_count == 115008, f"Unexpected pos row count: {pos_count}"
     assert inv_count == 53808, f"Unexpected inventory row count: {inv_count}"
 
     # Verify retail_kpis.yaml
-    print(f"\n[2] Verifying Retail Commercial Metrics (rill/metrics/retail_kpis.yaml):")
+    print("\n[2] Verifying Retail Commercial Metrics (rill/metrics/retail_kpis.yaml):")
     with open('rill/metrics/retail_kpis.yaml', encoding='utf-8') as f:
         retail_meta = yaml.safe_load(f)
 
@@ -57,7 +57,7 @@ def verify_rill():
         print(f"    Dimension '{d['name']}' ({col}): {card} distinct values")
 
     # Verify inventory_kpis.yaml
-    print(f"\n[3] Verifying Inventory Metrics (rill/metrics/inventory_kpis.yaml):")
+    print("\n[3] Verifying Inventory Metrics (rill/metrics/inventory_kpis.yaml):")
     with open('rill/metrics/inventory_kpis.yaml', encoding='utf-8') as f:
         inv_meta = yaml.safe_load(f)
 
@@ -78,7 +78,7 @@ def verify_rill():
         print(f"    Dimension '{d['name']}' ({col}): {card} distinct values")
 
     # Verify Math Parity with Gold Standard DAX
-    print(f"\n[4] Checking Exact Parity with Authoritative 43 DAX Measures:")
+    print("\n[4] Checking Exact Parity with Authoritative 43 DAX Measures:")
     fin = con.execute("""
         SELECT 
             sum(UnitsSold),

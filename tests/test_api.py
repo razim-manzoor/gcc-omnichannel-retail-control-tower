@@ -2,7 +2,6 @@
 Unit and integration tests for FastAPI Retail Control Tower Analytical Microservice.
 Verifies all REST endpoints, contract schemas, and calculation parity against verified Kimball Star Schema.
 """
-import pytest
 from fastapi.testclient import TestClient
 from api.main import app
 

@@ -6,7 +6,6 @@ import os
 import re
 import json
 import duckdb
-import pandas as pd
 
 def run_audit():
     print("=" * 80)

@@ -6,11 +6,8 @@ Conforming strictly to Kimball Star Schema DDL specification
 Output: 5 relational CSVs + 1 Disconnected Parameter CSV in data/
 """
 
-import sys
-import os
-import math
 import random
-from datetime import date, datetime, timedelta
+from datetime import date
 from pathlib import Path
 import numpy as np
 import pandas as pd
