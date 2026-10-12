@@ -1,0 +1,4 @@
+version: 1
+type: source
+connector: "duckdb"
+sql: "SELECT * FROM read_csv_auto('../data/Dim_Date.csv');"

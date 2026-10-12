@@ -1,0 +1,13 @@
+version: 1
+type: explore
+display_name: "Store Inventory Health & Balancing"
+metrics_view: inventory_kpis
+dimensions: "*"
+measures:
+  - total_on_hand_units
+  - total_available_units
+  - total_in_transit_units
+  - total_inventory_cost
+  - total_inventory_retail
+defaults:
+  time_range: P1Y

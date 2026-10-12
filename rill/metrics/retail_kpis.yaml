@@ -1,0 +1,101 @@
+version: 1
+type: metrics_view
+title: "Retail Commercial KPIs"
+model: pos_analytics
+timeseries: TransactionTimestamp
+
+dimensions:
+  - name: StoreName
+    column: StoreName
+    label: "Store Location"
+  - name: ChannelType
+    column: ChannelType
+    label: "Channel Type"
+  - name: City
+    column: City
+    label: "City"
+  - name: Country
+    column: Country
+    label: "Country"
+  - name: Department
+    column: Department
+    label: "Department"
+  - name: Category
+    column: Category
+    label: "Category"
+  - name: SubCategory
+    column: SubCategory
+    label: "Sub-Category"
+  - name: SKU
+    column: SKU
+    label: "Product SKU"
+  - name: ProductName
+    column: ProductName
+    label: "Product Name"
+  - name: IsMarkdown
+    column: IsMarkdown
+    label: "Discounted Transaction"
+  - name: FiscalQuarter
+    column: FiscalQuarter
+    label: "Fiscal Quarter"
+
+measures:
+  - name: total_gross_sales
+    label: "Gross Sales"
+    expression: "sum(GrossSalesAmt)"
+    format_preset: "currency_usd"
+    description: "Total list price value of sales prior to discounts"
+
+  - name: total_discounts
+    label: "Markdown Discounts"
+    expression: "sum(DiscountAmt)"
+    format_preset: "currency_usd"
+    description: "Total promotional and markdown concession amount"
+
+  - name: total_net_revenue
+    label: "Net Revenue"
+    expression: "sum(NetSalesAmt)"
+    format_preset: "currency_usd"
+    description: "Recognized sales revenue (Gross - Markdown)"
+
+  - name: total_cogs
+    label: "Total COGS"
+    expression: "sum(TotalCOGS)"
+    format_preset: "currency_usd"
+    description: "Cost of Goods Sold"
+
+  - name: gross_margin
+    label: "Gross Margin"
+    expression: "sum(GrossMarginAmt)"
+    format_preset: "currency_usd"
+    description: "Gross Margin in AED (Net Revenue - COGS)"
+
+  - name: gross_margin_pct
+    label: "Gross Margin %"
+    expression: "sum(GrossMarginAmt) / nullif(sum(NetSalesAmt), 0)"
+    format_preset: "percentage"
+    description: "Gross Margin Percentage"
+
+  - name: units_sold
+    label: "Units Sold"
+    expression: "sum(UnitsSold)"
+    format_preset: "humanize"
+    description: "Physical unit count sold"
+
+  - name: markdown_depth_pct
+    label: "Markdown Depth %"
+    expression: "sum(DiscountAmt) / nullif(sum(GrossSalesAmt), 0)"
+    format_preset: "percentage"
+    description: "Discount concession depth percentage"
+
+  - name: aur
+    label: "Average Unit Retail (AUR)"
+    expression: "sum(NetSalesAmt) / nullif(sum(UnitsSold), 0)"
+    format_preset: "currency_usd"
+    description: "Realized selling price per unit"
+
+  - name: transaction_count
+    label: "Transaction Count"
+    expression: "count(distinct TransactionID)"
+    format_preset: "humanize"
+    description: "Distinct POS sales orders"

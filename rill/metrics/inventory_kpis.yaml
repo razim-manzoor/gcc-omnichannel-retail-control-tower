@@ -1,0 +1,59 @@
+version: 1
+type: metrics_view
+title: "Inventory Health & Supply Chain"
+model: inventory_analytics
+timeseries: SnapshotTimestamp
+
+dimensions:
+  - name: StoreName
+    column: StoreName
+    label: "Store Location"
+  - name: ChannelType
+    column: ChannelType
+    label: "Channel Type"
+  - name: Department
+    column: Department
+    label: "Department"
+  - name: Category
+    column: Category
+    label: "Category"
+  - name: SKU
+    column: SKU
+    label: "Product SKU"
+  - name: ProductName
+    column: ProductName
+    label: "Product Name"
+  - name: City
+    column: City
+    label: "City"
+
+measures:
+  - name: total_on_hand_units
+    label: "On Hand Units"
+    expression: "sum(OnHandUnits)"
+    format_preset: "humanize"
+    description: "Physical stock on shelf and backroom"
+
+  - name: total_in_transit_units
+    label: "In-Transit Units"
+    expression: "sum(InTransitUnits)"
+    format_preset: "humanize"
+    description: "Stock en route from Central DC"
+
+  - name: total_available_units
+    label: "Available Units"
+    expression: "sum(AvailableUnits)"
+    format_preset: "humanize"
+    description: "Stock available for omni-channel customer order allocation"
+
+  - name: total_inventory_cost
+    label: "Inventory Value (Cost)"
+    expression: "sum(InventoryCostValue)"
+    format_preset: "currency_usd"
+    description: "Working capital tied in store inventory"
+
+  - name: total_inventory_retail
+    label: "Inventory Value (Retail)"
+    expression: "sum(InventoryRetailValue)"
+    format_preset: "currency_usd"
+    description: "List retail valuation of store inventory"

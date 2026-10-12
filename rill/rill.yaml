@@ -1,0 +1,5 @@
+version: 1
+title: "GCC Omnichannel Retail Control Tower"
+description: "High-performance operational BI metrics layer powered by DuckDB"
+olap_connector: "duckdb"
+public_url: "http://localhost:9009"

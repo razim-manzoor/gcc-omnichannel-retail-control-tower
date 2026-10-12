@@ -1,90 +1,75 @@
 # GCC Omnichannel Retail & Markdown Elasticity Control Tower
 
+[![CI/CD Pipeline](https://github.com/razim-manzoor/gcc-omnichannel-retail-control-tower/actions/workflows/verify_pipeline.yml/badge.svg)](https://github.com/razim-manzoor/gcc-omnichannel-retail-control-tower/actions)
 [![Power BI](https://img.shields.io/badge/Power_BI-Desktop_%26_Service-F2C811?logo=powerbi&logoColor=black)](https://powerbi.microsoft.com/)
-[![DAX](https://img.shields.io/badge/DAX-Advanced_Semantic_Layer-blue)](./model_schema.dax)
-[![Tabular Editor](https://img.shields.io/badge/Tabular_Editor-TOM_%26_BIM-512BD4)](./tabular/model.bim)
-[![DuckDB](https://img.shields.io/badge/DuckDB-In--Memory_Verification-FFF000?logo=duckdb&logoColor=black)](./scripts/verify_schema.py)
-[![Python 3.12](https://img.shields.io/badge/Python-3.12_%7C_Pandas_%7C_NumPy_%7C_Faker-3776AB?logo=python&logoColor=white)](./scripts/generate_data.py)
+[![DAX](https://img.shields.io/badge/DAX-43_Measures-blue)](./model_schema.dax)
+[![DuckDB](https://img.shields.io/badge/DuckDB-In--Memory_Columnar-FFF000?logo=duckdb&logoColor=black)](./scripts/verify_schema.py)
+[![Parquet](https://img.shields.io/badge/Parquet-Snappy_Compressed-0273D4)](./scripts/convert_to_parquet.py)
+[![FastAPI](https://img.shields.io/badge/FastAPI-REST_API-009688?logo=fastapi&logoColor=white)](./api/main.py)
+[![MCP](https://img.shields.io/badge/MCP-Model_Context_Protocol-purple)](./mcp/duckdb_mcp_server.py)
 [![Star Schema](https://img.shields.io/badge/Architecture-Kimball_Star_Schema-success)](./sql/01_star_schema_ddl.sql)
 
-> **Cognitive Target: The 3-Second Executive Rule**  
+> **The 3-Second Executive Rule:**  
 > **Macro Commercial Status** &rarr; **Operational Bottleneck** &rarr; **Prescriptive What-If Control Levers**
 
-An enterprise-grade, end-to-end Decision Support Control Tower built for luxury and premium retail groups operating across high-footfall GCC retail hubs (**The Dubai Mall Flagship**, **Mall of the Emirates**, **Yas Mall Abu Dhabi**, **Kingdom Centre Riyadh**) and central omnichannel fulfillment hubs.
+An enterprise-grade Decision Support Control Tower built for luxury and premium retail groups operating across premier GCC destinations (**The Dubai Mall Flagship**, **Mall of the Emirates**, **Yas Mall Abu Dhabi**, **Kingdom Centre Riyadh**) and central omnichannel fulfillment hubs.
 
 ---
 
-## Executive Preview
+## ⚡ Quickstart in 10 Seconds
+
+Everything in this repository is pre-built, tested, and zero-dependency:
+
+```powershell
+# 1. View the Live Executive Control Tower (Zero installation, open in browser)
+python -m http.server 8080
+# Navigate to: http://localhost:8080/web/index.html (or double-click web/index.html)
+
+# 2. Run the Complete 360° Quality, Math & Schema Audit (Takes ~5 seconds)
+python scripts/audit_everything.py
+```
+
+---
+
+## 🎬 Executive Preview
 
 ![Control Tower Executive Simulation in Motion](./docs/assets/control_tower_demo.gif)
 
-*Live Interactive 1920x1080 Landscape Dashboard (`web/index.html`) featuring zero-latency What-If discount elasticity parameter slider, inter-mall rebalancing directives, and sub-second diagnostic matrix.*
+*Live interactive C-Suite dashboard featuring What-If price elasticity simulation, inter-mall inventory rebalance directives, and sub-10ms diagnostic scatter plots.*
 
 ---
 
-## 1. System Architecture & Data Flow
+## 🏗️ System Architecture: The "Rule of 3"
+
+Instead of tangled monolithic systems, the Control Tower is organized into **three decoupled, modular layers**:
 
 ```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 1. DATA GENERATION & SYNTHESIS (Python)                                               │
-│    • Python 3.12 (Pandas, NumPy, Faker)                                                │
-│    • Simulates 115,000+ realistic GCC retail transactions & 53,000+ daily snapshots   │
-│    • Models GCC dynamics: Friday-Sunday weekends, Ramadan, DSF, White Friday, Eid      │
-│    • Outputs: 5 relational CSV files + 1 Parameter CSV (Star Schema) in data/          │
-└───────────────────────────────────┬────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 2. INGESTION & DATA TRANSFORMATION (Power Query / M)                                   │
-│    • Power Query M Engine in Power BI Desktop (power_query/*.m)                        │
-│    • Type casting, null handling, surrogate key mapping, retail calendar modeling      │
-└───────────────────────────────────┬────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 3. DIMENSIONAL MODELING & PERFORMANCE (Tabular Engine / VertiPaq)                      │
-│    • Pure Kimball Dimensional Star Schema (1-to-Many single-direction relationships)   │
-│    • Tabular Object Model (TOM) C# automation script (Apply_Tabular_Metadata.cs)       │
-│    • Strict surrogate key joins (-1 Unknown member fallbacks)                          │
-└───────────────────────────────────┬────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 4. BUSINESS LOGIC & SIMULATION ENGINE (Advanced DAX)                                  │
-│    • 30+ Curated Measures across 6 Production Folders in model_schema.dax              │
-│    • Core Retail KPIs: GMROI, Sell-Through %, Weeks of Supply (WOS)                    │
-│    • Forward-Looking What-If Engine: Disconnected parameter table for discount depth   │
-│    • Dynamic Elasticity Formulas: Calculating gross margin vs. working capital release │
-└───────────────────────────────────┬────────────────────────────────────────────────────┘
-                                    │
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ 5. VISUALIZATION & DEPLOYMENT LAYER (Power BI Service & GitHub)                        │
-│    • C-Suite Executive UX: Heatmaps, scatter plots, waterfall charts, parameter sliders│
-│    • Live Deployment: Standalone 1080p Web Dashboard & Power BI Service Publish-to-Web │
-│    • Portfolio Assets: GitHub Repo + 1-Page Printable Executive Case Study             │
-└────────────────────────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│ 1. THE DATA LAYER (Kimball Star Schema in Parquet & CSV)               │
+│    • 115,008 luxury transactions across 114 SKUs & 8 GCC locations     │
+│    • 53,808 daily closing stock balances (available = on_hand - resv) │
+│    • Snappy-compressed Parquet (4.24 MB, 60.5% smaller, 28x faster)   │
+├────────────────────────────────────────────────────────────────────────┤
+│ 2. THE CALCULATION CORE (43 Certified Production Measures)             │
+│    • Commercial Profitability: Realized Gross Margin (69.73% luxury)   │
+│    • Supply Chain Health: Weeks of Supply (WOS) & Sell-Through % (STR) │
+│    • What-If Elasticity Engine: Volume lift vs. gross margin dilution  │
+│    • Mathematical parity certified to the exact cent across engines    │
+├────────────────────────────────────────────────────────────────────────┤
+│ 3. THE CONSUMPTION LAYER (Pick Your Tool)                              │
+│    • 👔 For C-Suite:      Responsive Bento-Grid Web UI (web/index.html)│
+│    • 🏢 For Corporate BI:  Power BI Tabular Model (tabular/model.bim)   │
+│    • 🚀 For Developers:   FastAPI REST Microservice (api/main.py)      │
+│    • 📊 For Data Teams:   Rill BI-as-Code Explorer (rill/)             │
+│    • 🤖 For AI Agents:    Model Context Protocol Server (mcp/)         │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 2. Tech Stack Breakdown
+## 📊 Verified Commercial Baseline
 
-| Layer | Tools / Languages | Purpose & Implementation |
-| :--- | :--- | :--- |
-| **Data Generation** | Python 3.12 (`pandas`, `numpy`, `faker`) | Simulating 115,000+ POS transactions & 53,000+ daily inventory snapshots across GCC malls with authentic footfall and seasonality weighting. |
-| **ETL & Data Prep** | Power Query (M Language) | Fully parameterized M scripts (`power_query/`) handling ingestion, data typing, and retail calendar generation. |
-| **Data Modeling** | Power BI Desktop, Tabular Editor 2/3 | Pure Kimball Star Schema with 1-to-many single-direction filtering and Tabular Object Model (TOM) automation. |
-| **Calculation Engine** | Advanced DAX (VertiPaq) | 43 production measures in 6 display folders: Financial Core, Semi-Additive Inventory, STR%, WOS, Prescriptive Directives, and What-If Elasticity. |
-| **Analytical Verification** | DuckDB In-Memory | High-speed analytical test harness (`scripts/verify_schema.py`) asserting referential integrity, math invariants, and sub-30ms aggregation. |
-| **Visualization & UX** | HTML5, Tailwind CSS (CDN), Power BI | Pixel-perfect 1920x1080 executive canvas honoring the 3-second rule with zero npm build dependencies (Tailwind CSS and Google Fonts loaded via CDN). |
-| **Executive Briefing** | Markdown & HTML Case Study | Branded 1-page executive summary (`docs/CASE_STUDY.html`) formatted for leadership presentations and PDF export. |
-
----
-
-## 3. Verified Commercial Baseline (In-Memory DuckDB & VertiPaq Assertions)
-
-The entire synthetic dataset is audited and verified against formal financial and relational invariants via `scripts/verify_schema.py` in **6.79 seconds**:
+Audited and verified against formal financial and relational invariants via `scripts/audit_everything.py`:
 
 | Metric Dimension | Verified Dataset Value | Commercial Governance Assertion |
 | :--- | :---: | :--- |
@@ -92,143 +77,69 @@ The entire synthetic dataset is audited and verified against formal financial an
 | **Promotional Markdowns** | **AED 12,503,716.42** | 6.09% average markdown depth across 115,008 POS transactions |
 | **Net Realized Revenue** | **AED 192,726,717.08** | Invariant check: $Net = Gross - Discount$ (0 rounding discrepancies) |
 | **Total Landed COGS** | **AED 58,334,652.00** | Landed supply chain cost snapshot |
-| **Realized Gross Margin** | **AED 134,392,065.08** | **69.73% Gross Margin** (Luxury apparel/accessories threshold > 65%) |
+| **Realized Gross Margin** | **AED 134,392,065.08** | **69.73% Gross Margin** (Luxury apparel/accessories benchmark > 65%) |
 | **Units Commercialized** | **142,664 Units** | AUR AED 1,350.91 vs AUC AED 408.90 |
 | **Store & Channel Footprint** | **8 GCC Locations** | 53,808 store-day closing inventory snapshots (0 orphan FKs) |
 
 ---
 
-## 4. Kimball Star Schema Architecture
+## 🛠️ Modular Interfaces & Deep Dives
 
-```
-                       ┌───────────────────────┐
-                       │       Dim_Date        │
-                       ├───────────────────────┤
-                       │ PK: DateKey (Int)     │
-                       │     FullDate          │
-                       │     FiscalYear/Qtr    │
-                       │     RetailWeekNum     │
-                       │     IsWeekendGCC      │
-                       │     IsRetailPeakSeason│
-                       └───────────┬───────────┘
-                                   │
-              ┌────────────────────┴────────────────────┐
-              │ 1                                       │ 1
-              ▼ *                                       ▼ *
-┌───────────────────────────────┐       ┌───────────────────────────────┐
-│     Fact_POS_Transactions     │       │     Fact_Daily_Inventory      │
-├───────────────────────────────┤       ├───────────────────────────────┤
-│ PK: TransactionLineKey (BigInt│       │ PK: InventorySnapshotKey      │
-│ FK: DateKey                   │       │ FK: SnapshotDateKey           │
-│ FK: StoreKey                  │       │ FK: StoreKey                  │
-│ FK: ProductKey                │       │ FK: ProductKey                │
-│     BasketID (Degenerate)     │       │     OnHandUnits               │
-│     PaymentType (Tabby, etc.) │       │     InTransitUnits            │
-│     UnitsSold                 │       │     ReservedUnits             │
-│     GrossSalesAmt             │       │     AvailableUnits            │
-│     DiscountAmt               │       │     UnitCostSnapshotAmt       │
-│     NetSalesAmt               │       │     InventoryCostValueAmt     │
-│     ExtendedCostAmt           │       └───────────────▲───────────────┘
-│     TaxAmtAED (5% VAT)        │                       │ *
-└───────────────▲───────────────┘                       │
-              * │                                       │ 1
-              ┌─┴──────────────────┬────────────────────┘
-              │ 1                  │ 1
-┌─────────────┴─────────┐ ┌────────┴─────────────┐ ┌───────────────────────────┐
-│       Dim_Store       │ │     Dim_Product      │ │     Markdown_Scenario     │
-├───────────────────────┤ ├──────────────────────┤ ├───────────────────────────┤
-│ PK: StoreKey (Int)    │ │ PK: ProductKey (Int) │ │ PK: ScenarioDiscountPct   │
-│     StoreCode         │ │     SKU              │ │     DiscountDisplayLabel  │
-│     StoreName         │ │     ProductName      │ │     SimulationSortOrder   │
-│     Channel           │ │     Department       │ └───────────────────────────┘
-│     GrossLeasableAreaSqFt │ │     BrandTier        │    (DISCONNECTED PARAMETER)
-│     HubFulfillment    │ │     BaseUnitCostAED  │
-└───────────────────────┘ │     BaseRetailPrice  │
-                          │     ElasticityCoefficient │
-                          └──────────────────────┘
-```
+Each consumption layer is independent—use only what you need:
 
----
-
-## 5. DAX Measure Repository (`model_schema.dax`)
-
-Measures are structured into **6 Production Display Folders**:
-
-### Folder 01: Financial & Commercial Core
-* `[Units Sold] = SUM ( Fact_POS_Transactions[UnitsSold] )`
-* `[Net Revenue (AED)] = SUM ( Fact_POS_Transactions[NetSalesAmt] )`
-* `[Gross Margin (AED)] = [Net Revenue (AED)] - [Total COGS (AED)]`
-* `[Gross Margin %] = DIVIDE ( [Gross Margin (AED)], [Net Revenue (AED)], 0 )`
-* `[AUR] = DIVIDE ( [Net Revenue (AED)], [Units Sold], 0 )`
-
-### Folder 02: Semi-Additive Inventory Snapshots
-* `[Ending On Hand Units]` — Evaluated strictly on the latest available snapshot date using `LASTNONBLANK` date filtering, eliminating improper temporal summation.
-* `[Ending Inventory Cost (AED)]` — Salable landed cost value of closing inventory.
-* `[GMROI]` — Annualized Gross Margin Return on Inventory Investment.
-
-### Folder 03 & 04: Velocity, Sell-Through & Supply Cover
-* `[Units Sold Trailing 4W]` — Trailing 28-day demand run rate.
-* `[Sell-Through Rate %]` — `DIVIDE ( [Units Sold], [Units Sold] + [Ending On Hand Units], 0 )`
-* `[Weeks of Supply (WOS)]` — `DIVIDE ( [Ending On Hand Units], [Weekly Run Rate T4W], 0 )`
-
-### Folder 05: Action Triggers & Prescriptive Balancing
-* Automated business logic comparing store Weeks of Supply and STR% against benchmark thresholds:
-  * **Critical Stockout Risk:** STR $\ge 70\%$ and WOS $< 2.5\text{ wks}$ &rarr; `⚠️ PULL INVENTORY: Request X units from Yas Mall / Central DC.`
-  * **Overstock Cash Trap:** STR $\le 25\%$ and WOS $> 10.0\text{ wks}$ &rarr; `📦 PUSH INVENTORY: Surplus of Y units. Dispatch to Dubai Mall or trigger markdown.`
-  * **Balanced Equilibrium:** WOS between $3.0 - 6.0\text{ wks}$ &rarr; `🟢 OPTIMAL: Target stock maintained.`
-
-### Folder 06: Forward-Looking What-If Elasticity Simulator
-* Leverages the disconnected parameter `Markdown_Scenario[ScenarioDiscountPct]`:
-  * `[Simulated Volume Lift %] = -1 * ( [Effective Elasticity Coeff] * [Simulated Discount %] )`
-  * `[Simulated Units Sold] = [Units Sold] * ( 1 + [Simulated Volume Lift %] )`
-  * `[Working Capital Released (AED)] = [Incremental Units] * [Average Unit Cost]`
-  * `[Breakeven Unit Gap] = [Simulated Units Sold] - ( [Baseline GM] / ( [Sim AUR] - [AUC] ) )`
-  * Dynamic Verdict: **Accretive (+AED)** vs. **Dilutive (-AED)** vs. **Capital Release Trade-off**.
-
----
-
-## 6. Quickstart & Reproduction Guide
-
-### Prerequisites
-* Python 3.12+ with `pandas`, `numpy`, `faker`, `duckdb`, `playwright`
-* Power BI Desktop (May 2024 or newer recommended)
-* Tabular Editor 2 or 3 (optional, for TOM automation)
-
-### Step 1: Synthesize the 115,000+ Row Dataset
+### 1. High-Performance REST API Microservice
+Run the embedded FastAPI microservice powered by DuckDB with auto-generated Swagger UI:
 ```powershell
-python scripts/generate_data.py
+uvicorn api.main:app --port 8000 --reload
+# Interactive API documentation: http://localhost:8000/docs
 ```
-*Outputs 6 relational CSVs into `data/` within ~10 seconds.*
+* **Endpoints:** `GET /api/kpis` (financial aggregates), `GET /api/inventory/stockouts` (stockout alerts), `POST /api/simulation/markdown` (elasticity simulations).
 
-### Step 2: Validate Schema & DAX Logic in DuckDB
+### 2. Conversational AI Agent (MCP Server)
+Connect AI coding assistants (Antigravity, Claude Desktop, Cursor) directly to your retail data:
 ```powershell
-python scripts/verify_schema.py --mode csv
+python scripts/verify_mcp_server.py
 ```
-*Runs zero-copy relational integrity tests, foreign key assertion, and aggregates 115k rows in ~26ms.*
+* Exposes 4 tools (`get_executive_kpis`, `get_stockout_alerts`, `simulate_markdown`, `run_read_only_sql`) over standard JSON-RPC 2.0 stdio with **zero SQL hallucinations**.
 
-### Step 3: Ingest into Power BI Desktop
-1. Open Power BI Desktop.
-2. In Power Query, set parameter `DataFolderPath` to your local `data` directory.
-3. Paste the M scripts from [`power_query/`](./power_query/) into the Advanced Editor.
-4. Hit **Close & Apply**.
-5. Connect with Tabular Editor and execute [`scripts/Apply_Tabular_Metadata.cs`](./scripts/Apply_Tabular_Metadata.cs) to generate all measure folders and format strings instantly.
-
-### Step 4: Launch the Live Web Control Tower
-Simply open [`web/index.html`](./web/index.html) in any modern browser or host it via GitHub Pages:
+### 3. Lakehouse Parquet Storage Benchmarks
+Benchmark DuckDB vectorized query performance on columnar Parquet vs raw CSV:
 ```powershell
-python -m http.server 8080
-# Navigate to http://localhost:8080/web/index.html
+python scripts/convert_to_parquet.py
+```
+* **Results:** 60.5% storage reduction (10.74 MB &rarr; 4.24 MB), **15x faster** full aggregation, and **28.5x faster** column-pruned scans.
+
+### 4. Rill BI-as-Code Operational Analytics
+Launch the declarative DuckDB metrics dashboard (via WSL or Docker):
+```bash
+cd rill && rill start
+# Explore interactive metrics at http://localhost:9009
 ```
 
 ---
 
-## 7. Executive Case Study & Portfolio Asset
+## 📚 Enterprise Documentation Suite
 
-For executive reading, PDF download, and LinkedIn case sharing:
-* **Markdown Briefing:** [`docs/CASE_STUDY.md`](./docs/CASE_STUDY.md)
-* **Printable Executive 1-Pager:** [`docs/CASE_STUDY.html`](./docs/CASE_STUDY.html) *(Supports 1-click Print to PDF)*
+Detailed architectural, business, and data specifications:
+* **Product Requirements Document (PRD):** [`docs/PRD.md`](./docs/PRD.md) — Business context, personas, functional requirements (FR-1 to FR-8), and OKRs.
+* **Technical Requirements Document (TRD):** [`docs/TRD.md`](./docs/TRD.md) — Kimball schema design, mathematical formulas, DuckDB/Parquet benchmarks, and API contracts.
+* **End-to-End System & Sequence Flows:** [`docs/SYSTEM_FLOWS.md`](./docs/SYSTEM_FLOWS.md) — Mermaid sequence flows for simulation, replenishment, MCP, and CI/CD.
+* **Data Dictionary & Measure Catalog:** [`docs/DATA_DICTIONARY.md`](./docs/DATA_DICTIONARY.md) — Table attributes, data types, and all 43 authoritative DAX measures.
+* **Executive Case Study:** [`docs/CASE_STUDY.md`](./docs/CASE_STUDY.md) & Printable 1-Pager [`docs/CASE_STUDY.html`](./docs/CASE_STUDY.html) *(Supports 1-click Print to PDF)*.
 
 ---
 
-## License & Data Governance
-All datasets generated by this repository are completely synthetic and produced via deterministic statistical algorithms. No proprietary client data (Majid Al Futtaim, Chalhoub Group, or Al Tayer) is contained herein. Open-source under the MIT License.
+## 🛡️ Automated Quality Gate (CI/CD)
+
+Every Git push and Pull Request triggers the automated test matrix in [`.github/workflows/verify_pipeline.yml`](./.github/workflows/verify_pipeline.yml) on GitHub Actions:
+1. Validates Kimball Star Schema referential integrity & invariants (`verify_schema.py`).
+2. Benchmarks Parquet compression and columnar scan speed (`convert_to_parquet.py`).
+3. Validates Rill BI-as-Code semantic models & measures (`verify_rill_models.py`).
+4. Tests Model Context Protocol (MCP) server over stdio (`verify_mcp_server.py`).
+5. Executes the 10-stage master integrity audit (`audit_everything.py`).
+6. Executes the FastAPI REST API test suite (`pytest tests/`).
+
+---
+
+## ⚖️ License & Data Governance
+All datasets in this repository are synthetic and produced via deterministic statistical algorithms modeling authentic GCC seasonal retail dynamics. No proprietary client data is contained herein. Open-source under the MIT License.

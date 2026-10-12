@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "retail-control-tower": {
+      "command": "python",
+      "args": [
+        "R:/Projects/Omnichannel Retail Control Tower/mcp/duckdb_mcp_server.py"
+      ],
+      "env": {
+        "PYTHONUNBUFFERED": "1"
+      }
+    }
+  }
+}

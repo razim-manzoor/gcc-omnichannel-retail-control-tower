@@ -1,0 +1,71 @@
+{
+  "storage": {
+    "total_csv_bytes": 11259723,
+    "total_parquet_bytes": 4444422,
+    "savings_pct": 60.528140878776505,
+    "tables": [
+      {
+        "table": "Fact_POS_Transactions",
+        "row_count": 115008,
+        "csv_bytes": 8781012,
+        "parquet_bytes": 3571366,
+        "reduction_pct": 59.328537530753856
+      },
+      {
+        "table": "Fact_Daily_Inventory",
+        "row_count": 53808,
+        "csv_bytes": 2412862,
+        "parquet_bytes": 852411,
+        "reduction_pct": 64.6722025544768
+      },
+      {
+        "table": "Dim_Date",
+        "row_count": 731,
+        "csv_bytes": 45955,
+        "parquet_bytes": 9500,
+        "reduction_pct": 79.32760308997932
+      },
+      {
+        "table": "Dim_Store",
+        "row_count": 9,
+        "csv_bytes": 1048,
+        "parquet_bytes": 2135,
+        "reduction_pct": -103.72137404580153
+      },
+      {
+        "table": "Dim_Product",
+        "row_count": 115,
+        "csv_bytes": 18606,
+        "parquet_bytes": 8271,
+        "reduction_pct": 55.5465978716543
+      },
+      {
+        "table": "Markdown_Scenario",
+        "row_count": 11,
+        "csv_bytes": 240,
+        "parquet_bytes": 739,
+        "reduction_pct": -207.91666666666666
+      }
+    ]
+  },
+  "query_performance": [
+    {
+      "name": "Full Table Aggregation (3 Measures)",
+      "avg_csv_ms": 109.97675999988132,
+      "avg_pq_ms": 7.32769999995071,
+      "speedup": 15.008360058493263
+    },
+    {
+      "name": "Column-Pruned Scan (Single Column)",
+      "avg_csv_ms": 100.60844000036013,
+      "avg_pq_ms": 3.5243599999375874,
+      "speedup": 28.546584344999317
+    },
+    {
+      "name": "Filtered Commercial Slice",
+      "avg_csv_ms": 106.08910000009928,
+      "avg_pq_ms": 7.48200000016368,
+      "speedup": 14.179243517479073
+    }
+  ]
+}

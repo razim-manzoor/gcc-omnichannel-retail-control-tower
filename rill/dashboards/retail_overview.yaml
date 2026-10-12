@@ -1,0 +1,17 @@
+version: 1
+type: explore
+display_name: "Executive Retail Performance Control Tower"
+metrics_view: retail_kpis
+dimensions: "*"
+measures:
+  - total_net_revenue
+  - gross_margin
+  - gross_margin_pct
+  - total_discounts
+  - markdown_depth_pct
+  - units_sold
+  - aur
+  - transaction_count
+defaults:
+  time_range: P2Y
+  comparison_mode: time

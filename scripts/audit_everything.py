@@ -236,6 +236,49 @@ def run_audit():
     else:
         issues.append(f"README.md has misaligned metrics (margin:{rm_has_margin}, rows:{rm_has_rows})")
 
+    # 8. Check Rill BI-as-Code Semantic Models & Metrics
+    print("\n--- Checking Rill BI-as-Code Semantic Layer ---")
+    if os.path.exists("rill/rill.yaml"):
+        try:
+            import sys
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            if script_dir not in sys.path:
+                sys.path.insert(0, script_dir)
+            import verify_rill_models
+            verify_rill_models.verify_rill()
+            print("  [PASS] Rill models, metrics, and DAX parity verified successfully")
+        except Exception as e:
+            issues.append(f"Rill verification failed: {e}")
+            print(f"  [FAIL] Rill verification error: {e}")
+    else:
+        print("  [SKIP] Rill directory not present")
+
+    # 9. Check Parquet Storage Layer
+    print("\n--- Checking Parquet Storage & Benchmark Layer ---")
+    parquet_summary_path = "data/parquet/benchmark_summary.json"
+    if os.path.exists(parquet_summary_path):
+        try:
+            pq_summary = json.load(open(parquet_summary_path, encoding='utf-8'))
+            savings = pq_summary["storage"]["savings_pct"]
+            print(f"  [PASS] Parquet lakehouse storage verified ({savings:.1f}% space savings)")
+        except Exception as e:
+            issues.append(f"Parquet summary corrupt: {e}")
+    else:
+        issues.append("Parquet benchmark summary missing (run scripts/convert_to_parquet.py)")
+
+    # 10. Check Model Context Protocol (MCP) Server
+    print("\n--- Checking Model Context Protocol (MCP) Server ---")
+    if os.path.exists("mcp/duckdb_mcp_server.py"):
+        try:
+            import verify_mcp_server
+            verify_mcp_server.verify_mcp()
+            print("  [PASS] MCP server handshake and tools verified successfully")
+        except Exception as e:
+            issues.append(f"MCP server verification failed: {e}")
+            print(f"  [FAIL] MCP server error: {e}")
+    else:
+        print("  [SKIP] MCP server script not found")
+
     print("\n" + "=" * 80)
     print(f"AUDIT COMPLETE: {len(issues)} ISSUES IDENTIFIED")
     print("=" * 80)
