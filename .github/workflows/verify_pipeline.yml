@@ -1,4 +1,4 @@
-name: CI/CD Control Tower Verification Pipeline
+name: "CI/CD Control Tower Verification Pipeline"
 
 on:
   push:
@@ -9,44 +9,44 @@ on:
 
 jobs:
   verify-and-test:
-    name: 🛡️ Audit, Parquet Benchmark, MCP & API Tests
+    name: "Audit, Parquet Benchmark, MCP & API Tests"
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout Repository
+      - name: "Checkout Repository"
         uses: actions/checkout@v4
 
-      - name: 🐍 Set up Python 3.12
+      - name: "Set up Python 3.12"
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: "pip"
 
-      - name: 📦 Install Python Dependencies
+      - name: "Install Python Dependencies"
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 🔍 Step 1: Validate Kimball Star Schema & DAX Invariants
+      - name: "Step 1: Validate Kimball Star Schema & DAX Invariants"
         run: |
           python scripts/verify_schema.py --mode csv
 
-      - name: ⚡ Step 2: Parquet Conversion & Columnar Throughput Benchmark
+      - name: "Step 2: Parquet Conversion & Columnar Throughput Benchmark"
         run: |
           python scripts/convert_to_parquet.py
 
-      - name: 📊 Step 3: Verify Rill BI-as-Code Models & Semantic Metrics
+      - name: "Step 3: Verify Rill BI-as-Code Models & Semantic Metrics"
         run: |
           python scripts/verify_rill_models.py
 
-      - name: 🤖 Step 4: Verify Model Context Protocol (MCP) Server
+      - name: "Step 4: Verify Model Context Protocol (MCP) Server"
         run: |
           python scripts/verify_mcp_server.py
 
-      - name: 🔬 Step 5: Execute 360-Degree Master Integrity Audit
+      - name: "Step 5: Execute 360-Degree Master Integrity Audit"
         run: |
           python scripts/audit_everything.py
 
-      - name: 🚀 Step 6: Execute FastAPI Microservice Test Suite
+      - name: "Step 6: Execute FastAPI Microservice Test Suite"
         run: |
           python -m pytest tests/ -v
