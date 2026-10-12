@@ -1,6 +1,6 @@
 /**
  * GCC Omnichannel Retail Control Tower - Haute Horlogerie Action Grid Engine
- * High-Density Data Presentation, Monospace Numerals, Dynamic Directives, CSV Export
+ * High-Density Data Presentation, Monospace Numerals, Dynamic Directives, CSV Export, Interactive Transfer Dispatch
  */
 
 /** Escapes HTML entities to prevent XSS when injecting data into innerHTML */
@@ -23,9 +23,9 @@ export function renderTable(data, selectedSkuHighlight, sortColumn, sortAsc, onR
   let rows = '';
   sortedData.forEach(item => {
     let wosBadge = `<span class="px-2 py-0.5 rounded-md font-mono text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80">${item.wos.toFixed(1)} Wks</span>`;
-    if (item.wos < 2.0) {
+    if (item.wos < 2.5) {
       wosBadge = `<span class="px-2 py-0.5 rounded-md font-mono text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-200/80">${item.wos.toFixed(1)} Wks</span>`;
-    } else if (item.wos > 10.0) {
+    } else if (item.wos > 8.0) {
       wosBadge = `<span class="px-2 py-0.5 rounded-md font-mono text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200/80">${item.wos.toFixed(1)} Wks</span>`;
     }
 
@@ -40,23 +40,35 @@ export function renderTable(data, selectedSkuHighlight, sortColumn, sortAsc, onR
     `;
 
     let directiveBadge = '';
-    if (item.directive.includes('Stockout') || item.directive.includes('Urgent') || item.directive.includes('PULL')) {
+    if (item.status === 'CRITICAL_STOCKOUT_RISK') {
       directiveBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200 shrink-0 mr-1.5"><span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1"></span>PULL</span>`;
-    } else if (item.directive.includes('RESTOCK') || item.directive.includes('PRIORITY')) {
-      directiveBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 shrink-0 mr-1.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1"></span>RESTOCK</span>`;
-    } else if (item.directive.includes('OPTIMAL')) {
-      directiveBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0 mr-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1"></span>OPTIMAL</span>`;
+    } else if (item.status === 'OVERSTOCK_CASH_TRAP') {
+      directiveBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 shrink-0 mr-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1"></span>PUSH</span>`;
     } else {
-      directiveBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 shrink-0 mr-1.5"><span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1"></span>REBALANCE</span>`;
+      directiveBadge = `<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shrink-0 mr-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1"></span>OPTIMAL</span>`;
     }
 
     const cleanDirective = item.directive.replace(/[⚠️🚨📦✅🏷️]/g, '').trim();
+
+    // Action button
+    let actionBtn = '';
+    if (item.isDispatched) {
+      actionBtn = `<span class="inline-flex items-center text-[10px] font-bold font-mono px-2 py-1 rounded bg-slate-100 text-slate-600 border border-slate-200">✓ Dispatched</span>`;
+    } else if (item.transferAction) {
+      actionBtn = `
+        <button class="dispatch-trigger-btn inline-flex items-center px-2.5 py-1 text-[11px] font-bold rounded-md bg-slate-900 hover:bg-blue-600 text-white transition shadow-2xs gap-1 cursor-pointer" onclick="event.stopPropagation(); window.openTransferDrawer('${item.sku}')">
+          <span>⚡ Rebalance</span>
+        </button>
+      `;
+    } else {
+      actionBtn = `<span class="text-[11px] text-slate-400 font-medium">Cover Healthy</span>`;
+    }
 
     const isSelected = selectedSkuHighlight === item.sku;
     const rowBg = isSelected ? "bg-blue-50/70 border-l-4 border-l-blue-600" : "hover:bg-slate-50/80";
 
     rows += `
-      <tr id="row-${item.sku}" data-sku="${item.sku}" class="${rowBg} transition-all duration-150 border-b border-slate-100 cursor-pointer text-xs">
+      <tr id="row-${item.sku}" data-sku="${item.sku}" class="${rowBg} transition-all duration-150 border-b border-slate-100 cursor-pointer text-xs" onclick="window.openTransferDrawer('${item.sku}')">
         <td class="py-2.5 px-3">
           <div class="font-mono font-bold text-slate-900">${escapeHtml(item.sku)}</div>
           <div class="text-[11px] text-slate-500">${escapeHtml(item.prodName)}</div>
@@ -65,17 +77,19 @@ export function renderTable(data, selectedSkuHighlight, sortColumn, sortAsc, onR
           <div class="font-semibold text-slate-800">${escapeHtml(item.storeName)}</div>
           <div class="font-mono text-[10px] text-slate-400">${escapeHtml(item.storeCode)}</div>
         </td>
-        <td class="py-2.5 px-3">${strBar}</td>
-        <td class="py-2.5 px-3">${wosBadge}</td>
-        <td class="py-2.5 px-3 font-mono font-semibold text-slate-800">${item.gmroi.toFixed(2)}x</td>
         <td class="py-2.5 px-3 text-right font-mono font-bold text-slate-900">${item.onHand}</td>
-        <td class="py-2.5 px-3 text-right font-mono text-slate-500">${item.targetSS}</td>
-        <td class="py-2.5 px-3 text-right font-mono text-slate-600">AED ${item.unitCost}</td>
-        <td class="py-2.5 px-3 text-slate-700 max-w-md">
+        <td class="py-2.5 px-3 text-right font-mono text-slate-600">${item.runRate.toFixed(2)}/wk</td>
+        <td class="py-2.5 px-3">${strBar}</td>
+        <td class="py-2.5 px-3 text-right">${wosBadge}</td>
+        <td class="py-2.5 px-3 text-right font-mono font-bold text-slate-800">${item.gmroi.toFixed(2)}x</td>
+        <td class="py-2.5 px-3 text-slate-700 max-w-sm">
           <div class="flex items-center">
             ${directiveBadge}
             <span class="text-[11px] font-medium leading-snug text-slate-600 truncate">${cleanDirective}</span>
           </div>
+        </td>
+        <td class="py-2.5 px-3 text-right">
+          ${actionBtn}
         </td>
       </tr>
     `;
@@ -86,34 +100,42 @@ export function renderTable(data, selectedSkuHighlight, sortColumn, sortAsc, onR
   }
 
   tbody.innerHTML = rows;
-
-  tbody.querySelectorAll('tr[data-sku]').forEach(tr => {
-    tr.addEventListener('click', () => {
-      const sku = tr.getAttribute('data-sku');
-      if (typeof onRowClick === 'function') {
-        onRowClick(sku);
-      }
-    });
-  });
 }
 
 export function highlightFromRow(sku) {
-  const circleGroup = document.getElementById(`scatter-g-${sku}`);
-  if (circleGroup) {
-    circleGroup.classList.add('scale-150');
-    setTimeout(() => circleGroup.classList.remove('scale-150'), 1500);
-  }
+  document.querySelectorAll('tr[data-sku]').forEach(r => {
+    if (r.getAttribute('data-sku') === sku) {
+      r.classList.add('bg-blue-50/70', 'border-l-4', 'border-l-blue-600');
+    } else {
+      r.classList.remove('bg-blue-50/70', 'border-l-4', 'border-l-blue-600');
+    }
+  });
 }
 
 export function exportCSV(data) {
-  let csv = 'SKU,ProductName,StoreCode,StoreName,SellThroughRatePct,WeeksOfSupply,GMROI,OnHandUnits,TargetSafetyStock,UnitCostAED,Directive\n';
-  data.forEach(d => {
-    csv += `"${d.sku}","${d.prodName}","${d.storeCode}","${d.storeName}",${d.str},${d.wos},${d.gmroi},${d.onHand},${d.targetSS},${d.unitCost},"${d.directive}"\n`;
-  });
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'GCC_Control_Tower_Rebalance_Matrix.csv';
-  a.click();
+  const headers = ['SKU', 'Product Name', 'Store Code', 'Store Name', 'On Hand Units', 'Weekly Run Rate', 'STR Pct', 'WOS Weeks', 'Safety Stock', 'Unit Cost AED', 'GMROI', 'Status', 'Directive'];
+  const rows = data.map(item => [
+    item.sku,
+    `"${item.prodName.replace(/"/g, '""')}"`,
+    item.storeCode,
+    `"${item.storeName.replace(/"/g, '""')}"`,
+    item.onHand,
+    item.runRate,
+    item.str,
+    item.wos,
+    item.targetSS,
+    item.unitCost,
+    item.gmroi,
+    item.status,
+    `"${item.directive.replace(/"/g, '""')}"`
+  ]);
+
+  const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement('a');
+  link.setAttribute('href', encodedUri);
+  link.setAttribute('download', `GCC_Control_Tower_Rebalancing_${new Date().toISOString().split('T')[0]}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }

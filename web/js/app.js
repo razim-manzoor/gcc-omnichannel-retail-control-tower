@@ -3,9 +3,9 @@
  * Fluid Responsive Orchestrator linking State, Simulation, Visuals, and DOM Event Streams
  */
 
-import { rawProducts, rawStores, initialInventoryPositions } from './data.js';
+import { rawProducts, rawStores, initialInventoryPositions, weeklyPacingData, channelBreakdownData, paymentTypeData } from './data.js';
 import { recalculateSimulation } from './simulation.js';
-import { renderSensitivityChart, renderScatterPlot } from './charts.js';
+import { renderSensitivityChart, renderScatterPlot, renderRetailPacingChart, renderChannelMixChart } from './charts.js';
 import { renderTable, highlightFromRow, exportCSV } from './table.js';
 
 // --- Global Application State ---
@@ -13,11 +13,12 @@ export const state = {
   currentQuarter: 'All',
   currentChannel: 'All',
   currentDept: 'All',
-  currentDiscountPct: 0.10,
+  currentDiscountPct: 0.15,
   currentStatusChip: 'All',
   sortColumn: 'wos',
   sortAsc: true,
   selectedSkuHighlight: null,
+  activeTransferSku: null,
   inventoryPositions: [...initialInventoryPositions]
 };
 
@@ -40,6 +41,107 @@ export function toggleModal(show) {
   } else {
     modal.classList.add('hidden');
   }
+}
+
+// --- Slide-Out Logistics Transfer Dispatch Drawer ---
+export function openTransferDrawer(sku) {
+  const item = state.inventoryPositions.find(p => p.sku === sku);
+  if (!item) return;
+
+  state.activeTransferSku = sku;
+  const drawer = document.getElementById('transfer-drawer');
+  const backdrop = document.getElementById('drawer-backdrop');
+  if (!drawer) return;
+
+  // Populate drawer fields
+  const skuCode = document.getElementById('drawer-sku-code');
+  const prodName = document.getElementById('drawer-prod-name');
+  const fromNode = document.getElementById('drawer-from-node');
+  const toNode = document.getElementById('drawer-to-node');
+  const qtyInput = document.getElementById('drawer-transfer-qty');
+  const freightVal = document.getElementById('drawer-freight-val');
+  const revProtectedVal = document.getElementById('drawer-rev-val');
+  const capReleasedVal = document.getElementById('drawer-cap-val');
+  const transitVal = document.getElementById('drawer-transit-val');
+  const statusBadge = document.getElementById('drawer-status-badge');
+
+  if (skuCode) skuCode.innerText = item.sku;
+  if (prodName) prodName.innerText = item.prodName;
+
+  const action = item.transferAction || {
+    fromStore: `${item.storeName} (${item.storeCode})`,
+    toStore: 'The Dubai Mall Flagship (DXB-TDM-01)',
+    recommendedUnits: Math.max(2, Math.round(item.onHand * 0.4)),
+    freightAED: 180,
+    revProtectedAED: Math.round(item.runRate * 4 * item.unitCost * 1.8),
+    capReleasedAED: Math.round(item.onHand * item.unitCost * 0.5),
+    transitTime: '24 Hours (GCC Logistics Shuttle)',
+    urgency: item.status === 'CRITICAL_STOCKOUT_RISK' ? 'CRITICAL' : 'Standard'
+  };
+
+  if (fromNode) fromNode.innerText = action.fromStore;
+  if (toNode) toNode.innerText = action.toStore;
+  if (qtyInput) qtyInput.value = action.recommendedUnits;
+  if (freightVal) freightVal.innerText = `AED ${action.freightAED}`;
+  if (revProtectedVal) revProtectedVal.innerText = `AED ${action.revProtectedAED.toLocaleString()}`;
+  if (capReleasedVal) capReleasedVal.innerText = `AED ${action.capReleasedAED.toLocaleString()}`;
+  if (transitVal) transitVal.innerText = action.transitTime;
+
+  if (statusBadge) {
+    if (item.isDispatched) {
+      statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200';
+      statusBadge.innerText = 'Dispatched to Transit';
+    } else if (item.status === 'CRITICAL_STOCKOUT_RISK') {
+      statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200';
+      statusBadge.innerText = 'Priority 1: Emergency Stockout';
+    } else {
+      statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200';
+      statusBadge.innerText = 'Priority 2: Working Capital Overstock';
+    }
+  }
+
+  // Show drawer
+  drawer.classList.remove('translate-x-full');
+  if (backdrop) backdrop.classList.remove('hidden');
+}
+
+export function closeTransferDrawer() {
+  const drawer = document.getElementById('transfer-drawer');
+  const backdrop = document.getElementById('drawer-backdrop');
+  if (drawer) drawer.classList.add('translate-x-full');
+  if (backdrop) backdrop.classList.add('hidden');
+}
+
+export function confirmTransferDispatch() {
+  const sku = state.activeTransferSku;
+  const item = state.inventoryPositions.find(p => p.sku === sku);
+  if (!item) return;
+
+  const qtyInput = document.getElementById('drawer-transfer-qty');
+  const qty = qtyInput ? parseInt(qtyInput.value) : 10;
+
+  item.isDispatched = true;
+  closeTransferDrawer();
+
+  // Show Toast Notification
+  showToast(`✅ Transfer Order #TR-2026-${sku.slice(0, 7)} Dispatched: ${qty} units allocated to ${item.transferAction ? item.transferAction.toStore : 'Flagship'}.`);
+
+  updateAllVisuals();
+}
+
+function showToast(msg) {
+  let toast = document.getElementById('app-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'app-toast';
+    toast.className = 'fixed bottom-5 right-5 z-50 bg-slate-900 text-white text-xs font-semibold px-4 py-3 rounded-lg shadow-xl border border-slate-700 flex items-center gap-2 transform transition-all duration-300 translate-y-20 opacity-0';
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `<span>${msg}</span>`;
+  toast.classList.remove('translate-y-20', 'opacity-0');
+  setTimeout(() => {
+    toast.classList.add('translate-y-20', 'opacity-0');
+  }, 4000);
 }
 
 // --- Filtering & Queries ---
@@ -68,19 +170,19 @@ export function applyGlobalFilters() {
   if (channelElem) state.currentChannel = channelElem.value;
   if (deptElem) state.currentDept = deptElem.value;
 
-  // Dynamically aggregate KPIs from the filtered inventory positions
+  // Dynamically aggregate KPIs
   const filtered = getFilteredPositions();
   let totalRevenue = 0;
   let totalCost = 0;
   let totalOnHand = 0;
   let totalRunRate = 0;
   let totalInventoryCost = 0;
-  let dayCount = 60; // Evaluation window (days)
+  let dayCount = 60;
 
   filtered.forEach(pos => {
     const product = rawProducts.find(p => p.sku === pos.sku);
     if (!product) return;
-    const unitsSoldEst = pos.runRate * 4; // 4-week trailing units
+    const unitsSoldEst = pos.runRate * 4;
     const revenue = unitsSoldEst * product.price;
     const cost = unitsSoldEst * product.cost;
     totalRevenue += revenue;
@@ -125,10 +227,10 @@ export function setQuarter(q, btn) {
 export function setStatusChip(status, btn) {
   state.currentStatusChip = status;
   document.querySelectorAll('.status-chip').forEach(b => {
-    b.className = "status-chip px-3 py-1 rounded-lg text-xs font-medium bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100 transition cursor-pointer flex items-center";
+    b.className = "status-chip px-2.5 py-1 rounded-md text-xs font-medium bg-white text-slate-600 hover:text-slate-900 border border-slate-200 transition cursor-pointer";
   });
   if (btn) {
-    btn.className = "status-chip px-3 py-1 rounded-lg text-xs font-semibold bg-slate-900 text-white transition cursor-pointer shadow-xs flex items-center";
+    btn.className = "status-chip px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-900 text-white transition cursor-pointer shadow-xs";
   }
   updateAllVisuals();
 }
@@ -139,7 +241,7 @@ export function resetFilters() {
   state.currentDept = 'All';
   state.currentStatusChip = 'All';
   state.selectedSkuHighlight = null;
-  state.currentDiscountPct = 0.25;
+  state.currentDiscountPct = 0.15;
 
   const channelFilter = document.getElementById('channel-filter');
   const deptFilter = document.getElementById('dept-filter');
@@ -149,7 +251,7 @@ export function resetFilters() {
   if (channelFilter) channelFilter.value = 'All';
   if (deptFilter) deptFilter.value = 'All';
   if (searchInput) searchInput.value = '';
-  if (discountSlider) discountSlider.value = '25';
+  if (discountSlider) discountSlider.value = '15';
 
   document.querySelectorAll('.quarter-btn').forEach((b, idx) => {
     b.className = idx === 0 
@@ -159,17 +261,62 @@ export function resetFilters() {
 
   document.querySelectorAll('.status-chip').forEach((b, idx) => {
     b.className = idx === 0
-      ? "status-chip px-3 py-1 rounded-lg text-xs font-semibold bg-slate-900 text-white transition cursor-pointer shadow-xs"
-      : "status-chip px-3 py-1 rounded-lg text-xs font-medium bg-slate-50 text-slate-600 hover:text-slate-900 border border-slate-200 transition cursor-pointer";
+      ? "status-chip px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-900 text-white transition cursor-pointer shadow-xs"
+      : "status-chip px-2.5 py-1 rounded-md text-xs font-medium bg-white text-slate-600 hover:text-slate-900 border border-slate-200 transition cursor-pointer";
   });
 
+  setPresetDiscount(15);
   applyGlobalFilters();
 }
 
 // --- Interaction Handlers ---
 export function handleSliderChange(val) {
   state.currentDiscountPct = parseFloat(val) / 100;
+  
+  // Sync preset pills active state
+  document.querySelectorAll('.preset-pill').forEach(btn => {
+    const bVal = parseFloat(btn.getAttribute('data-val'));
+    if (bVal === parseFloat(val)) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
   recalculateSimulation(state.currentDiscountPct, rawProducts, renderSensitivityChart);
+}
+
+export function setPresetDiscount(val) {
+  const slider = document.getElementById('discount-slider');
+  if (slider) {
+    slider.value = val;
+  }
+  handleSliderChange(val);
+}
+
+export function switchTab(tabId) {
+  // Update Tab Switcher Buttons
+  document.querySelectorAll('.tab-switcher-btn').forEach(btn => {
+    if (btn.getAttribute('data-tab') === tabId) {
+      btn.className = "tab-switcher-btn segmented-btn active";
+    } else {
+      btn.className = "tab-switcher-btn segmented-btn";
+    }
+  });
+
+  // Switch Active Tab Pane
+  document.querySelectorAll('.tab-pane').forEach(pane => {
+    pane.classList.add('hidden');
+  });
+
+  const activePane = document.getElementById(`pane-${tabId}`);
+  if (activePane) {
+    activePane.classList.remove('hidden');
+    // If switching to diagnostics, trigger resize on scatter chart
+    if (tabId === 'diagnostics') {
+      setTimeout(() => renderScatterPlot(getFilteredPositions(), state.selectedSkuHighlight, drilldownToSku), 50);
+    }
+  }
 }
 
 export function drilldownToSku(sku) {
@@ -178,19 +325,14 @@ export function drilldownToSku(sku) {
   if (searchInput) {
     searchInput.value = sku;
   }
+  switchTab('inventory');
   updateAllVisuals();
-
-  const targetRow = document.getElementById(`row-${sku}`);
-  if (targetRow) {
-    targetRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    targetRow.classList.add('row-highlight');
-    setTimeout(() => targetRow.classList.remove('row-highlight'), 2500);
-  }
+  openTransferDrawer(sku);
 }
 
 export function handleRowClick(sku) {
   state.selectedSkuHighlight = sku;
-  renderScatterPlot(getFilteredPositions(), state.selectedSkuHighlight, drilldownToSku);
+  openTransferDrawer(sku);
   highlightFromRow(sku);
 }
 
@@ -208,96 +350,39 @@ export function handleExportCSV() {
   exportCSV(getFilteredPositions());
 }
 
-export function simulateTransfer() {
-  const banner = document.getElementById('banner-text');
-  if (banner) {
-    banner.innerHTML = `<strong class="text-blue-900">SIMULATION ACTIVE:</strong> 450 units re-routed from Yas Mall to Dubai Mall. Projected Stockout Risk reduced to 0.0%; Projected Dubai Mall STR sustained at 78.5%.`;
-  }
-  
-  const kpiWos = document.getElementById('kpi-wos');
-  if (kpiWos) kpiWos.innerText = '4.2 Wks';
-  
-  const wosBadge = document.getElementById('wos-badge-status');
-  if (wosBadge) {
-    wosBadge.className = 'px-2 py-0.5 text-[10px] font-bold bg-emerald-50 text-emerald-700 rounded border border-emerald-200';
-    wosBadge.innerText = 'Optimal';
-  }
-
-  const wosBar = document.getElementById('wos-progress-bar');
-  if (wosBar) {
-    wosBar.className = 'bg-emerald-500 h-full rounded-full transition-all duration-500';
-    wosBar.style.width = '42%';
-  }
-
-  const badge = document.getElementById('sim-verdict-badge');
-  if (badge) {
-    badge.className = "px-2.5 py-1 text-xs font-bold rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center";
-    badge.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span> REBALANCING OPTIMAL: Zero lost revenue`;
-  }
-}
-
-export function approveTransfer() {
-  alert("✅ Inter-Mall Stock Transfer #TR-2026-DXB-0450 APPROVED.\n\nDispatching 450 units from Yas Mall Logistics Hub to The Dubai Mall Flagship via GCC Express Logistics.\nERP Transfer Order Created in Dynamics 365.");
-}
-
 export function updateAllVisuals() {
   const filtered = getFilteredPositions();
+  renderRetailPacingChart(weeklyPacingData);
+  renderChannelMixChart(channelBreakdownData);
   renderScatterPlot(filtered, state.selectedSkuHighlight, drilldownToSku);
   recalculateSimulation(state.currentDiscountPct, rawProducts, renderSensitivityChart);
   renderTable(filtered, state.selectedSkuHighlight, state.sortColumn, state.sortAsc, handleRowClick);
 }
 
-export function setPresetDiscount(val) {
-  const slider = document.getElementById('discount-slider');
-  if (slider) {
-    slider.value = val;
-  }
-  handleSliderChange(val);
-}
-
-export function switchTab(tabId) {
-  document.querySelectorAll('.tab-switcher-btn').forEach(btn => {
-    if (btn.getAttribute('data-tab') === tabId) {
-      btn.className = "tab-switcher-btn segmented-btn active";
-    } else {
-      btn.className = "tab-switcher-btn segmented-btn";
-    }
-  });
-
-  document.querySelectorAll('.tab-pane').forEach(pane => {
-    if (pane.id === `pane-${tabId}`) {
-      pane.classList.remove('hidden');
-    } else {
-      pane.classList.add('hidden');
-    }
-  });
-}
-
-// Bind to window for HTML event handlers
+// --- Bootstrap & Window Event Binding ---
 window.toggleFullScreen = toggleFullScreen;
 window.toggleModal = toggleModal;
 window.setQuarter = setQuarter;
 window.setStatusChip = setStatusChip;
-window.applyGlobalFilters = applyGlobalFilters;
 window.resetFilters = resetFilters;
+window.applyGlobalFilters = applyGlobalFilters;
 window.handleSliderChange = handleSliderChange;
 window.setPresetDiscount = setPresetDiscount;
 window.switchTab = switchTab;
-window.drilldownToSku = drilldownToSku;
-window.highlightFromRow = handleRowClick;
 window.sortTable = sortTable;
-window.simulateTransfer = simulateTransfer;
-window.approveTransfer = approveTransfer;
 window.exportCSV = handleExportCSV;
+window.drilldownToSku = drilldownToSku;
+window.openTransferDrawer = openTransferDrawer;
+window.closeTransferDrawer = closeTransferDrawer;
+window.confirmTransferDispatch = confirmTransferDispatch;
 
-// Initialization
-window.addEventListener('DOMContentLoaded', () => {
-  updateAllVisuals();
-  
+document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('grid-search');
   if (searchInput) {
-    searchInput.addEventListener('input', () => {
-      updateAllVisuals();
-    });
+    searchInput.addEventListener('input', () => updateAllVisuals());
   }
+
+  // Initial Boot
+  setPresetDiscount(15);
+  applyGlobalFilters();
 });

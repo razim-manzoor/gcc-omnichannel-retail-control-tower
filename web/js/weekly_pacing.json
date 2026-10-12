@@ -1,0 +1,470 @@
+[
+  {
+    "week": 1,
+    "label": "W1 (01 Jan)",
+    "netSales": 2916182.62,
+    "target": 3100000.0,
+    "marginPct": 69.77,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 2,
+    "label": "W2 (05 Jan)",
+    "netSales": 5517097.65,
+    "target": 5300000.0,
+    "marginPct": 69.8,
+    "isPeak": true,
+    "event": "Dubai Shopping Festival"
+  },
+  {
+    "week": 3,
+    "label": "W3 (12 Jan)",
+    "netSales": 5489432.93,
+    "target": 5300000.0,
+    "marginPct": 69.64,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 4,
+    "label": "W4 (19 Jan)",
+    "netSales": 5566141.6,
+    "target": 5300000.0,
+    "marginPct": 69.74,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 5,
+    "label": "W5 (26 Jan)",
+    "netSales": 5245111.31,
+    "target": 5300000.0,
+    "marginPct": 69.75,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 6,
+    "label": "W6 (02 Feb)",
+    "netSales": 2979117.47,
+    "target": 3100000.0,
+    "marginPct": 69.99,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 7,
+    "label": "W7 (09 Feb)",
+    "netSales": 3030082.11,
+    "target": 3100000.0,
+    "marginPct": 69.87,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 8,
+    "label": "W8 (16 Feb)",
+    "netSales": 3649568.33,
+    "target": 3100000.0,
+    "marginPct": 69.77,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 9,
+    "label": "W9 (23 Feb)",
+    "netSales": 4610983.82,
+    "target": 5400000.0,
+    "marginPct": 69.8,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 10,
+    "label": "W10 (02 Mar)",
+    "netSales": 5700562.19,
+    "target": 5400000.0,
+    "marginPct": 69.75,
+    "isPeak": true,
+    "event": "Ramadan & Eid Al-Fitr"
+  },
+  {
+    "week": 11,
+    "label": "W11 (09 Mar)",
+    "netSales": 5476538.89,
+    "target": 5400000.0,
+    "marginPct": 69.81,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 12,
+    "label": "W12 (16 Mar)",
+    "netSales": 5325323.6,
+    "target": 5400000.0,
+    "marginPct": 69.75,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 13,
+    "label": "W13 (23 Mar)",
+    "netSales": 4983330.29,
+    "target": 5400000.0,
+    "marginPct": 69.8,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 14,
+    "label": "W14 (30 Mar)",
+    "netSales": 4212889.7,
+    "target": 3100000.0,
+    "marginPct": 69.7,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 15,
+    "label": "W15 (06 Apr)",
+    "netSales": 3004989.15,
+    "target": 3100000.0,
+    "marginPct": 69.79,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 16,
+    "label": "W16 (13 Apr)",
+    "netSales": 2823576.14,
+    "target": 3100000.0,
+    "marginPct": 69.69,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 17,
+    "label": "W17 (20 Apr)",
+    "netSales": 3061931.68,
+    "target": 3100000.0,
+    "marginPct": 69.94,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 18,
+    "label": "W18 (27 Apr)",
+    "netSales": 2999792.62,
+    "target": 3100000.0,
+    "marginPct": 69.9,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 19,
+    "label": "W19 (04 May)",
+    "netSales": 3101979.31,
+    "target": 3100000.0,
+    "marginPct": 69.38,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 20,
+    "label": "W20 (11 May)",
+    "netSales": 2890096.6,
+    "target": 3100000.0,
+    "marginPct": 69.89,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 21,
+    "label": "W21 (18 May)",
+    "netSales": 3081313.97,
+    "target": 3100000.0,
+    "marginPct": 69.71,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 22,
+    "label": "W22 (25 May)",
+    "netSales": 3777432.84,
+    "target": 3800000.0,
+    "marginPct": 69.57,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 23,
+    "label": "W23 (01 Jun)",
+    "netSales": 3892405.38,
+    "target": 3800000.0,
+    "marginPct": 69.48,
+    "isPeak": true,
+    "event": "Eid Al-Adha Peak"
+  },
+  {
+    "week": 24,
+    "label": "W24 (08 Jun)",
+    "netSales": 3354294.86,
+    "target": 3100000.0,
+    "marginPct": 69.63,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 25,
+    "label": "W25 (15 Jun)",
+    "netSales": 2952301.12,
+    "target": 3100000.0,
+    "marginPct": 69.68,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 26,
+    "label": "W26 (22 Jun)",
+    "netSales": 2867921.9,
+    "target": 3100000.0,
+    "marginPct": 69.61,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 27,
+    "label": "W27 (29 Jun)",
+    "netSales": 2727711.73,
+    "target": 3100000.0,
+    "marginPct": 69.53,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 28,
+    "label": "W28 (06 Jul)",
+    "netSales": 2914565.42,
+    "target": 3100000.0,
+    "marginPct": 69.62,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 29,
+    "label": "W29 (13 Jul)",
+    "netSales": 3027175.34,
+    "target": 3100000.0,
+    "marginPct": 69.79,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 30,
+    "label": "W30 (20 Jul)",
+    "netSales": 2953203.26,
+    "target": 3100000.0,
+    "marginPct": 69.62,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 31,
+    "label": "W31 (27 Jul)",
+    "netSales": 2738993.53,
+    "target": 3100000.0,
+    "marginPct": 69.76,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 32,
+    "label": "W32 (03 Aug)",
+    "netSales": 3035834.84,
+    "target": 3100000.0,
+    "marginPct": 69.6,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 33,
+    "label": "W33 (10 Aug)",
+    "netSales": 2931380.48,
+    "target": 3100000.0,
+    "marginPct": 69.74,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 34,
+    "label": "W34 (17 Aug)",
+    "netSales": 3160354.74,
+    "target": 3100000.0,
+    "marginPct": 69.43,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 35,
+    "label": "W35 (24 Aug)",
+    "netSales": 3161909.29,
+    "target": 3100000.0,
+    "marginPct": 69.89,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 36,
+    "label": "W36 (31 Aug)",
+    "netSales": 2986902.56,
+    "target": 3100000.0,
+    "marginPct": 69.64,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 37,
+    "label": "W37 (07 Sep)",
+    "netSales": 2910915.32,
+    "target": 3100000.0,
+    "marginPct": 69.92,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 38,
+    "label": "W38 (14 Sep)",
+    "netSales": 2946981.76,
+    "target": 3100000.0,
+    "marginPct": 69.84,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 39,
+    "label": "W39 (21 Sep)",
+    "netSales": 3960998.56,
+    "target": 3900000.0,
+    "marginPct": 69.92,
+    "isPeak": true,
+    "event": "Saudi National Day"
+  },
+  {
+    "week": 40,
+    "label": "W40 (28 Sep)",
+    "netSales": 2822076.26,
+    "target": 3100000.0,
+    "marginPct": 69.83,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 41,
+    "label": "W41 (05 Oct)",
+    "netSales": 2816063.2,
+    "target": 3100000.0,
+    "marginPct": 69.88,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 42,
+    "label": "W42 (12 Oct)",
+    "netSales": 2876432.62,
+    "target": 3100000.0,
+    "marginPct": 69.63,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 43,
+    "label": "W43 (19 Oct)",
+    "netSales": 3097335.86,
+    "target": 3100000.0,
+    "marginPct": 69.58,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 44,
+    "label": "W44 (26 Oct)",
+    "netSales": 2709186.97,
+    "target": 3100000.0,
+    "marginPct": 69.71,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 45,
+    "label": "W45 (02 Nov)",
+    "netSales": 3087648.09,
+    "target": 3100000.0,
+    "marginPct": 69.73,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 46,
+    "label": "W46 (09 Nov)",
+    "netSales": 3067464.65,
+    "target": 3100000.0,
+    "marginPct": 69.72,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 47,
+    "label": "W47 (16 Nov)",
+    "netSales": 4022179.8,
+    "target": 5200000.0,
+    "marginPct": 69.83,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 48,
+    "label": "W48 (23 Nov)",
+    "netSales": 5520474.74,
+    "target": 5200000.0,
+    "marginPct": 69.79,
+    "isPeak": true,
+    "event": "White Friday Surge"
+  },
+  {
+    "week": 49,
+    "label": "W49 (30 Nov)",
+    "netSales": 4592797.51,
+    "target": 5200000.0,
+    "marginPct": 69.77,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 50,
+    "label": "W50 (07 Dec)",
+    "netSales": 2927791.74,
+    "target": 3100000.0,
+    "marginPct": 69.73,
+    "isPeak": false,
+    "event": ""
+  },
+  {
+    "week": 51,
+    "label": "W51 (14 Dec)",
+    "netSales": 4837112.4,
+    "target": 8200000.0,
+    "marginPct": 69.53,
+    "isPeak": true,
+    "event": ""
+  },
+  {
+    "week": 52,
+    "label": "W52 (21 Dec)",
+    "netSales": 8382828.33,
+    "target": 8200000.0,
+    "marginPct": 69.73,
+    "isPeak": true,
+    "event": "Festive Luxury Gifting"
+  }
+]

@@ -303,3 +303,30 @@ input[type=range]::-moz-range-thumb:hover {
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
 }
+
+/* Slide-Out Logistics Transfer Drawer */
+#transfer-drawer {
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Chart Canvas Containers */
+.chart-container-pacing {
+  min-height: 260px;
+  width: 100%;
+}
+
+.chart-container-channel {
+  min-height: 220px;
+  width: 100%;
+}
+
+.chart-container-sim {
+  min-height: 200px;
+  width: 100%;
+}
+
+.chart-container-scatter {
+  min-height: 340px;
+  width: 100%;
+}
+
