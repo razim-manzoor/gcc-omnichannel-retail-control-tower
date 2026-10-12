@@ -247,6 +247,32 @@ export function updateAllVisuals() {
   renderTable(filtered, state.selectedSkuHighlight, state.sortColumn, state.sortAsc, handleRowClick);
 }
 
+export function setPresetDiscount(val) {
+  const slider = document.getElementById('discount-slider');
+  if (slider) {
+    slider.value = val;
+  }
+  handleSliderChange(val);
+}
+
+export function switchTab(tabId) {
+  document.querySelectorAll('.tab-switcher-btn').forEach(btn => {
+    if (btn.getAttribute('data-tab') === tabId) {
+      btn.className = "tab-switcher-btn segmented-btn active";
+    } else {
+      btn.className = "tab-switcher-btn segmented-btn";
+    }
+  });
+
+  document.querySelectorAll('.tab-pane').forEach(pane => {
+    if (pane.id === `pane-${tabId}`) {
+      pane.classList.remove('hidden');
+    } else {
+      pane.classList.add('hidden');
+    }
+  });
+}
+
 // Bind to window for HTML event handlers
 window.toggleFullScreen = toggleFullScreen;
 window.toggleModal = toggleModal;
@@ -255,6 +281,8 @@ window.setStatusChip = setStatusChip;
 window.applyGlobalFilters = applyGlobalFilters;
 window.resetFilters = resetFilters;
 window.handleSliderChange = handleSliderChange;
+window.setPresetDiscount = setPresetDiscount;
+window.switchTab = switchTab;
 window.drilldownToSku = drilldownToSku;
 window.highlightFromRow = handleRowClick;
 window.sortTable = sortTable;

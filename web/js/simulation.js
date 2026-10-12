@@ -78,6 +78,17 @@ export function recalculateSimulation(discountPct, products, onChartRender) {
     sliderLabel.innerText = `${Math.round(discountPct * 100)}% Markdown`;
   }
 
+  // Update Preset Stepper Pills Active State
+  const presetPills = document.querySelectorAll('.preset-pill');
+  presetPills.forEach(pill => {
+    const val = parseInt(pill.getAttribute('data-val'), 10);
+    if (val === Math.round(discountPct * 100)) {
+      pill.classList.add('active');
+    } else {
+      pill.classList.remove('active');
+    }
+  });
+
   // Animate Numbers smoothly
   animateValue('sim-cap-released', lastCapReleased, roundedCap, 200, '+', ' AED');
   animateValue('sim-margin-sacrificed', lastMarginDelta, roundedDelta, 200, roundedDelta >= 0 ? '+' : '', ' AED');
@@ -92,30 +103,42 @@ export function recalculateSimulation(discountPct, products, onChartRender) {
   lastMarginDelta = roundedDelta;
   lastBeGap = beGapTotal;
 
-  // Dynamic Slider Track Gradient Fill
+  // Dynamic Slider Track Gradient Fill (Linear / Slate Dark Fill)
   const pctPos = (discountPct / 0.30) * 100;
   const slider = document.getElementById('discount-slider');
   if (slider) {
-    slider.style.background = `linear-gradient(to right, #1E3A8A 0%, #1E3A8A ${pctPos}%, #CBD5E1 ${pctPos}%, #CBD5E1 100%)`;
+    slider.style.background = `linear-gradient(to right, #0F172A 0%, #0F172A ${pctPos}%, #E2E8F0 ${pctPos}%, #E2E8F0 100%)`;
   }
 
-  // Update Verdict Badge (Aligned with DAX [Breakeven Feasibility Verdict])
-  // "VOLUME BUFFERED" fires when margin is sacrificed but Capital ROI >= 1.5x
-  // (i.e. working capital released is at least 1.5x the margin surrendered)
+  // Update Verdict Badge & Executive Rationale (Aligned with DAX [Breakeven Feasibility Verdict])
   const badge = document.getElementById('sim-verdict-badge');
+  const rationaleElem = document.getElementById('sim-verdict-rationale');
+  
   if (badge) {
     if (discountPct === 0) {
-      badge.className = "px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-slate-100 text-slate-700 border border-slate-200 flex items-center";
-      badge.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-slate-400 mr-1.5"></span> BASELINE (Full Price)`;
+      badge.className = "px-2.5 py-1 text-xs font-semibold rounded-md bg-slate-100 text-slate-800 border border-slate-200 inline-flex items-center gap-1.5";
+      badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-slate-400"></span> FULL PRICE BASELINE`;
+      if (rationaleElem) {
+        rationaleElem.innerText = "Operating at full price baseline. Margin realization is 100% preserved with zero promotional dilution. High-velocity SKUs maintain regular buffer.";
+      }
     } else if (roundedDelta >= 0) {
-      badge.className = "px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center";
-      badge.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span> ACCRETIVE PROFIT YIELD`;
+      badge.className = "px-2.5 py-1 text-xs font-semibold rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 inline-flex items-center gap-1.5";
+      badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> ACCRETIVE PROFIT YIELD`;
+      if (rationaleElem) {
+        rationaleElem.innerText = `Elasticity expansion (+${Math.round((-1.82 * discountPct) * 100)}% est volume) exceeds discount depth. Net gross profit expands by +AED ${Math.abs(roundedDelta).toLocaleString()}. Recommended for immediate omni campaign.`;
+      }
     } else if (capROI !== 'N/A' && parseFloat(capROI) >= 1.5) {
-      badge.className = "px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-amber-50 text-amber-800 border border-amber-200 flex items-center";
-      badge.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5"></span> CAPITAL TRADE-OFF (${capROI}x ROI)`;
+      badge.className = "px-2.5 py-1 text-xs font-semibold rounded-md bg-amber-50 text-amber-800 border border-amber-200 inline-flex items-center gap-1.5";
+      badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span> CAPITAL TRADE-OFF (${capROI}x ROI)`;
+      if (rationaleElem) {
+        rationaleElem.innerText = `Strategic liquidity trade-off: surrendering AED ${Math.abs(roundedDelta).toLocaleString()} in margin liberates +AED ${roundedCap.toLocaleString()} in trapped working capital (${capROI}x multiplier). Acceptable for overstocked seasonal lines.`;
+      }
     } else {
-      badge.className = "px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-rose-50 text-rose-800 border border-rose-200 flex items-center";
-      badge.innerHTML = `<span class="inline-block w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5"></span> DILUTIVE MARGIN RISK`;
+      badge.className = "px-2.5 py-1 text-xs font-semibold rounded-md bg-rose-50 text-rose-800 border border-rose-200 inline-flex items-center gap-1.5";
+      badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span> DILUTIVE MARGIN RISK`;
+      if (rationaleElem) {
+        rationaleElem.innerText = `Excessive price concession: margin erosion (-AED ${Math.abs(roundedDelta).toLocaleString()}) outweighs volume lift. Breakeven volume shortfall is ${Math.abs(beGapTotal).toLocaleString()} units. Restrict strictly to terminal clearance.`;
+      }
     }
   }
 
